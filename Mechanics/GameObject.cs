@@ -10,5 +10,10 @@ namespace TankProject
     class GameObject
     {
         internal Vector3 position;
+
+        internal GameObject(Vector3 position)
+        {
+            this.position = position;
+        }
     }
 }

@@ -41,8 +41,9 @@ namespace TankProject
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
+            GameObject x = new GameObject(new Vector3(64, 10, 64));
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            currentCamera = new CameraFreeSurfaceFolow(GraphicsDevice, new Vector3(64, 10, 64));
+            currentCamera = new CameraThirdPerson(GraphicsDevice, new Vector3(64, 10, 65), x, 3.0f);
 
             Floor.Start(this, currentCamera);
         }
