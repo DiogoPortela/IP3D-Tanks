@@ -9,12 +9,14 @@ namespace TankProject
         private float[] nearVertices;
 
         // --- --- --- --- CONSTRUCTORS --- --- --- --- \\
-        public CameraFreeSurfaceFolow(GraphicsDevice device, Vector3 position, float cameraSpeed = 5.0f, float fieldOfView = 45.0f)
+        internal CameraFreeSurfaceFolow(GraphicsDevice device, Vector3 position, float cameraSpeed = 5.0f, float fieldOfView = 45.0f)
             : base (device, position, cameraSpeed, fieldOfView)
         {
             nearVertices = new float[4];
-            relativeForward = Vector3.Forward;
-            relativeRight = Vector3.Right;
+        }
+        internal CameraFreeSurfaceFolow(Camera camera) : base (camera)
+        {
+            nearVertices = new float[4];
         }
 
         // --- --- --- --- FUNCTIONS --- --- --- --- \\

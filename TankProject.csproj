@@ -42,11 +42,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Floor.cs" />
-    <Compile Include="Mechanics\Camera.cs" />
-    <Compile Include="Mechanics\CameraFree.cs" />
+    <Compile Include="Mechanics\Camera\Camera.cs" />
+    <Compile Include="Mechanics\Camera\CameraFree.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="Mechanics\CameraFreeSurfaceFolow.cs" />
-    <Compile Include="Mechanics\CameraThirdPerson.cs" />
+    <Compile Include="Mechanics\Camera\CameraFreeSurfaceFolow.cs" />
+    <Compile Include="Mechanics\Camera\CameraThirdPerson.cs" />
     <Compile Include="Mechanics\Debug.cs" />
     <Compile Include="Mechanics\GameObject.cs" />
     <Compile Include="Mechanics\Input.cs" />

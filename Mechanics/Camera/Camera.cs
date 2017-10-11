@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 namespace TankProject
-{   
+{
     /// <summary>
     /// Base class for cameras. Do not edit.
     /// </summary>
@@ -37,6 +37,19 @@ namespace TankProject
 
             ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fieldOfView), (device.Viewport.Width / device.Viewport.Height), 0.1f, 500.0f);
             ViewMatrix = Matrix.CreateLookAt(this.Position, this.Position + this.Forward, this.Up);
+        }
+        internal Camera(Camera camera)
+        {
+            this.Position = camera.Position;
+            this.Forward = camera.Forward;
+            this.relativeForward = camera.relativeForward;
+            this.Up = camera.Up;
+            this.Right = camera.Right;
+            this.relativeRight = camera.relativeRight;
+            this.cameraSpeed = camera.cameraSpeed;
+            this.rotation = camera.rotation;
+            this.rotationMatrix = camera.rotationMatrix;
+            this.ProjectionMatrix = camera.ProjectionMatrix;
         }
 
         // --- --- --- --- FUNCTIONS --- --- --- --- \\

@@ -8,15 +8,19 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace TankProject
-{ 
+{
     /// <summary>
     /// Free following camera. Use numpad to control.
     /// </summary>
     class CameraFree : Camera
     {
         // --- --- --- --- CONSTRUCTORS --- --- --- --- \\
-        internal CameraFree(GraphicsDevice device, Vector3 position, float cameraSpeed = 5.0f, float fieldOfView = 45.0f) 
-            : base (device, position, cameraSpeed, fieldOfView)
+        internal CameraFree(GraphicsDevice device, Vector3 position, float cameraSpeed = 5.0f, float fieldOfView = 45.0f)
+            : base(device, position, cameraSpeed, fieldOfView)
+        {
+
+        }
+        internal CameraFree(Camera camera) : base(camera)
         {
 
         }

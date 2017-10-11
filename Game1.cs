@@ -13,6 +13,7 @@ namespace TankProject
         internal static SpriteBatch spriteBatch;
 
         internal static Camera currentCamera;
+        internal static GameObject player;
 
         public Game1()
         {
@@ -41,10 +42,9 @@ namespace TankProject
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            GameObject x = new GameObject(new Vector3(64, 10, 64));
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            currentCamera = new CameraThirdPerson(GraphicsDevice, new Vector3(64, 10, 65), x, 3.0f);
-
+            currentCamera = new CameraFree(GraphicsDevice, new Vector3(64, 10, 65), 3.0f);
+            player = new GameObject(new Vector3(64, 10, 64));
             Floor.Start(this, currentCamera);
         }
 
@@ -68,6 +68,19 @@ namespace TankProject
                 Exit();
 
             Input.Update();
+            if (Input.IsPressedDown(Keys.F1))
+            {
+                currentCamera = new CameraThirdPerson(currentCamera, player, 5.0f);
+            }
+            if (Input.IsPressedDown(Keys.F2) /* && position dentro do mapa*/)
+            {
+                currentCamera = new CameraFreeSurfaceFolow(currentCamera);
+            }
+            if (Input.IsPressedDown(Keys.F3))
+            {
+                currentCamera = new CameraFree(currentCamera);
+            }
+
             currentCamera.Update(gameTime);
 
             Debug.Update();
