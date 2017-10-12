@@ -15,11 +15,14 @@ namespace TankProject
             this.target = target;
             this.distanceToTarget = distanceToTarget;
         }
-        internal CameraThirdPerson(Camera camera, GameObject target, float distanceToTarget) : base (camera) //: base(camera.device, camera.Position, camera.ca, camera.fieldOfView)
+        internal CameraThirdPerson(Camera camera, GameObject target, float distanceToTarget, GameTime gameTime) : base (camera)
         {
             this.target = target;
             this.distanceToTarget = distanceToTarget;
-            this.Position = Vector3.Zero;
+            Rotate(gameTime);
+
+            this.Position = target.position + targetToCameraVector;
+
         }
 
         internal override void Update(GameTime gameTime)
@@ -46,8 +49,10 @@ namespace TankProject
                 if (distanceToTarget < 0.1f)
                     distanceToTarget = 0.1f;
             }
+            base.Update(gameTime);
+
             targetToCameraVector = new Vector3(0, 0, distanceToTarget);
-            rotationMatrix = Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, 0);
+            this.rotationMatrix = Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, 0);
             targetToCameraVector = Vector3.Transform(targetToCameraVector, rotationMatrix);
             this.Forward = Vector3.Transform(Vector3.Forward, rotationMatrix);
             this.Right = Vector3.Transform(Vector3.Right, rotationMatrix);

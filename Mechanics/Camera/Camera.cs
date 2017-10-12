@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace TankProject
 {
@@ -55,6 +56,8 @@ namespace TankProject
         // --- --- --- --- FUNCTIONS --- --- --- --- \\
         internal virtual void Update(GameTime gameTime)
         {
+            //rotation.X = Math.Max(0, Math.Min(2, rotation.X));
+            rotation.Y = Math.Max(-0.9f, Math.Min(0.9f, rotation.Y));
             return;
         }
     }

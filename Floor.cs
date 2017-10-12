@@ -55,7 +55,7 @@ namespace TankProject
             {
                 for (int z = 0; z < heightMap.Height; z++)
                 {
-                    vertices[n] = new VertexPositionNormalTexture(new Vector3(x, pixelMap[n].R * 0.05f, z), new Vector3(0,1,0), new Vector2(x % 2, (z + 1) % 2));
+                    vertices[n] = new VertexPositionNormalTexture(new Vector3(x, pixelMap[n].R * 0.05f, z), new Vector3(0,1,0), new Vector2(x, z));
                     VerticesHeight[x,z] = pixelMap[n++].R * 0.05f;
                 }
             }
