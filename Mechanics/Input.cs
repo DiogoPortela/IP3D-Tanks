@@ -63,5 +63,9 @@ namespace TankProject
 
             lastMousePosition = MouseState.Position;
         }
+        internal static void LateUpdate()
+        {
+            Mouse.SetPosition(300, 300);
+        }
     }
 }

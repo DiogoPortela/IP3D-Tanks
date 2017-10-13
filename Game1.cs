@@ -68,15 +68,15 @@ namespace TankProject
                 Exit();
 
             Input.Update();
-            if (Input.IsPressedDown(Keys.F1))
+            if (Input.IsPressedDown(Keys.F1) && !(currentCamera is CameraThirdPerson))
             {
-                currentCamera = new CameraThirdPerson(currentCamera, player, 5.0f);
+                currentCamera = new CameraThirdPerson(currentCamera, player, 5.0f, gameTime);
             }
-            if (Input.IsPressedDown(Keys.F2) /* && position dentro do mapa*/)
+            if (Input.IsPressedDown(Keys.F2) && !(currentCamera is CameraFreeSurfaceFolow) && currentCamera.Position.X > 0 && currentCamera.Position.Z > 0/* TODO: Clean camera position check code.*/)
             {
                 currentCamera = new CameraFreeSurfaceFolow(currentCamera);
             }
-            if (Input.IsPressedDown(Keys.F3))
+            if (Input.IsPressedDown(Keys.F3) && !(currentCamera is CameraFree))
             {
                 currentCamera = new CameraFree(currentCamera);
             }
