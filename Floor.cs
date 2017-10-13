@@ -87,7 +87,7 @@ namespace TankProject
             Game1.graphics.GraphicsDevice.Indices = indexBuffer;
 
             effect.CurrentTechnique.Passes[0].Apply();
-            for (int i = 0; i < 127; i++)
+            for (int i = 0; i < heightMap.Width - 1; i++)
             {
                 Game1.graphics.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleStrip, 0, i * heightMap.Width * 2, heightMap.Height * 2 - 2);
             }
