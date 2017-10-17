@@ -31,7 +31,8 @@ namespace TankProject
 
             effect.World = Matrix.Identity;
             effect.Projection = camera.ProjectionMatrix;
-            effect.LightingEnabled = false;
+            effect.LightingEnabled = true;
+            effect.EnableDefaultLighting();
             effect.VertexColorEnabled = false;
             effect.TextureEnabled = true;
             effect.Texture = texture;
@@ -55,10 +56,38 @@ namespace TankProject
             {
                 for (int z = 0; z < heightMap.Height; z++)
                 {
-                    vertices[n] = new VertexPositionNormalTexture(new Vector3(x, pixelMap[n].R * 0.05f, z), new Vector3(0,1,0), new Vector2(x, z));
-                    VerticesHeight[x,z] = pixelMap[n++].R * 0.05f;
+                    vertices[n] = new VertexPositionNormalTexture(new Vector3(x, pixelMap[n].R * 0.05f, z), new Vector3(0, 1, 0), new Vector2(x, z));
+                    VerticesHeight[x, z] = pixelMap[n++].R * 0.05f;
                 }
             }
+
+            //Calculo das normais
+                //Miolo
+            for (int x = 1; x < heightMap.Width - 1; x++)
+            {
+                for (int z = 1; z < heightMap.Height - 1; z++)
+                {
+                    Vector3 currentPosition = vertices[x * heightMap.Height + z].Position;
+                    Vector3 normal1 = Vector3.Cross(vertices[(x - 1) * heightMap.Height + (z - 1)].Position - currentPosition, vertices[(x - 1) * heightMap.Height + z].Position - currentPosition);
+                    Vector3 normal2 = Vector3.Cross(vertices[(x - 1) * heightMap.Height + z].Position - currentPosition, vertices[(x - 1) * heightMap.Height + (z + 1)].Position - currentPosition);
+                    Vector3 normal3 = Vector3.Cross(vertices[(x - 1) * heightMap.Height + (z + 1)].Position - currentPosition, vertices[x * heightMap.Height + (z + 1)].Position - currentPosition);
+                    Vector3 normal4 = Vector3.Cross(vertices[x * heightMap.Height + (z + 1)].Position - currentPosition, vertices[(x + 1) * heightMap.Height + (z + 1)].Position - currentPosition);
+                    Vector3 normal5 = Vector3.Cross(vertices[(x + 1) * heightMap.Height + (z + 1)].Position - currentPosition, vertices[(x + 1) * heightMap.Height + z].Position - currentPosition);
+                    Vector3 normal6 = Vector3.Cross(vertices[(x + 1) * heightMap.Height + z].Position - currentPosition, vertices[(x + 1) * heightMap.Height + (z - 1)].Position - currentPosition);
+                    Vector3 normal7 = Vector3.Cross(vertices[(x + 1) * heightMap.Height + (z - 1)].Position - currentPosition, vertices[x * heightMap.Height + (z - 1)].Position - currentPosition);
+                    Vector3 normal8 = Vector3.Cross(vertices[x * heightMap.Height + (z - 1)].Position - currentPosition, vertices[(x - 1) * heightMap.Height + (z - 1)].Position - currentPosition);
+                    normal1.Normalize();
+                    normal2.Normalize();
+                    normal3.Normalize();
+                    normal4.Normalize();
+                    normal5.Normalize();
+                    normal6.Normalize();
+                    normal7.Normalize();
+                    normal8.Normalize();
+                    vertices[x * heightMap.Height + z].Normal =(normal1 + normal2 + normal3 + normal4 + normal5 + normal6 + normal7 + normal8) / 8.0f;
+                }
+            }
+            //
 
             vertexBuffer = new VertexBuffer(Game1.graphics.GraphicsDevice, typeof(VertexPositionNormalTexture), vertexCount, BufferUsage.None);
             vertexBuffer.SetData<VertexPositionNormalTexture>(vertices);
