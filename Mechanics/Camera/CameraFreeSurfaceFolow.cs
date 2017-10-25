@@ -31,11 +31,17 @@ namespace TankProject
                 Position -= relativeRight * cameraSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             else if (Input.IsPressedDown(Keys.NumPad6) && !Input.IsPressedDown(Keys.NumPad4))
                 Position += relativeRight * cameraSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            nearVertices[0] = Floor.VerticesHeight[(int)(this.Position.X), (int)(this.Position.Z)];
-            nearVertices[1] = Floor.VerticesHeight[(int)(this.Position.X + 1), (int)(this.Position.Z)];
-            nearVertices[2] = Floor.VerticesHeight[(int)(this.Position.X), (int)(this.Position.Z + 1)];
-            nearVertices[3] = Floor.VerticesHeight[(int)(this.Position.X + 1), (int)(this.Position.Z + 1)];
+            try
+            {
+                nearVertices[0] = Floor.VerticesHeight[(int)(this.Position.X), (int)(this.Position.Z)];
+                nearVertices[1] = Floor.VerticesHeight[(int)(this.Position.X + 1), (int)(this.Position.Z)];
+                nearVertices[2] = Floor.VerticesHeight[(int)(this.Position.X), (int)(this.Position.Z + 1)];
+                nearVertices[3] = Floor.VerticesHeight[(int)(this.Position.X + 1), (int)(this.Position.Z + 1)];
+            }
+            catch
+            {
+                Game1.currentCamera = new CameraFree(this);
+            }
 
             float yab, ycd, y;
             float da, db, dcd, dab;

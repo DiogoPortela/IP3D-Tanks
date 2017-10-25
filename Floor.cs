@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace TankProject
@@ -18,7 +13,7 @@ namespace TankProject
         internal static float[,] VerticesHeight;
 
 
-        internal static void Start(Game1 game, Camera camera)
+        internal static void Start(Game1 game, Camera camera, Material material, Light light)
         {
             heightMap = game.Content.Load<Texture2D>("lh3d1");
             texture = game.Content.Load<Texture2D>("sand");
@@ -31,11 +26,36 @@ namespace TankProject
 
             effect.World = Matrix.Identity;
             effect.Projection = camera.ProjectionMatrix;
-            effect.LightingEnabled = true;
-            effect.EnableDefaultLighting();
-            effect.VertexColorEnabled = false;
+
             effect.TextureEnabled = true;
             effect.Texture = texture;
+
+            //Material
+            effect.AmbientLightColor = material.AmbientColor;
+            effect.DiffuseColor = material.DiffuseColor;
+            effect.SpecularColor = material.SpecularColor;
+            effect.SpecularPower = material.SpecularPower;
+            effect.PreferPerPixelLighting = true;
+
+            //Light
+            effect.LightingEnabled = true;
+            effect.DirectionalLight0.Enabled = true;
+            effect.DirectionalLight0.DiffuseColor = light.DiffuseColor;
+            effect.DirectionalLight0.SpecularColor = light.SpecularColor;
+            effect.DirectionalLight0.Direction = light.Direction;
+
+            /*effect.DiffuseColor = new Vector3(1.0f, 1.0f, 1.0f);
+            effect.SpecularColor = new Vector3(1.0f, 1.0f, 1.0f);
+            effect.SpecularPower = 70.0f;
+
+            effect.AmbientLightColor = new Vector3(0.5f, 0.5f, 0.5f);
+
+            effect.DirectionalLight0.DiffuseColor = new Vector3(0.5f, 0.5f, 0.5f);
+            effect.DirectionalLight0.SpecularColor = new Vector3(0.2f, 0.2f, 0.2f);
+            effect.DirectionalLight0.Direction = new Vector3(-1.0f, -1.0f, -1.0f);
+            effect.DirectionalLight0.Enabled = true;
+
+            effect.PreferPerPixelLighting = true;*/
 
             CreateGeometry();
         }
@@ -62,7 +82,7 @@ namespace TankProject
             }
 
             //Calculo das normais
-                //Miolo
+            //Miolo
             for (int x = 1; x < heightMap.Width - 1; x++)
             {
                 for (int z = 1; z < heightMap.Height - 1; z++)
@@ -84,10 +104,104 @@ namespace TankProject
                     normal6.Normalize();
                     normal7.Normalize();
                     normal8.Normalize();
-                    vertices[x * heightMap.Height + z].Normal =(normal1 + normal2 + normal3 + normal4 + normal5 + normal6 + normal7 + normal8) / 8.0f;
+                    vertices[x * heightMap.Height + z].Normal = (normal1 + normal2 + normal3 + normal4 + normal5 + normal6 + normal7 + normal8) / 8.0f;
                 }
             }
-            //
+            // Top
+            for (int x = 1; x < heightMap.Width - 1; x++)
+            {
+                Vector3 currentPosition = vertices[x * heightMap.Height].Position;
+                Vector3 normal1 = Vector3.Cross(vertices[(x - 1) * heightMap.Height].Position - currentPosition, vertices[(x - 1) * heightMap.Height + 1].Position - currentPosition);
+                Vector3 normal2 = Vector3.Cross(vertices[(x - 1) * heightMap.Height + 1].Position - currentPosition, vertices[x * heightMap.Height + 1].Position - currentPosition);
+                Vector3 normal3 = Vector3.Cross(vertices[x * heightMap.Height + 1].Position - currentPosition, vertices[(x + 1) * heightMap.Height + 1].Position - currentPosition);
+                Vector3 normal4 = Vector3.Cross(vertices[(x + 1) * heightMap.Height + 1].Position - currentPosition, vertices[(x + 1) * heightMap.Height].Position - currentPosition);
+                normal1.Normalize();
+                normal2.Normalize();
+                normal3.Normalize();
+                normal4.Normalize();
+                vertices[x * heightMap.Height].Normal = (normal1 + normal2 + normal3 + normal4) / 4.0f;
+            }
+            // Bottom
+            for (int x = 1; x < heightMap.Width - 1; x++)
+            {
+                Vector3 currentPosition = vertices[x * heightMap.Height + (heightMap.Height - 1)].Position;
+                Vector3 normal1 = Vector3.Cross(vertices[(x + 1) * heightMap.Height + (heightMap.Height - 1)].Position - currentPosition, vertices[(x + 1) * heightMap.Height + (heightMap.Height - 2)].Position - currentPosition);
+                Vector3 normal2 = Vector3.Cross(vertices[(x + 1) * heightMap.Height + (heightMap.Height - 2)].Position - currentPosition, vertices[x * heightMap.Height + (heightMap.Height - 2)].Position - currentPosition);
+                Vector3 normal3 = Vector3.Cross(vertices[x * heightMap.Height + (heightMap.Height - 2)].Position - currentPosition, vertices[(x - 1) * heightMap.Height + (heightMap.Height - 2)].Position - currentPosition);
+                Vector3 normal4 = Vector3.Cross(vertices[(x - 1) * heightMap.Height + (heightMap.Height - 2)].Position - currentPosition, vertices[(x - 1) * heightMap.Height + (heightMap.Height - 1)].Position - currentPosition);
+                normal1.Normalize();
+                normal2.Normalize();
+                normal3.Normalize();
+                normal4.Normalize();
+                vertices[x * heightMap.Height + (heightMap.Height - 1)].Normal = (normal1 + normal2 + normal3 + normal4) / 4.0f;
+            }
+            // Left
+            for (int z = 1; z < heightMap.Height - 1; z++)
+            {
+                Vector3 currentPosition = vertices[z].Position;
+                Vector3 normal1 = Vector3.Cross(vertices[z + 1].Position - currentPosition, vertices[heightMap.Height + (z + 1)].Position - currentPosition);
+                Vector3 normal2 = Vector3.Cross(vertices[heightMap.Height + (z + 1)].Position - currentPosition, vertices[heightMap.Height + z].Position - currentPosition);
+                Vector3 normal3 = Vector3.Cross(vertices[heightMap.Height + z].Position - currentPosition, vertices[heightMap.Height + (z - 1)].Position - currentPosition);
+                Vector3 normal4 = Vector3.Cross(vertices[heightMap.Height + (z - 1)].Position - currentPosition, vertices[z - 1].Position - currentPosition);
+                normal1.Normalize();
+                normal2.Normalize();
+                normal3.Normalize();
+                normal4.Normalize();
+                vertices[z].Normal = (normal1 + normal2 + normal3 + normal4) / 4.0f;
+            }
+            //Right
+            for (int z = 1; z < heightMap.Height - 1; z++)
+            {
+                Vector3 currentPosition = vertices[(heightMap.Width - 1) * heightMap.Height + z].Position;
+                Vector3 normal1 = Vector3.Cross(vertices[(heightMap.Width - 1) * heightMap.Height + (z - 1)].Position - currentPosition, vertices[(heightMap.Width - 2) * heightMap.Height + (z - 1)].Position - currentPosition);
+                Vector3 normal2 = Vector3.Cross(vertices[(heightMap.Width - 2) * heightMap.Height + (z - 1)].Position - currentPosition, vertices[(heightMap.Width - 2) * heightMap.Height + z].Position - currentPosition);
+                Vector3 normal3 = Vector3.Cross(vertices[(heightMap.Width - 2) * heightMap.Height + z].Position - currentPosition, vertices[(heightMap.Width - 2) * heightMap.Height + (z + 1)].Position - currentPosition);
+                Vector3 normal4 = Vector3.Cross(vertices[(heightMap.Width - 2) * heightMap.Height + (z + 1)].Position - currentPosition, vertices[(heightMap.Width - 1) * heightMap.Height + (z + 1)].Position - currentPosition);
+                normal1.Normalize();
+                normal2.Normalize();
+                normal3.Normalize();
+                normal4.Normalize();
+                vertices[(heightMap.Width - 1) * heightMap.Height + z].Normal = (normal1 + normal2 + normal3 + normal4) / 4.0f;
+            }
+
+            //Top-Left;
+            {
+                Vector3 currentPosition = vertices[0].Position;
+                Vector3 normal1 = Vector3.Cross(vertices[1].Position - currentPosition, vertices[heightMap.Height + 1].Position - currentPosition);
+                Vector3 normal2 = Vector3.Cross(vertices[heightMap.Height + 1].Position - currentPosition, vertices[heightMap.Height].Position - currentPosition);
+                normal1.Normalize();
+                normal2.Normalize();
+                vertices[0].Normal = (normal1 + normal2) / 2.0f;
+            }
+            //Top-Right;
+            {
+                Vector3 currentPosition = vertices[(heightMap.Width - 1) * heightMap.Height].Position;
+                Vector3 normal1 = Vector3.Cross(vertices[(heightMap.Width - 2) * heightMap.Height].Position - currentPosition, vertices[(heightMap.Width - 2) * heightMap.Height + 1].Position - currentPosition);
+                Vector3 normal2 = Vector3.Cross(vertices[(heightMap.Width - 2) * heightMap.Height + 1].Position - currentPosition, vertices[(heightMap.Width - 1) * heightMap.Height + 1].Position - currentPosition);
+                normal1.Normalize();
+                normal2.Normalize();
+                vertices[(heightMap.Width - 1) * heightMap.Height].Normal = (normal1 + normal2) / 2.0f;
+            }
+
+            //Bottom-Left;
+            {
+                Vector3 currentPosition = vertices[heightMap.Height - 1].Position;
+                Vector3 normal1 = Vector3.Cross(vertices[heightMap.Height * 2 - 1].Position - currentPosition, vertices[heightMap.Height * 2 - 2].Position - currentPosition);
+                Vector3 normal2 = Vector3.Cross(vertices[heightMap.Height * 2 - 2].Position - currentPosition, vertices[heightMap.Height - 2].Position - currentPosition);
+                normal1.Normalize();
+                normal2.Normalize();
+                vertices[heightMap.Height - 1].Normal = (normal1 + normal2) / 2.0f;
+            }
+
+            //Bottom-Right;
+            {
+                Vector3 currentPosition = vertices[heightMap.Width * heightMap.Height - 1].Position;
+                Vector3 normal1 = Vector3.Cross(vertices[heightMap.Width * heightMap.Height - 2].Position - currentPosition, vertices[(heightMap.Width - 1) * heightMap.Height - 2].Position - currentPosition);
+                Vector3 normal2 = Vector3.Cross(vertices[(heightMap.Width - 1) * heightMap.Height - 2].Position - currentPosition, vertices[(heightMap.Width - 1) * heightMap.Height - 1].Position - currentPosition);
+                normal1.Normalize();
+                normal2.Normalize();
+                vertices[heightMap.Width * heightMap.Height - 1].Normal = (normal1 + normal2) / 2.0f;
+            }
 
             vertexBuffer = new VertexBuffer(Game1.graphics.GraphicsDevice, typeof(VertexPositionNormalTexture), vertexCount, BufferUsage.None);
             vertexBuffer.SetData<VertexPositionNormalTexture>(vertices);

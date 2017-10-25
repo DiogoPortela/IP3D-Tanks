@@ -45,7 +45,8 @@ namespace TankProject
             spriteBatch = new SpriteBatch(GraphicsDevice);
             currentCamera = new CameraFree(GraphicsDevice, new Vector3(64, 10, 65), 3.0f);
             player = new GameObject(new Vector3(64, 10, 64));
-            Floor.Start(this, currentCamera);
+
+            Floor.Start(this, currentCamera, Material.White, new Light(-Vector3.One, new Color(new Vector3(0.5f, 0.5f, 0.5f)), new Color(new Vector3(0.1f, 0.1f, 0.1f))));
         }
 
         /// <summary>
