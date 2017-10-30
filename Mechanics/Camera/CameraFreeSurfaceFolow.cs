@@ -43,20 +43,9 @@ namespace TankProject
                 Game1.currentCamera = new CameraFree(this);
             }
 
-            float yab, ycd, y;
-            float da, db, dcd, dab;
-
-            da = (this.Position.X - (int)(this.Position.X));
-            db = ((int)(this.Position.X + 1) - this.Position.X);
-
-            yab = db * nearVertices[0] + da * nearVertices[1];
-            ycd = db * nearVertices[2] + da * nearVertices[3];
-
-            dcd = ((int)(this.Position.Z + 1) - this.Position.Z);
-            dab = (this.Position.Z - (int)(this.Position.Z));
-
-            y = dcd * yab + dab * ycd + 1.0f;
-            Position.Y = y;
+            Position.Y = 1.0f + Interpolation.BiLinear(new Vector2(this.Position.X, this.Position.Z),
+                                                       new Vector2((int)this.Position.X, (int)this.Position.Z),
+                                                       1.0f, nearVertices[0], nearVertices[1], nearVertices[2], nearVertices[3]);
         }
     }
 }

@@ -44,19 +44,6 @@ namespace TankProject
             effect.DirectionalLight0.SpecularColor = light.SpecularColor;
             effect.DirectionalLight0.Direction = light.Direction;
 
-            /*effect.DiffuseColor = new Vector3(1.0f, 1.0f, 1.0f);
-            effect.SpecularColor = new Vector3(1.0f, 1.0f, 1.0f);
-            effect.SpecularPower = 70.0f;
-
-            effect.AmbientLightColor = new Vector3(0.5f, 0.5f, 0.5f);
-
-            effect.DirectionalLight0.DiffuseColor = new Vector3(0.5f, 0.5f, 0.5f);
-            effect.DirectionalLight0.SpecularColor = new Vector3(0.2f, 0.2f, 0.2f);
-            effect.DirectionalLight0.Direction = new Vector3(-1.0f, -1.0f, -1.0f);
-            effect.DirectionalLight0.Enabled = true;
-
-            effect.PreferPerPixelLighting = true;*/
-
             CreateGeometry();
         }
 

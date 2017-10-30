@@ -50,6 +50,7 @@
     <Compile Include="Mechanics\Debug.cs" />
     <Compile Include="Mechanics\GameObject.cs" />
     <Compile Include="Mechanics\Input.cs" />
+    <Compile Include="Mechanics\Interpolation.cs" />
     <Compile Include="Mechanics\Light.cs" />
     <Compile Include="Mechanics\Material.cs" />
     <Compile Include="Program.cs" />
