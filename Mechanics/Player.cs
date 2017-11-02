@@ -20,7 +20,6 @@ namespace TankProject
         internal Matrix[] boneTransformations;
         
 
-
         internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float modelScale)
             : base(position, rotation, velocity)
         {
@@ -115,7 +114,7 @@ namespace TankProject
 
         internal void Update(GameTime gameTime)
         {
-            tankModel.Root.Transform = Matrix.CreateScale(modelScale);
+            tankModel.Root.Transform = Matrix.CreateScale(modelScale) * rotationMatrix * transformMatrix;
             turretBone.Transform = Matrix.CreateRotationY(turretAngle) * turretTransform;
             cannonBone.Transform = Matrix.CreateRotationX(cannonAngle) * cannonTransform;
             rightFrontWheelBone.Transform = Matrix.CreateRotationX(rightFrontWheelAngle) * rightFrontWheelTransform;

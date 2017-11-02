@@ -44,7 +44,7 @@ namespace TankProject
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             currentCamera = new CameraFree(GraphicsDevice, new Vector3(64, 10, 65), 3.0f);
-            player = new Player(new Vector3(64, 10, 64), Vector3.Zero, Vector3.Zero, 0.005f);
+            player = new Player(new Vector3(64, 10, 64), Vector3.Zero, Vector3.Zero, 0.0005f);
             player.LoadModelBones(Content);
 
             
