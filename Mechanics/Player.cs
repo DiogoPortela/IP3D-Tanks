@@ -10,6 +10,7 @@ namespace TankProject
     {
         private Vector3 relativeForward, relativeRight;
         private Vector3 turretRotationVelocity;
+        private Vector3 Up, Forward, Right;
         private Model tankModel;
         private ModelBone turretBone, cannonBone, hatchBone, rightSteerBone, leftSteerBone, rightFrontWheelBone, leftFrontWheelBone, rightBackWheelBone, leftBackWheelBone;
         private Matrix turretTransform, cannonTransform, hatchTransform, rightSteerTransform, leftSteerTransform, rightFrontWheelTransform, leftFrontWheelTransform, rightBackWheelTransform, leftBackWheelTransform;
@@ -19,12 +20,14 @@ namespace TankProject
 
         internal Matrix[] boneTransformations;
 
-
         internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float modelScale)
             : base(position, rotation, velocity)
         {
             this.relativeForward = Vector3.Forward;
             this.relativeRight = Vector3.Right;
+            this.Up = Vector3.Up;
+            this.Forward = Vector3.Forward;
+            this.Right = Vector3.Right;
             this.modelScale = modelScale;
 
         }
@@ -127,9 +130,10 @@ namespace TankProject
             Rotate(gameTime);
             UpdateHatchet(gameTime);
             HeightFollow();
+            NormalFollow();
 
             transformMatrix = Matrix.CreateTranslation(position);
-            rotationMatrix = Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z);
+            rotationMatrix = Matrix.CreateFromYawPitchRoll(rotation.X, Forward.Y, Right.Z);
 
             relativeForward = Vector3.Transform(Vector3.Forward, rotationMatrix);
             relativeRight = Vector3.Transform(Vector3.Right, rotationMatrix);
@@ -159,13 +163,27 @@ namespace TankProject
             }
         }
 
-        internal void HeightFollow()
+        private void HeightFollow()
         {
-            Vector2 positionXZ = new Vector2((int)this.position.X, (int)this.position.Z);
-            this.position.Y = 0.001f /*offset*/ + Interpolation.BiLinear(new Vector2(position.X, position.Z), positionXZ, 1.0f,
+            Vector2 positionXZ = new Vector2(position.X, position.Z);
+            Vector2 roundedPositionXZ = new Vector2((int)this.position.X, (int)this.position.Z);
+
+            this.position.Y = 0.001f /*offset*/ + Interpolation.BiLinear(positionXZ, roundedPositionXZ, 1.0f,
             Floor.VerticesHeight[(int)positionXZ.X, (int)positionXZ.Y], Floor.VerticesHeight[(int)positionXZ.X + 1, (int)positionXZ.Y],
             Floor.VerticesHeight[(int)positionXZ.X, (int)positionXZ.Y + 1], Floor.VerticesHeight[(int)positionXZ.X + 1, (int)positionXZ.Y + 1]);
         }
 
+        private void NormalFollow()
+        {
+            Vector2 positionXZ = new Vector2(position.X, position.Z);
+            Vector2 roundedPositionXZ = new Vector2((int)this.position.X, (int)this.position.Z);
+
+            this.Up = Interpolation.BiLinear(positionXZ, roundedPositionXZ, 1.0f,
+                Floor.VerticesNormals[(int)positionXZ.X, (int)positionXZ.Y], Floor.VerticesNormals[(int)positionXZ.X + 1, (int)positionXZ.Y],
+                Floor.VerticesNormals[(int)positionXZ.X, (int)positionXZ.Y + 1], Floor.VerticesNormals[(int)positionXZ.X + 1, (int)positionXZ.Y + 1]);
+
+            this.Forward = Vector3.Cross(Up, relativeRight);
+            this.Right = Vector3.Cross(Up, relativeForward);
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace TankProject
         private static Texture2D heightMap;
         private static Texture2D texture;
         internal static float[,] VerticesHeight;
+        internal static Vector3[,] VerticesNormals;
 
 
         internal static void Start(Game1 game, Camera camera, Material material, Light light)
@@ -19,6 +20,7 @@ namespace TankProject
             texture = game.Content.Load<Texture2D>("sand");
 
             VerticesHeight = new float[heightMap.Width, heightMap.Height];
+            VerticesNormals = new Vector3[heightMap.Width, heightMap.Height];
 
             effect = new BasicEffect(Game1.graphics.GraphicsDevice);
 
@@ -92,6 +94,8 @@ namespace TankProject
                     normal7.Normalize();
                     normal8.Normalize();
                     vertices[x * heightMap.Height + z].Normal = (normal1 + normal2 + normal3 + normal4 + normal5 + normal6 + normal7 + normal8) / 8.0f;
+                    VerticesNormals[x, z] = (normal1 + normal2 + normal3 + normal4 + normal5 + normal6 + normal7 + normal8) / 8.0f;
+
                 }
             }
             // Top
@@ -107,6 +111,7 @@ namespace TankProject
                 normal3.Normalize();
                 normal4.Normalize();
                 vertices[x * heightMap.Height].Normal = (normal1 + normal2 + normal3 + normal4) / 4.0f;
+                VerticesNormals[x, 0] = (normal1 + normal2 + normal3 + normal4) / 4.0f;
             }
             // Bottom
             for (int x = 1; x < heightMap.Width - 1; x++)
@@ -121,6 +126,7 @@ namespace TankProject
                 normal3.Normalize();
                 normal4.Normalize();
                 vertices[x * heightMap.Height + (heightMap.Height - 1)].Normal = (normal1 + normal2 + normal3 + normal4) / 4.0f;
+                VerticesNormals[x, heightMap.Height - 1] = (normal1 + normal2 + normal3 + normal4) / 4.0f;
             }
             // Left
             for (int z = 1; z < heightMap.Height - 1; z++)
@@ -135,6 +141,7 @@ namespace TankProject
                 normal3.Normalize();
                 normal4.Normalize();
                 vertices[z].Normal = (normal1 + normal2 + normal3 + normal4) / 4.0f;
+                VerticesNormals[0, z] = (normal1 + normal2 + normal3 + normal4) / 4.0f;
             }
             //Right
             for (int z = 1; z < heightMap.Height - 1; z++)
@@ -149,6 +156,7 @@ namespace TankProject
                 normal3.Normalize();
                 normal4.Normalize();
                 vertices[(heightMap.Width - 1) * heightMap.Height + z].Normal = (normal1 + normal2 + normal3 + normal4) / 4.0f;
+                VerticesNormals[heightMap.Width - 1, z] = (normal1 + normal2 + normal3 + normal4) / 4.0f;
             }
 
             //Top-Left;
@@ -159,6 +167,7 @@ namespace TankProject
                 normal1.Normalize();
                 normal2.Normalize();
                 vertices[0].Normal = (normal1 + normal2) / 2.0f;
+                VerticesNormals[0, 0] = (normal1 + normal2) / 2.0f;
             }
             //Top-Right;
             {
@@ -168,6 +177,7 @@ namespace TankProject
                 normal1.Normalize();
                 normal2.Normalize();
                 vertices[(heightMap.Width - 1) * heightMap.Height].Normal = (normal1 + normal2) / 2.0f;
+                VerticesNormals[heightMap.Width - 1, 0] = (normal1 + normal2) / 2.0f;
             }
 
             //Bottom-Left;
@@ -178,6 +188,7 @@ namespace TankProject
                 normal1.Normalize();
                 normal2.Normalize();
                 vertices[heightMap.Height - 1].Normal = (normal1 + normal2) / 2.0f;
+                VerticesNormals[0, heightMap.Height - 1] = (normal1 + normal2) / 2.0f;
             }
 
             //Bottom-Right;
@@ -188,6 +199,7 @@ namespace TankProject
                 normal1.Normalize();
                 normal2.Normalize();
                 vertices[heightMap.Width * heightMap.Height - 1].Normal = (normal1 + normal2) / 2.0f;
+                VerticesNormals[heightMap.Width - 1, heightMap.Height - 1] = (normal1 + normal2) / 2.0f;
             }
 
             vertexBuffer = new VertexBuffer(Game1.graphics.GraphicsDevice, typeof(VertexPositionNormalTexture), vertexCount, BufferUsage.None);
