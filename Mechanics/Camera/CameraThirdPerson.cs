@@ -10,7 +10,7 @@ namespace TankProject
         Vector3 targetToCameraVector;
         float distanceToTarget;
 
-        internal CameraThirdPerson(GraphicsDevice device, Vector3 position, GameObject target, float distanceToTarget, float cameraSpeed = 15, float fieldOfView = 45) : base(device, position, cameraSpeed, fieldOfView)
+        internal CameraThirdPerson(GraphicsDevice device, Vector3 position, GameObject target, float distanceToTarget, float cameraSpeed = 5, float fieldOfView = 45) : base(device, position, cameraSpeed, fieldOfView)
         {
             this.target = target;
             this.distanceToTarget = distanceToTarget;

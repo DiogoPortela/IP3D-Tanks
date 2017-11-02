@@ -19,7 +19,7 @@ namespace TankProject
             this.position = position;
             this.velocity = velocity;
             this.rotation = rotation;
-            rotationMatrix = Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z);
+            rotationMatrix = Matrix.Identity; /*Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z)*/;
             transformMatrix = Matrix.CreateTranslation(position);
         }
     }

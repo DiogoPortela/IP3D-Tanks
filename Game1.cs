@@ -86,7 +86,6 @@ namespace TankProject
             }
 
             currentCamera.Update(gameTime);
-            player.Move(gameTime);
             player.Update(gameTime);
 
             Debug.Update();
