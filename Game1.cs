@@ -15,6 +15,8 @@ namespace TankProject
         internal static Camera currentCamera;
         internal static Player player;
 
+        internal static Light currentLight;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -44,12 +46,11 @@ namespace TankProject
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             currentCamera = new CameraFree(GraphicsDevice, new Vector3(64, 10, 65), 3.0f);
+            currentLight = new Light(-Vector3.One, new Color(new Vector3(0.5f, 0.5f, 0.5f)), new Color(new Vector3(0.1f, 0.1f, 0.1f)));
             player = new Player(new Vector3(64, 10, 64), Vector3.Zero, Vector3.Zero, 0.0005f);
-            player.LoadModelBones(Content);
+            player.LoadModelBones(Content, Material.White, currentLight);
 
-            
-
-            Floor.Start(this, currentCamera, Material.White, new Light(-Vector3.One, new Color(new Vector3(0.5f, 0.5f, 0.5f)), new Color(new Vector3(0.1f, 0.1f, 0.1f))));
+            Floor.Start(this, currentCamera, Material.White, currentLight);
         }
 
         /// <summary>
