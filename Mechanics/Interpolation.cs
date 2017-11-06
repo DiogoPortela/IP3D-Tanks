@@ -13,7 +13,7 @@ namespace TankProject
             da = (currentPosition.X - gridPosition.X);
             db = ((gridPosition.X + gridSize) - currentPosition.X);
 
-            yAB = (db * valueOne + da * valueTwo);
+            yAB = db * valueOne + da * valueTwo;
             yCD = db * valueThree + da * valueFour;
 
             dcd = ((gridPosition.Y + gridSize) - currentPosition.Y);
@@ -31,7 +31,7 @@ namespace TankProject
             da = (currentPosition.X - gridPosition.X);
             db = ((gridPosition.X + gridSize) - currentPosition.X);
 
-            yAB = (db * valueOne + da * valueTwo);
+            yAB = db * valueOne + da * valueTwo;
             yCD = db * valueThree + da * valueFour;
 
             dcd = ((gridPosition.Y + gridSize) - currentPosition.Y);
