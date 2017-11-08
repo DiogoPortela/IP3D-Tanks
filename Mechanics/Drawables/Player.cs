@@ -119,14 +119,17 @@ namespace TankProject
             if (rotation.X > 2 * MathHelper.Pi || rotation.X < -2 * MathHelper.Pi)
                 rotation.X = 0;
 
-            //movimento torre
+            //canhao
             if (Input.IsPressedDown(Keys.Up) && !Input.IsPressedDown(Keys.Down))
-                if (this.cannonAngle < Math.PI / 4)
+            {
+                if (this.cannonAngle >= -Math.PI / 4)
                     this.cannonAngle -= MathHelper.ToRadians(1f);
+            }
             else if (Input.IsPressedDown(Keys.Down) && !Input.IsPressedDown(Keys.Up))
-                if (this.cannonAngle > 0)
-                    this.cannonAngle += MathHelper.ToRadians(1f);
-            //TODO: FIX CANNON.
+                    if (this.cannonAngle <= 0)
+                        this.cannonAngle += MathHelper.ToRadians(1f);
+
+            //torre
             if (Input.IsPressedDown(Keys.Left) && !Input.IsPressedDown(Keys.Right))
                 this.turretAngle -= MathHelper.ToRadians(1f);
             else if (Input.IsPressedDown(Keys.Right) && !Input.IsPressedDown(Keys.Left))
