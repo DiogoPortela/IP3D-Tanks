@@ -41,7 +41,7 @@ namespace TankProject
             }
             if (Input.MouseWheelValue() != 0)
             {
-                distanceToTarget += (float)gameTime.ElapsedGameTime.TotalSeconds * 0.1f * Input.MouseWheelValue();
+                distanceToTarget -= (float)gameTime.ElapsedGameTime.TotalSeconds * 0.1f * Input.MouseWheelValue();
                 if (distanceToTarget < 0.1f)
                     distanceToTarget = 0.1f;
             }

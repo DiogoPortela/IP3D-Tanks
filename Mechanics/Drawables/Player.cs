@@ -21,15 +21,24 @@ namespace TankProject
 
         internal Matrix[] boneTransformations;
 
+        //Player keys
+        protected Keys[] playerKeys;
+        internal enum PlayerNumber { PlayerOne = 1, PlayerTwo};
+        private PlayerNumber playerNumber;
+        
+
         //--------------------Constructors--------------------//
 
-        internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float modelScale)
+        internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float modelScale, PlayerNumber number)
             : base(position, rotation, velocity)
         {
             this.relativeForward = this.Forward = Vector3.Forward;
             this.relativeRight = this.Right = Vector3.Right;
             this.Up = Vector3.Up;
             this.modelScale = modelScale;
+            this.playerNumber = number;
+
+            SetPlayerKeys();
         }
 
         //--------------------Functions--------------------//
@@ -88,6 +97,14 @@ namespace TankProject
             }
         }
 
+        private void SetPlayerKeys()
+        {
+            if(playerNumber == PlayerNumber.PlayerOne)
+            {
+                //playerKeys = { Keys.A, Keys.D, k}
+            }
+        }
+
         private void Move(GameTime gameTime)
         {
             if (Input.IsPressedDown(Keys.W) && !Input.IsPressedDown(Keys.S))
@@ -133,9 +150,9 @@ namespace TankProject
 
             //torre
             if (Input.IsPressedDown(Keys.Left) && !Input.IsPressedDown(Keys.Right))
-                this.turretAngle -= MathHelper.ToRadians(1f);
-            else if (Input.IsPressedDown(Keys.Right) && !Input.IsPressedDown(Keys.Left))
                 this.turretAngle += MathHelper.ToRadians(1f);
+            else if (Input.IsPressedDown(Keys.Right) && !Input.IsPressedDown(Keys.Left))
+                this.turretAngle -= MathHelper.ToRadians(1f);
         }
 
         private void UpdateHatchet(GameTime gameTime)
