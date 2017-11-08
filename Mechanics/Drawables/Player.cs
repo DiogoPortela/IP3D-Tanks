@@ -134,15 +134,20 @@ namespace TankProject
             {
                 rightSteerAngle = MathHelper.ToRadians(10f);
                 leftSteerAngle = MathHelper.ToRadians(10f);
-                if (Input.IsPressedDown(Keys.W) || Input.IsPressedDown(Keys.S))
+                if (Input.IsPressedDown(Keys.W))
                     rotation.X += MathHelper.ToRadians(1f);
+                else if (Input.IsPressedDown(Keys.S))
+                    rotation.X -= MathHelper.ToRadians(1f);
             }
             else if (Input.IsPressedDown(Keys.D) && !Input.IsPressedDown(Keys.A))
             {
                 rightSteerAngle = MathHelper.ToRadians(-10f);
                 leftSteerAngle = MathHelper.ToRadians(-10f);
-                if (Input.IsPressedDown(Keys.W) || Input.IsPressedDown(Keys.S))
+                if (Input.IsPressedDown(Keys.W))
                     rotation.X -= MathHelper.ToRadians(1f);
+                else if (Input.IsPressedDown(Keys.S))
+                    rotation.X += MathHelper.ToRadians(1f);
+
             }
             else
             {
