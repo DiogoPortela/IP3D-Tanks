@@ -36,9 +36,11 @@ namespace TankProject
         }
 
 
-        internal static void Start()
+        internal static void Start(Color color, SpriteFont spriteFont)
         {
             textDictionary = new Dictionary<string, DebugText>();
+            debugFont = spriteFont;
+            debugColor = color;
         }
         internal static void AddText(String id, String text, Vector2 screenPosition)
         {
@@ -61,9 +63,9 @@ namespace TankProject
         }
         internal static void Draw(SpriteBatch batch)
         {
-            foreach (DebugText text in textDictionary)
+            foreach (KeyValuePair<String, DebugText> text in textDictionary)
             {
-                text.Draw(batch);
+                text.Value.Draw(batch);
             }
         }
     }
