@@ -15,7 +15,7 @@ namespace TankProject
         private Matrix turretTransform, cannonTransform, hatchTransform, rightSteerTransform, leftSteerTransform, rightFrontWheelTransform, leftFrontWheelTransform, rightBackWheelTransform, leftBackWheelTransform;
 
         private float modelScale;
-        private float turretAngle = 0, cannonAngle = 0, hatchetAngle = 0, rightFrontWheelAngle = 0, leftFrontWheelAngle = 0, rightBackWheelAngle = 0, leftBackWheelAngle = 0;
+        private float turretAngle = 0, cannonAngle = 0, hatchetAngle = 0, rightSteerAngle = 0, leftSteerAngle = 0, rightFrontWheelAngle = 0, leftFrontWheelAngle = 0, rightBackWheelAngle = 0, leftBackWheelAngle = 0;
 
         private bool isOpenning; //used to slowly open hatchet
 
@@ -23,9 +23,9 @@ namespace TankProject
 
         //Player keys
         protected Keys[] playerKeys;
-        internal enum PlayerNumber { PlayerOne = 1, PlayerTwo};
+        internal enum PlayerNumber { PlayerOne = 1, PlayerTwo };
         private PlayerNumber playerNumber;
-        
+
 
         //--------------------Constructors--------------------//
 
@@ -99,11 +99,11 @@ namespace TankProject
 
         private void SetPlayerKeys()
         {
-            if(playerNumber == PlayerNumber.PlayerOne)
+            if (playerNumber == PlayerNumber.PlayerOne)
             {
-                
+
             }
-            else if(playerNumber == PlayerNumber.PlayerTwo)
+            else if (playerNumber == PlayerNumber.PlayerTwo)
             {
 
             }
@@ -132,11 +132,22 @@ namespace TankProject
         {
             if (Input.IsPressedDown(Keys.A) && !Input.IsPressedDown(Keys.D))
             {
-                rotation.X += MathHelper.ToRadians(1f);
+                rightSteerAngle = MathHelper.ToRadians(10f);
+                leftSteerAngle = MathHelper.ToRadians(10f);
+                if (Input.IsPressedDown(Keys.W) || Input.IsPressedDown(Keys.S))
+                    rotation.X += MathHelper.ToRadians(1f);
             }
             else if (Input.IsPressedDown(Keys.D) && !Input.IsPressedDown(Keys.A))
             {
-                rotation.X -= MathHelper.ToRadians(1f);
+                rightSteerAngle = MathHelper.ToRadians(-10f);
+                leftSteerAngle = MathHelper.ToRadians(-10f);
+                if (Input.IsPressedDown(Keys.W) || Input.IsPressedDown(Keys.S))
+                    rotation.X -= MathHelper.ToRadians(1f);
+            }
+            else
+            {
+                rightSteerAngle = MathHelper.ToRadians(0f);
+                leftSteerAngle = MathHelper.ToRadians(0f);
             }
 
             if (rotation.X > 2 * MathHelper.Pi || rotation.X < -2 * MathHelper.Pi)
@@ -149,8 +160,8 @@ namespace TankProject
                     this.cannonAngle -= MathHelper.ToRadians(1f);
             }
             else if (Input.IsPressedDown(Keys.Down) && !Input.IsPressedDown(Keys.Up))
-                    if (this.cannonAngle <= 0)
-                        this.cannonAngle += MathHelper.ToRadians(1f);
+                if (this.cannonAngle <= 0)
+                    this.cannonAngle += MathHelper.ToRadians(1f);
 
             //torre
             if (Input.IsPressedDown(Keys.Left) && !Input.IsPressedDown(Keys.Right))
@@ -219,6 +230,8 @@ namespace TankProject
             tankModel.Root.Transform = Matrix.CreateScale(modelScale) * rotationMatrix * transformMatrix;
             turretBone.Transform = Matrix.CreateRotationY(turretAngle) * turretTransform;
             cannonBone.Transform = Matrix.CreateRotationX(cannonAngle) * cannonTransform;
+            rightSteerBone.Transform = Matrix.CreateRotationY(rightSteerAngle) * rightSteerTransform;
+            leftSteerBone.Transform = Matrix.CreateRotationY(leftSteerAngle) * leftSteerTransform;
             rightFrontWheelBone.Transform = Matrix.CreateRotationX(rightFrontWheelAngle) * rightFrontWheelTransform;
             leftFrontWheelBone.Transform = Matrix.CreateRotationX(leftFrontWheelAngle) * leftFrontWheelTransform;
             rightBackWheelBone.Transform = Matrix.CreateRotationX(rightBackWheelAngle) * rightBackWheelTransform;
