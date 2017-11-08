@@ -14,6 +14,8 @@ namespace TankProject
         internal Vector3 SpecularColor { get { return specularColor.ToVector3(); } set { specularColor = new Color(value.X, value.Y, value.Z); } }
         internal float SpecularPower { get { return specularPower; } set { specularPower = value; } }
 
+        //--------------------Constructors--------------------//
+
         internal Material(Color diffuse, Color specular, Color ambient, float specularPower)
         {
             diffuseColor = diffuse;
@@ -21,6 +23,8 @@ namespace TankProject
             ambientColor = ambient;
             this.specularPower = specularPower;
         }
+
+        //--------------------Ovos--------------------//
 
         internal static Material White = new Material(Color.White, Color.White, new Color(new Vector3(0.5f, 0.5f, 0.5f)), 75.0f);
         internal static Material Black = new Material(Color.Black, Color.White, Color.Black, 75.0f);

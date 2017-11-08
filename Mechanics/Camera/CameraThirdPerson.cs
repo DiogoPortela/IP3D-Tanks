@@ -10,6 +10,8 @@ namespace TankProject
         Vector3 targetToCameraVector;
         float distanceToTarget;
 
+        //--------------------Constructors--------------------//
+
         internal CameraThirdPerson(GraphicsDevice device, Vector3 position, GameObject target, float distanceToTarget, float cameraSpeed = 5.0f, float fieldOfView = 45.0f) : base(device, position, cameraSpeed, fieldOfView)
         {
             this.target = target;
@@ -25,13 +27,7 @@ namespace TankProject
 
         }
 
-        internal override void Update(GameTime gameTime)
-        {
-            this.targetPosition = target.position;
-            this.Position = target.position + targetToCameraVector;
-            Rotate(gameTime);
-            this.ViewMatrix = Matrix.CreateLookAt(Position, target.position, Vector3.Up);
-        }
+        //--------------------Functions--------------------//
 
         internal void Rotate(GameTime gameTime)
         {
@@ -57,6 +53,16 @@ namespace TankProject
             this.Forward = Vector3.Transform(Vector3.Forward, rotationMatrix);
             this.Right = Vector3.Transform(Vector3.Right, rotationMatrix);
 
+        }
+        
+        //--------------------Update&Draw--------------------//
+
+        internal override void Update(GameTime gameTime)
+        {
+            this.targetPosition = target.position;
+            this.Position = target.position + targetToCameraVector;
+            Rotate(gameTime);
+            this.ViewMatrix = Matrix.CreateLookAt(Position, target.position, Vector3.Up);
         }
     }
 }

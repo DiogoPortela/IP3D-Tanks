@@ -41,20 +41,20 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Floor.cs" />
-    <Compile Include="Mechanics\Bullet.cs" />
+    <Compile Include="Mechanics\Drawables\Floor.cs" />
+    <Compile Include="Mechanics\Drawables\Bullet.cs" />
     <Compile Include="Mechanics\Camera\Camera.cs" />
     <Compile Include="Mechanics\Camera\CameraFree.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Mechanics\Camera\CameraFreeSurfaceFolow.cs" />
     <Compile Include="Mechanics\Camera\CameraThirdPerson.cs" />
     <Compile Include="Mechanics\Debug.cs" />
-    <Compile Include="Mechanics\GameObject.cs" />
+    <Compile Include="Mechanics\Drawables\GameObject.cs" />
     <Compile Include="Mechanics\Input.cs" />
     <Compile Include="Mechanics\Interpolation.cs" />
     <Compile Include="Mechanics\Light.cs" />
     <Compile Include="Mechanics\Material.cs" />
-    <Compile Include="Mechanics\Player.cs" />
+    <Compile Include="Mechanics\Drawables\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

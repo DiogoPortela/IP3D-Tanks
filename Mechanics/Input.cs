@@ -18,6 +18,8 @@ namespace TankProject
         internal static float yAxis;
         private static Point lastMousePosition;
 
+        //--------------------Functions--------------------//
+
         internal static void Start()
         {
             Mouse.SetPosition(300, 300);
@@ -51,6 +53,9 @@ namespace TankProject
         {
             return (MouseState.ScrollWheelValue - LastFrameMouseState.ScrollWheelValue);
         }
+
+        //--------------------Update&Draw--------------------//
+
         internal static void Update()
         {
             LastFrameKeyboardState = KeyboardState;

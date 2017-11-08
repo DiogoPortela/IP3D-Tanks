@@ -12,12 +12,16 @@ namespace TankProject
         internal Vector3 SpecularColor { get { return specularColor.ToVector3(); } set { specularColor = new Color(value.X, value.Y, value.Z); } }
         internal Vector3 Direction { get { return direction; } set { direction = value; } }
 
+        //--------------------Constructors--------------------//
+
         internal Light(Vector3 direction, Color diffuse, Color specular)
         {
             this.direction = direction;
             diffuseColor = diffuse;
             specularColor = specular;
         }
+
+        //--------------------Ovos--------------------//
 
         internal static Light White = new Light(-Vector3.One, Color.White, Color.White);
     }

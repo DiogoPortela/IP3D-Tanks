@@ -8,7 +8,8 @@ namespace TankProject
     {
         private float[] nearVertices;
 
-        // --- --- --- --- CONSTRUCTORS --- --- --- --- \\
+        //--------------------Constructors--------------------//
+
         internal CameraFreeSurfaceFolow(GraphicsDevice device, Vector3 position, float cameraSpeed = 5.0f, float fieldOfView = 45.0f)
             : base (device, position, cameraSpeed, fieldOfView)
         {
@@ -19,7 +20,8 @@ namespace TankProject
             nearVertices = new float[4];
         }
 
-        // --- --- --- --- FUNCTIONS --- --- --- --- \\
+        //--------------------Functions--------------------//
+
         internal override void Move(GameTime gameTime)
         {
             if (Input.IsPressedDown(Keys.NumPad8) && !Input.IsPressedDown(Keys.NumPad5))

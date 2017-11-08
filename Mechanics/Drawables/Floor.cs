@@ -13,6 +13,7 @@ namespace TankProject
         internal static float[,] VerticesHeight;
         internal static Vector3[,] VerticesNormals;
 
+        //--------------------Functions--------------------//
 
         internal static void Start(Game1 game, Camera camera, Material material, Light light)
         {
@@ -48,7 +49,6 @@ namespace TankProject
 
             CreateGeometry();
         }
-
         private static void CreateGeometry()
         {
             VertexPositionNormalTexture[] vertices;
@@ -237,6 +237,8 @@ namespace TankProject
             indexBuffer.SetData<short>(indices);
 
         }
+
+        //--------------------Update&Draw--------------------//
 
         internal static void Draw(Camera camera)
         {

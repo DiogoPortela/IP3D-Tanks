@@ -9,7 +9,7 @@ namespace TankProject
     /// </summary>
     class CameraFree : Camera
     {
-        // --- --- --- --- CONSTRUCTORS --- --- --- --- \\
+        //--------------------Constructors--------------------//
         internal CameraFree(GraphicsDevice device, Vector3 position, float cameraSpeed = 5.0f, float fieldOfView = 45.0f)
             : base(device, position, cameraSpeed, fieldOfView)
         {
@@ -20,13 +20,8 @@ namespace TankProject
 
         }
 
-        // --- --- --- --- FUNCTIONS --- --- --- --- \\
-        internal override void Update(GameTime gameTime)
-        {
-            Move(gameTime);
-            Rotate(gameTime);
-            ViewMatrix = Matrix.CreateLookAt(Position, Position + Forward, Up);
-        }
+        //--------------------Functions--------------------//
+
         internal virtual void Move(GameTime gameTime)
         {
             if (Input.IsPressedDown(Keys.NumPad8) && !Input.IsPressedDown(Keys.NumPad5))
@@ -64,5 +59,15 @@ namespace TankProject
             this.relativeForward = Vector3.Transform(Vector3.Forward, Matrix.CreateRotationY(rotation.X));
             this.relativeRight = Vector3.Transform(Vector3.Right, Matrix.CreateRotationY(rotation.X));
         }
+
+        //--------------------Update&Draw--------------------//
+
+        internal override void Update(GameTime gameTime)
+        {
+            Move(gameTime);
+            Rotate(gameTime);
+            ViewMatrix = Matrix.CreateLookAt(Position, Position + Forward, Up);
+        }
+
     }
 }

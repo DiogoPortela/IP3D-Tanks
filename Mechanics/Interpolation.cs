@@ -2,9 +2,12 @@
 
 namespace TankProject
 {
-
+    /// <summary>
+    /// Class to store Interpolation math.
+    /// </summary>
     static class Interpolation
     {
+        //--------------------Functions--------------------//
         public static float BiLinear(Vector2 currentPosition, Vector2 gridPosition, float gridSize, float valueOne, float valueTwo, float valueThree, float valueFour)
         {
             float yAB, yCD, y;
