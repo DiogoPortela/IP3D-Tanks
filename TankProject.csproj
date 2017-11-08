@@ -55,6 +55,7 @@
     <Compile Include="Mechanics\Light.cs" />
     <Compile Include="Mechanics\Material.cs" />
     <Compile Include="Mechanics\Drawables\Player.cs" />
+    <Compile Include="Mechanics\PlayerKeys.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -101,7 +101,11 @@ namespace TankProject
         {
             if(playerNumber == PlayerNumber.PlayerOne)
             {
-                //playerKeys = { Keys.A, Keys.D, k}
+                
+            }
+            else if(playerNumber == PlayerNumber.PlayerTwo)
+            {
+
             }
         }
 
