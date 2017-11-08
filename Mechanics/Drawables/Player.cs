@@ -106,7 +106,8 @@ namespace TankProject
             }
             else if (playerNumber == PlayerNumber.PlayerTwo)
             {
-
+                this.playerKeys = new PlayerKeys(Keys.I, Keys.K, Keys.J, Keys.L, Keys.U,
+                    Keys.D0, Keys.N, Keys.M, Keys.Y, Keys.H);
             }
         }
 

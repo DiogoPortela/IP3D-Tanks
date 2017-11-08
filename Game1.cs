@@ -13,7 +13,7 @@ namespace TankProject
         internal static SpriteBatch spriteBatch;
 
         internal static Camera currentCamera;
-        internal static Player player;
+        internal static Player playerOne, playerTwo;
 
         internal static Light currentLight;
 
@@ -47,8 +47,12 @@ namespace TankProject
             spriteBatch = new SpriteBatch(GraphicsDevice);
             currentCamera = new CameraFree(GraphicsDevice, new Vector3(64, 10, 65), 3.0f);
             currentLight = new Light(-Vector3.One, new Color(new Vector3(0.5f, 0.5f, 0.5f)), new Color(new Vector3(0.1f, 0.1f, 0.1f)));
-            player = new Player(new Vector3(64, 10, 64), Vector3.Zero, Vector3.Zero, 0.0005f, Player.PlayerNumber.PlayerOne);
-            player.LoadModelBones(Content, Material.White, currentLight);
+
+            playerOne = new Player(new Vector3(64, 10, 64), Vector3.Zero, Vector3.Zero, 0.0005f, Player.PlayerNumber.PlayerOne);
+            playerOne.LoadModelBones(Content, Material.White, currentLight);
+
+            playerTwo = new Player(new Vector3(65, 10, 65), Vector3.Zero, Vector3.Zero, 0.0005f, Player.PlayerNumber.PlayerTwo);
+            playerTwo.LoadModelBones(Content, Material.White, currentLight);
 
             Floor.Start(this, currentCamera, Material.White, currentLight);
         }
@@ -75,7 +79,7 @@ namespace TankProject
             Input.Update();
             if (Input.IsPressedDown(Keys.F1) && !(currentCamera is CameraThirdPerson))
             {
-                currentCamera = new CameraThirdPerson(currentCamera, player, 5.0f, gameTime);
+                currentCamera = new CameraThirdPerson(currentCamera, playerOne, 5.0f, gameTime);
             }
             if (Input.IsPressedDown(Keys.F2) && !(currentCamera is CameraFreeSurfaceFolow) && currentCamera.Position.X > 0 && currentCamera.Position.Z > 0/* TODO: Clean camera position check code.*/)
             {
@@ -87,7 +91,8 @@ namespace TankProject
             }
 
             currentCamera.Update(gameTime);
-            player.Update(gameTime);
+            playerOne.Update(gameTime);
+            playerTwo.Update(gameTime);
 
             Debug.Update();
             base.Update(gameTime);
@@ -102,7 +107,8 @@ namespace TankProject
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             Floor.Draw(currentCamera);
-            player.Draw(currentCamera);
+            playerOne.Draw(currentCamera);
+            playerTwo.Draw(currentCamera);
 
             base.Draw(gameTime);
         }
