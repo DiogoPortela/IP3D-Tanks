@@ -21,10 +21,10 @@ namespace TankProject
 
         internal Matrix[] boneTransformations;
 
-        //Player keys
-        protected Keys[] playerKeys;
         internal enum PlayerNumber { PlayerOne = 1, PlayerTwo };
         private PlayerNumber playerNumber;
+
+        private PlayerKeys playerKeys;
 
 
         //--------------------Constructors--------------------//
@@ -101,7 +101,8 @@ namespace TankProject
         {
             if (playerNumber == PlayerNumber.PlayerOne)
             {
-
+                this.playerKeys = new PlayerKeys(Keys.W, Keys.S, Keys.A, Keys.D, Keys.Space,
+                    Keys.O, Keys.Left, Keys.Right, Keys.Up, Keys.Down);
             }
             else if (playerNumber == PlayerNumber.PlayerTwo)
             {
@@ -111,7 +112,7 @@ namespace TankProject
 
         private void Move(GameTime gameTime)
         {
-            if (Input.IsPressedDown(Keys.W) && !Input.IsPressedDown(Keys.S))
+            if (Input.IsPressedDown(playerKeys.Forward) && !Input.IsPressedDown(playerKeys.Backward))
             {
                 this.position -= this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.rightFrontWheelAngle += MathHelper.ToRadians(10f);
@@ -119,7 +120,7 @@ namespace TankProject
                 this.rightBackWheelAngle += MathHelper.ToRadians(10f);
                 this.leftBackWheelAngle += MathHelper.ToRadians(10f);
             }
-            else if (Input.IsPressedDown(Keys.S) && !Input.IsPressedDown(Keys.W))
+            else if (Input.IsPressedDown(playerKeys.Backward) && !Input.IsPressedDown(playerKeys.Forward))
             {
                 this.position += this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.rightFrontWheelAngle -= MathHelper.ToRadians(10f);
@@ -130,22 +131,24 @@ namespace TankProject
         }
         private void Rotate(GameTime gameTime)
         {
-            if (Input.IsPressedDown(Keys.A) && !Input.IsPressedDown(Keys.D))
+            if (Input.IsPressedDown(playerKeys.Left) && !Input.IsPressedDown(playerKeys.Right))
             {
                 rightSteerAngle = MathHelper.ToRadians(10f);
                 leftSteerAngle = MathHelper.ToRadians(10f);
-                if (Input.IsPressedDown(Keys.W))
+
+                if (Input.IsPressedDown(playerKeys.Forward))
                     rotation.X += MathHelper.ToRadians(1f);
-                else if (Input.IsPressedDown(Keys.S))
+                else if (Input.IsPressedDown(playerKeys.Backward))
                     rotation.X -= MathHelper.ToRadians(1f);
             }
-            else if (Input.IsPressedDown(Keys.D) && !Input.IsPressedDown(Keys.A))
+            else if (Input.IsPressedDown(playerKeys.Right) && !Input.IsPressedDown(playerKeys.Left))
             {
                 rightSteerAngle = MathHelper.ToRadians(-10f);
                 leftSteerAngle = MathHelper.ToRadians(-10f);
-                if (Input.IsPressedDown(Keys.W))
+
+                if (Input.IsPressedDown(playerKeys.Forward))
                     rotation.X -= MathHelper.ToRadians(1f);
-                else if (Input.IsPressedDown(Keys.S))
+                else if (Input.IsPressedDown(playerKeys.Backward))
                     rotation.X += MathHelper.ToRadians(1f);
 
             }
@@ -159,25 +162,25 @@ namespace TankProject
                 rotation.X = 0;
 
             //canhao
-            if (Input.IsPressedDown(Keys.Up) && !Input.IsPressedDown(Keys.Down))
+            if (Input.IsPressedDown(playerKeys.CannonUp) && !Input.IsPressedDown(playerKeys.CannonDown))
             {
                 if (this.cannonAngle >= -Math.PI / 4)
                     this.cannonAngle -= MathHelper.ToRadians(1f);
             }
-            else if (Input.IsPressedDown(Keys.Down) && !Input.IsPressedDown(Keys.Up))
+            else if (Input.IsPressedDown(playerKeys.CannonDown) && !Input.IsPressedDown(playerKeys.CannonUp))
                 if (this.cannonAngle <= 0)
                     this.cannonAngle += MathHelper.ToRadians(1f);
 
             //torre
-            if (Input.IsPressedDown(Keys.Left) && !Input.IsPressedDown(Keys.Right))
+            if (Input.IsPressedDown(playerKeys.TurretLeft) && !Input.IsPressedDown(playerKeys.TurretRight))
                 this.turretAngle += MathHelper.ToRadians(1f);
-            else if (Input.IsPressedDown(Keys.Right) && !Input.IsPressedDown(Keys.Left))
+            else if (Input.IsPressedDown(playerKeys.TurretRight) && !Input.IsPressedDown(playerKeys.TurretLeft))
                 this.turretAngle -= MathHelper.ToRadians(1f);
         }
 
         private void UpdateHatchet(GameTime gameTime)
         {
-            if (Input.WasPressed(Keys.O))
+            if (Input.WasPressed(playerKeys.HatchetOpen))
                 isOpenning = !isOpenning;
 
             if (hatchetAngle <= Math.PI / 2f && isOpenning)
