@@ -17,6 +17,8 @@ namespace TankProject
         private float modelScale;
         private float turretAngle = 0, cannonAngle = 0, hatchetAngle = 0, rightFrontWheelAngle = 0, leftFrontWheelAngle = 0, rightBackWheelAngle = 0, leftBackWheelAngle = 0;
 
+        private bool isOpenning; //used to slowly open hatchet
+
         internal Matrix[] boneTransformations;
 
         //--------------------Constructors--------------------//
@@ -135,19 +137,18 @@ namespace TankProject
             else if (Input.IsPressedDown(Keys.Right) && !Input.IsPressedDown(Keys.Left))
                 this.turretAngle += MathHelper.ToRadians(1f);
         }
+
         private void UpdateHatchet(GameTime gameTime)
         {
-            //abrir hatchet
-            if (Input.IsPressedDown(Keys.O)) //TODO: meter o hatchet a abrir devagar
-            {
-                if (hatchetAngle < Math.PI / 8f)
-                {
-                    this.hatchetAngle += MathHelper.ToRadians(100f) * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                }
-                else if (hatchetAngle > 0)
-                    this.hatchetAngle -= MathHelper.ToRadians(100f) * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
+            if (Input.WasPressed(Keys.O))
+                isOpenning = !isOpenning;
+
+            if (hatchetAngle <= Math.PI / 2f && isOpenning)
+                this.hatchetAngle += MathHelper.ToRadians(100f) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            else if (hatchetAngle >= 0 && !isOpenning)
+                this.hatchetAngle -= MathHelper.ToRadians(100f) * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
+
         private void HeightFollow()
         {
             Vector2 positionXZ = new Vector2(position.X, position.Z);

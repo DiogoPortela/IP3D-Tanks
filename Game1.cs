@@ -32,7 +32,7 @@ namespace TankProject
         protected override void Initialize()
         {
             Input.Start();
-            Debug.Start(Color.Green, Content.Load<SpriteFont>("Arial"));
+            //Debug.Start(Color.Green, Content.Load<SpriteFont>("Arial"));
 
             base.Initialize();
         }
