@@ -22,7 +22,7 @@ namespace TankProject
 
         internal static void Start()
         {
-            Mouse.SetPosition(300, 300);
+            Mouse.SetPosition(Game1.graphics.PreferredBackBufferWidth / 2, Game1.graphics.PreferredBackBufferWidth / 2);
 
             KeyboardState = LastFrameKeyboardState = Keyboard.GetState();
             MouseState = LastFrameMouseState = Mouse.GetState();
@@ -70,7 +70,7 @@ namespace TankProject
         }
         internal static void LateUpdate()
         {
-            Mouse.SetPosition(300, 300);
+            Mouse.SetPosition(Game1.graphics.PreferredBackBufferWidth / 2, Game1.graphics.PreferredBackBufferHeight / 2);
         }
     }
 }

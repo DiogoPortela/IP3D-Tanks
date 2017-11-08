@@ -35,7 +35,6 @@ namespace TankProject
             }
         }
 
-
         internal static void Start(Color color, SpriteFont spriteFont)
         {
             textDictionary = new Dictionary<string, DebugText>();
