@@ -71,6 +71,9 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
+    <None Include="Content\Arial.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Content\engine_diff_tex.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
