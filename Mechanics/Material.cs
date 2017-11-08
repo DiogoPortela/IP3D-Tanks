@@ -24,7 +24,7 @@ namespace TankProject
             this.specularPower = specularPower;
         }
 
-        //--------------------Ovos--------------------//
+        //--------------------Instances--------------------//
 
         internal static Material White = new Material(Color.White, Color.White, new Color(new Vector3(0.5f, 0.5f, 0.5f)), 75.0f);
         internal static Material Black = new Material(Color.Black, Color.White, Color.Black, 75.0f);

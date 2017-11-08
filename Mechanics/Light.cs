@@ -21,7 +21,7 @@ namespace TankProject
             specularColor = specular;
         }
 
-        //--------------------Ovos--------------------//
+        //--------------------Instances--------------------//
 
         internal static Light White = new Light(-Vector3.One, Color.White, Color.White);
     }
