@@ -41,6 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Mechanics\Camera\CameraThirdPersonFixed.cs" />
     <Compile Include="Mechanics\Drawables\Floor.cs" />
     <Compile Include="Mechanics\Drawables\Bullet.cs" />
     <Compile Include="Mechanics\Camera\Camera.cs" />

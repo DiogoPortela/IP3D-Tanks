@@ -115,19 +115,19 @@ namespace TankProject
         {
             if (Input.IsPressedDown(playerKeys.Forward) && !Input.IsPressedDown(playerKeys.Backward))
             {
-                this.position -= this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                this.rightFrontWheelAngle += MathHelper.ToRadians(10f);
-                this.leftFrontWheelAngle += MathHelper.ToRadians(10f);
-                this.rightBackWheelAngle += MathHelper.ToRadians(10f);
-                this.leftBackWheelAngle += MathHelper.ToRadians(10f);
-            }
-            else if (Input.IsPressedDown(playerKeys.Backward) && !Input.IsPressedDown(playerKeys.Forward))
-            {
                 this.position += this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.rightFrontWheelAngle -= MathHelper.ToRadians(10f);
                 this.leftFrontWheelAngle -= MathHelper.ToRadians(10f);
                 this.rightBackWheelAngle -= MathHelper.ToRadians(10f);
                 this.leftBackWheelAngle -= MathHelper.ToRadians(10f);
+            }
+            else if (Input.IsPressedDown(playerKeys.Backward) && !Input.IsPressedDown(playerKeys.Forward))
+            {
+                this.position -= this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                this.rightFrontWheelAngle += MathHelper.ToRadians(10f);
+                this.leftFrontWheelAngle += MathHelper.ToRadians(10f);
+                this.rightBackWheelAngle += MathHelper.ToRadians(10f);
+                this.leftBackWheelAngle += MathHelper.ToRadians(10f);
             }
         }
         private void Rotate(GameTime gameTime)
@@ -233,8 +233,9 @@ namespace TankProject
 
             transformMatrix = Matrix.CreateTranslation(position); ;
             rotationMatrix.Up = this.Up;
-            rotationMatrix.Forward = this.Forward;
-            rotationMatrix.Right = this.Right;
+            //The 3d model is facing backwards.
+            rotationMatrix.Forward = -this.Forward;
+            rotationMatrix.Right = -this.Right;
 
             tankModel.Root.Transform = Matrix.CreateScale(modelScale) * rotationMatrix * transformMatrix;
             turretBone.Transform = Matrix.CreateRotationY(turretAngle) * turretTransform;

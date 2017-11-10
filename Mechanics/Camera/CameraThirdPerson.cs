@@ -6,7 +6,6 @@ namespace TankProject
     class CameraThirdPerson : Camera
     {
         GameObject target;
-        Vector3 targetPosition;
         Vector3 targetToCameraVector;
         float distanceToTarget;
 
@@ -24,7 +23,6 @@ namespace TankProject
             Rotate(gameTime);
 
             this.Position = target.position + targetToCameraVector;
-
         }
 
         //--------------------Functions--------------------//
@@ -52,14 +50,12 @@ namespace TankProject
             targetToCameraVector = Vector3.Transform(targetToCameraVector, rotationMatrix);
             this.Forward = Vector3.Transform(Vector3.Forward, rotationMatrix);
             this.Right = Vector3.Transform(Vector3.Right, rotationMatrix);
-
         }
         
         //--------------------Update&Draw--------------------//
 
         internal override void Update(GameTime gameTime)
         {
-            this.targetPosition = target.position;
             this.Position = target.position + targetToCameraVector;
             Rotate(gameTime);
             this.ViewMatrix = Matrix.CreateLookAt(Position, target.position, Vector3.Up);

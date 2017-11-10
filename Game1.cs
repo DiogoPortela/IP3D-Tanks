@@ -45,7 +45,6 @@ namespace TankProject
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            currentCamera = new CameraFree(GraphicsDevice, new Vector3(64, 10, 65), 3.0f);
             currentLight = new Light(-Vector3.One, new Color(new Vector3(0.5f, 0.5f, 0.5f)), new Color(new Vector3(0.1f, 0.1f, 0.1f)));
 
             playerOne = new Player(new Vector3(64, 10, 64), Vector3.Zero, Vector3.Zero, 0.0005f, Player.PlayerNumber.PlayerOne);
@@ -53,6 +52,8 @@ namespace TankProject
 
             playerTwo = new Player(new Vector3(65, 10, 65), Vector3.Zero, Vector3.Zero, 0.0005f, Player.PlayerNumber.PlayerTwo);
             playerTwo.LoadModelBones(Content, Material.White, currentLight);
+
+            currentCamera = new CameraThirdPerson(GraphicsDevice, new Vector3(64, 10, 65), playerOne, 2.0f);
 
             Floor.Start(this, currentCamera, Material.White, currentLight);
         }
@@ -79,16 +80,25 @@ namespace TankProject
             Input.Update();
             if (Input.IsPressedDown(Keys.F1) && !(currentCamera is CameraThirdPerson))
             {
-                currentCamera = new CameraThirdPerson(currentCamera, playerOne, 5.0f, gameTime);
+                currentCamera = new CameraThirdPerson(currentCamera, playerOne, 2.0f, gameTime);
             }
-            if (Input.IsPressedDown(Keys.F2) && !(currentCamera is CameraFreeSurfaceFolow) && currentCamera.Position.X > 0 && currentCamera.Position.Z > 0/* TODO: Clean camera position check code.*/)
+            else if (Input.IsPressedDown(Keys.F2) && !(currentCamera is CameraFreeSurfaceFolow) && currentCamera.Position.X > 0 && currentCamera.Position.Z > 0/* TODO: Clean camera position check code.*/)
             {
                 currentCamera = new CameraFreeSurfaceFolow(currentCamera);
             }
-            if (Input.IsPressedDown(Keys.F3) && !(currentCamera is CameraFree))
+            else if (Input.IsPressedDown(Keys.F3) && !(currentCamera is CameraFree))
             {
                 currentCamera = new CameraFree(currentCamera);
             }
+            else if (Input.IsPressedDown(Keys.F4))
+            {
+                currentCamera = new CameraThirdPersonFixed(currentCamera, playerOne, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(0.2f, 0.3f, 0.2f));
+            }
+            else if (Input.IsPressedDown(Keys.F5))
+            {
+                currentCamera = new CameraThirdPersonFixed(currentCamera, playerOne, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f));
+            }
+
 
             currentCamera.Update(gameTime);
             playerOne.Update(gameTime);
