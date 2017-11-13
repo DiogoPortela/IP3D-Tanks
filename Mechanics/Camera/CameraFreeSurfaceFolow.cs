@@ -10,12 +10,12 @@ namespace TankProject
 
         //--------------------Constructors--------------------//
 
-        internal CameraFreeSurfaceFolow(GraphicsDevice device, Vector3 position, float cameraSpeed = 5.0f, float fieldOfView = 45.0f)
-            : base (device, position, cameraSpeed, fieldOfView)
+        internal CameraFreeSurfaceFolow(GraphicsDevice device, Vector3 position, float aspectRatio, float cameraSpeed = 5.0f, float fieldOfView = 45.0f)
+            : base(device, position, aspectRatio, cameraSpeed, fieldOfView)
         {
             nearVertices = new float[4];
         }
-        internal CameraFreeSurfaceFolow(Camera camera) : base (camera)
+        internal CameraFreeSurfaceFolow(Camera camera) : base(camera)
         {
             nearVertices = new float[4];
         }

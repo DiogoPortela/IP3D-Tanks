@@ -26,7 +26,7 @@ namespace TankProject
         protected float cameraSpeed;
 
         //--------------------Constructors--------------------//
-        internal Camera(GraphicsDevice device, Vector3 position, float cameraSpeed = 5.0f, float fieldOfView = 45.0f)
+        internal Camera(GraphicsDevice device, Vector3 position, float aspectRatio, float cameraSpeed = 5.0f, float fieldOfView = 45.0f)
         {
             this.Position = position;
             this.Forward = this.relativeForward = Vector3.Forward;
@@ -36,7 +36,7 @@ namespace TankProject
             this.rotation = Vector3.Zero;
             this.rotationMatrix = Matrix.Identity;
 
-            ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fieldOfView), device.Viewport.AspectRatio, 0.1f, 500.0f);
+            ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fieldOfView), aspectRatio, 0.1f, 500.0f);
             ViewMatrix = Matrix.CreateLookAt(this.Position, this.Position + this.Forward, this.Up);
         }
         internal Camera(Camera camera)

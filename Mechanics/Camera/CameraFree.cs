@@ -10,8 +10,8 @@ namespace TankProject
     class CameraFree : Camera
     {
         //--------------------Constructors--------------------//
-        internal CameraFree(GraphicsDevice device, Vector3 position, float cameraSpeed = 5.0f, float fieldOfView = 45.0f)
-            : base(device, position, cameraSpeed, fieldOfView)
+        internal CameraFree(GraphicsDevice device, Vector3 position, float aspectRatio, float cameraSpeed = 5.0f, float fieldOfView = 45.0f)
+            : base(device, position, aspectRatio, cameraSpeed, fieldOfView)
         {
 
         }

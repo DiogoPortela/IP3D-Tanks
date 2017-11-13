@@ -17,14 +17,14 @@ namespace TankProject
         Vector3 initialLookPoint;
         float distanceToTarget;
 
-        internal CameraThirdPersonFixed(GraphicsDevice device, Vector3 position, GameObject target, float distanceToTarget, Vector3 lookDirection, Vector3 lookPoint, float cameraSpeed = 5, float fieldOfView = 45) : base(device, position, cameraSpeed, fieldOfView)
+        internal CameraThirdPersonFixed(GraphicsDevice device, Vector3 position, GameObject target, float distanceToTarget, Vector3 lookDirection, Vector3 lookPoint, float aspectRatio, float cameraSpeed = 5, float fieldOfView = 45) : base(device, position, aspectRatio, cameraSpeed, fieldOfView)
         {
             this.target = target;
             this.distanceToTarget = distanceToTarget;
             this.initialLookDirection = this.lookDirection = lookDirection;
             this.initialLookPoint = this.lookPoint = lookPoint;
         }
-        internal CameraThirdPersonFixed(Camera camera, GameObject target, float distanceToTarget, Vector3 lookDirection, Vector3 lookPoint) : base (camera)
+        internal CameraThirdPersonFixed(Camera camera, GameObject target, float distanceToTarget, Vector3 lookDirection, Vector3 lookPoint) : base(camera)
         {
             this.target = target;
             this.distanceToTarget = distanceToTarget;

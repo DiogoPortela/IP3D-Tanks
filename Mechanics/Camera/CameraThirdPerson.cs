@@ -11,7 +11,7 @@ namespace TankProject
 
         //--------------------Constructors--------------------//
 
-        internal CameraThirdPerson(GraphicsDevice device, Vector3 position, GameObject target, float distanceToTarget, float cameraSpeed = 5.0f, float fieldOfView = 45.0f) : base(device, position, cameraSpeed, fieldOfView)
+        internal CameraThirdPerson(GraphicsDevice device, Vector3 position, GameObject target, float aspectRatio, float distanceToTarget, float cameraSpeed = 5.0f, float fieldOfView = 45.0f) : base(device, position, aspectRatio, cameraSpeed, fieldOfView)
         {
             this.target = target;
             this.distanceToTarget = distanceToTarget;

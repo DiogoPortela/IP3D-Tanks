@@ -13,6 +13,8 @@ namespace TankProject
         internal static SpriteBatch spriteBatch;
 
         internal static Camera currentCamera;
+        internal static Camera currentCameraPlayerTwo;
+        static private Viewport defaultView, upView, downView;
         internal static Player playerOne, playerTwo;
 
         internal static Light currentLight;
@@ -34,6 +36,16 @@ namespace TankProject
             Input.Start();
             Debug.Start(Color.Green, Content.Load<SpriteFont>("Arial"));
 
+            #region Camera. Split screen
+            //Viewports           
+            defaultView = Game1.graphics.GraphicsDevice.Viewport;
+            upView = downView = defaultView;
+            //Dividing it in half, and adjusting the positioning.
+            upView.Height /= 2;
+            downView.Height /= 2;
+            downView.X = upView.Width;
+            #endregion
+
             base.Initialize();
         }
 
@@ -53,7 +65,8 @@ namespace TankProject
             playerTwo = new Player(new Vector3(65, 10, 65), Vector3.Zero, Vector3.Zero, 0.0005f, Player.PlayerNumber.PlayerTwo);
             playerTwo.LoadModelBones(Content, Material.White, currentLight);
 
-            currentCamera = new CameraThirdPerson(GraphicsDevice, new Vector3(64, 10, 65), playerOne, 2.0f);
+            currentCamera = new CameraThirdPerson(GraphicsDevice, new Vector3(64, 10, 65), playerOne, upView.AspectRatio, 2.0f);
+            currentCameraPlayerTwo = new CameraThirdPersonFixed(GraphicsDevice, new Vector3(64, 5, 65), playerTwo, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f), downView.AspectRatio);
 
             Floor.Start(this, currentCamera, Material.White, currentLight);
         }
@@ -82,7 +95,7 @@ namespace TankProject
             {
                 currentCamera = new CameraThirdPerson(currentCamera, playerOne, 2.0f, gameTime);
             }
-            else if (Input.IsPressedDown(Keys.F2) && !(currentCamera is CameraFreeSurfaceFolow) && currentCamera.Position.X > 0  && currentCamera.Position.X < Floor.heightMap.Width && currentCamera.Position.Z > 0 && currentCamera.Position.Z < Floor.heightMap.Height)
+            else if (Input.IsPressedDown(Keys.F2) && !(currentCamera is CameraFreeSurfaceFolow) && currentCamera.Position.X > 0 && currentCamera.Position.X < Floor.heightMap.Width && currentCamera.Position.Z > 0 && currentCamera.Position.Z < Floor.heightMap.Height)
             {
                 currentCamera = new CameraFreeSurfaceFolow(currentCamera);
             }
@@ -99,8 +112,8 @@ namespace TankProject
                 currentCamera = new CameraThirdPersonFixed(currentCamera, playerOne, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f));
             }
 
-
             currentCamera.Update(gameTime);
+            currentCameraPlayerTwo.Update(gameTime);
             playerOne.Update(gameTime);
             playerTwo.Update(gameTime);
 
@@ -116,9 +129,18 @@ namespace TankProject
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            GraphicsDevice.Viewport = upView;
             Floor.Draw(currentCamera);
             playerOne.Draw(currentCamera);
             playerTwo.Draw(currentCamera);
+
+            GraphicsDevice.Viewport = downView;
+            Floor.Draw(currentCameraPlayerTwo);
+            playerOne.Draw(currentCameraPlayerTwo);
+            playerTwo.Draw(currentCameraPlayerTwo);
+
+            GraphicsDevice.Viewport = defaultView;
+
 
             base.Draw(gameTime);
         }
