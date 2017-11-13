@@ -42,7 +42,7 @@ namespace TankProject
             }
             catch
             {
-                Game1.currentCamera = new CameraFree(this);
+                Game1.currentCameraPlayerOne = new CameraFree(this);
             }
 
             Position.Y = 1.0f + Interpolation.BiLinear(new Vector2(this.Position.X, this.Position.Z),

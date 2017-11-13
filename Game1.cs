@@ -12,7 +12,7 @@ namespace TankProject
         internal static GraphicsDeviceManager graphics;
         internal static SpriteBatch spriteBatch;
 
-        internal static Camera currentCamera;
+        internal static Camera currentCameraPlayerOne;
         internal static Camera currentCameraPlayerTwo;
         static private Viewport defaultView, upView, downView;
         internal static Player playerOne, playerTwo;
@@ -36,6 +36,8 @@ namespace TankProject
             Input.Start();
             Debug.Start(Color.Green, Content.Load<SpriteFont>("Arial"));
 
+            graphics.PreferredBackBufferHeight = 800;
+            graphics.ApplyChanges();
             #region Camera. Split screen
             //Viewports           
             defaultView = Game1.graphics.GraphicsDevice.Viewport;
@@ -43,7 +45,7 @@ namespace TankProject
             //Dividing it in half, and adjusting the positioning.
             upView.Height /= 2;
             downView.Height /= 2;
-            downView.X = upView.Width;
+            downView.Y = upView.Height;
             #endregion
 
             base.Initialize();
@@ -65,10 +67,10 @@ namespace TankProject
             playerTwo = new Player(new Vector3(65, 10, 65), Vector3.Zero, Vector3.Zero, 0.0005f, Player.PlayerNumber.PlayerTwo);
             playerTwo.LoadModelBones(Content, Material.White, currentLight);
 
-            currentCamera = new CameraThirdPerson(GraphicsDevice, new Vector3(64, 10, 65), playerOne, upView.AspectRatio, 2.0f);
+            currentCameraPlayerOne = new CameraThirdPersonFixed(GraphicsDevice, new Vector3(64, 5, 65), playerOne, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f), upView.AspectRatio);
             currentCameraPlayerTwo = new CameraThirdPersonFixed(GraphicsDevice, new Vector3(64, 5, 65), playerTwo, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f), downView.AspectRatio);
 
-            Floor.Start(this, currentCamera, Material.White, currentLight);
+            Floor.Start(this, currentCameraPlayerOne, Material.White, currentLight);
         }
 
         /// <summary>
@@ -91,28 +93,52 @@ namespace TankProject
                 Exit();
 
             Input.Update();
-            if (Input.IsPressedDown(Keys.F1) && !(currentCamera is CameraThirdPerson))
+            #region Player One Camera
+            if (Input.IsPressedDown(Keys.F1) && !(currentCameraPlayerOne is CameraThirdPerson))
             {
-                currentCamera = new CameraThirdPerson(currentCamera, playerOne, 2.0f, gameTime);
+                currentCameraPlayerOne = new CameraThirdPerson(currentCameraPlayerOne, playerOne, 2.0f, gameTime);
             }
-            else if (Input.IsPressedDown(Keys.F2) && !(currentCamera is CameraFreeSurfaceFolow) && currentCamera.Position.X > 0 && currentCamera.Position.X < Floor.heightMap.Width && currentCamera.Position.Z > 0 && currentCamera.Position.Z < Floor.heightMap.Height)
+            else if (Input.IsPressedDown(Keys.F2) && !(currentCameraPlayerOne is CameraFreeSurfaceFolow) && currentCameraPlayerOne.Position.X > 0 && currentCameraPlayerOne.Position.X < Floor.heightMap.Width && currentCameraPlayerOne.Position.Z > 0 && currentCameraPlayerOne.Position.Z < Floor.heightMap.Height)
             {
-                currentCamera = new CameraFreeSurfaceFolow(currentCamera);
+                currentCameraPlayerOne = new CameraFreeSurfaceFolow(currentCameraPlayerOne);
             }
-            else if (Input.IsPressedDown(Keys.F3) && !(currentCamera is CameraFree))
+            else if (Input.IsPressedDown(Keys.F3) && !(currentCameraPlayerOne is CameraFree))
             {
-                currentCamera = new CameraFree(currentCamera);
+                currentCameraPlayerOne = new CameraFree(currentCameraPlayerOne);
             }
             else if (Input.IsPressedDown(Keys.F4))
             {
-                currentCamera = new CameraThirdPersonFixed(currentCamera, playerOne, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(0.2f, 0.3f, 0.2f));
+                currentCameraPlayerOne = new CameraThirdPersonFixed(currentCameraPlayerOne, playerOne, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(0.2f, 0.3f, 0.2f));
             }
             else if (Input.IsPressedDown(Keys.F5))
             {
-                currentCamera = new CameraThirdPersonFixed(currentCamera, playerOne, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f));
+                currentCameraPlayerOne = new CameraThirdPersonFixed(currentCameraPlayerOne, playerOne, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f));
             }
+            #endregion
+            #region Player Two Camera
+            if (Input.IsPressedDown(Keys.F7) && !(currentCameraPlayerTwo is CameraThirdPerson))
+            {
+                currentCameraPlayerTwo = new CameraThirdPerson(currentCameraPlayerTwo, playerOne, 2.0f, gameTime);
+            }
+            else if (Input.IsPressedDown(Keys.F8) && !(currentCameraPlayerTwo is CameraFreeSurfaceFolow) && currentCameraPlayerTwo.Position.X > 0 && currentCameraPlayerTwo.Position.X < Floor.heightMap.Width && currentCameraPlayerTwo.Position.Z > 0 && currentCameraPlayerTwo.Position.Z < Floor.heightMap.Height)
+            {
+                currentCameraPlayerTwo = new CameraFreeSurfaceFolow(currentCameraPlayerTwo);
+            }
+            else if (Input.IsPressedDown(Keys.F9) && !(currentCameraPlayerTwo is CameraFree))
+            {
+                currentCameraPlayerTwo = new CameraFree(currentCameraPlayerTwo);
+            }
+            else if (Input.IsPressedDown(Keys.F10))
+            {
+                currentCameraPlayerTwo = new CameraThirdPersonFixed(currentCameraPlayerTwo, playerTwo, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(0.2f, 0.3f, 0.2f));
+            }
+            else if (Input.IsPressedDown(Keys.F11))
+            {
+                currentCameraPlayerTwo = new CameraThirdPersonFixed(currentCameraPlayerTwo, playerTwo, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f));
+            }
+            #endregion
 
-            currentCamera.Update(gameTime);
+            currentCameraPlayerOne.Update(gameTime);
             currentCameraPlayerTwo.Update(gameTime);
             playerOne.Update(gameTime);
             playerTwo.Update(gameTime);
@@ -130,9 +156,9 @@ namespace TankProject
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             GraphicsDevice.Viewport = upView;
-            Floor.Draw(currentCamera);
-            playerOne.Draw(currentCamera);
-            playerTwo.Draw(currentCamera);
+            Floor.Draw(currentCameraPlayerOne);
+            playerOne.Draw(currentCameraPlayerOne);
+            playerTwo.Draw(currentCameraPlayerOne);
 
             GraphicsDevice.Viewport = downView;
             Floor.Draw(currentCameraPlayerTwo);
