@@ -43,6 +43,7 @@ namespace TankProject
 
         //--------------------Functions--------------------//
 
+        //Loads
         internal void LoadModelBones(ContentManager content, Material material, Light light)
         {
             this.tankModel = content.Load<Model>("tank");
@@ -96,7 +97,6 @@ namespace TankProject
                 }
             }
         }
-
         private void SetPlayerKeys()
         {
             if (playerNumber == PlayerNumber.PlayerOne)
@@ -111,6 +111,7 @@ namespace TankProject
             }
         }
 
+        //Inputs
         private void Move(GameTime gameTime)
         {
             if (Input.IsPressedDown(playerKeys.Forward) && !Input.IsPressedDown(playerKeys.Backward))
@@ -178,7 +179,6 @@ namespace TankProject
             else if (Input.IsPressedDown(playerKeys.TurretRight) && !Input.IsPressedDown(playerKeys.TurretLeft))
                 this.turretAngle -= MathHelper.ToRadians(1f);
         }
-
         private void UpdateHatchet(GameTime gameTime)
         {
             if (Input.WasPressed(playerKeys.HatchetOpen))
@@ -190,6 +190,7 @@ namespace TankProject
                 this.hatchetAngle -= MathHelper.ToRadians(100f) * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
+        //Corrections
         private void HeightFollow()
         {
             Vector2 positionXZ = new Vector2(position.X, position.Z);

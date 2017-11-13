@@ -37,6 +37,7 @@ namespace TankProject
             rotationMatrix.Up = target.Up;
             rotationMatrix.Right = target.Right;
             rotationMatrix.Forward = target.Forward;
+            rotation = target.rotation;
             lookDirection = Vector3.Transform(initialLookDirection, rotationMatrix);
             lookPoint = Vector3.Transform(initialLookPoint, rotationMatrix);
             this.Position = target.position + lookPoint + lookDirection;

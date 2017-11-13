@@ -8,7 +8,7 @@ namespace TankProject
         private static VertexBuffer vertexBuffer;
         private static IndexBuffer indexBuffer;
         private static BasicEffect effect;
-        private static Texture2D heightMap;
+        internal static Texture2D heightMap;
         private static Texture2D texture;
         internal static float[,] VerticesHeight;
         internal static Vector3[,] VerticesNormals;
