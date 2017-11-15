@@ -6,10 +6,14 @@ using System;
 
 namespace TankProject
 {
+    /// <summary>
+    /// Player class.
+    /// </summary>
     class Player : GameObject
     {
-        private Vector3 turretRotationVelocity;
+        //private Vector3 turretRotationVelocity;
 
+        //Model information
         private Model tankModel;
         private ModelBone turretBone, cannonBone, hatchBone, rightSteerBone, leftSteerBone, rightFrontWheelBone, leftFrontWheelBone, rightBackWheelBone, leftBackWheelBone;
         private Matrix turretTransform, cannonTransform, hatchTransform, rightSteerTransform, leftSteerTransform, rightFrontWheelTransform, leftFrontWheelTransform, rightBackWheelTransform, leftBackWheelTransform;
@@ -20,6 +24,8 @@ namespace TankProject
         private bool isOpenning; //used to slowly open hatchet
 
         internal Matrix[] boneTransformations;
+
+        //Player information
 
         internal enum PlayerNumber { PlayerOne = 1, PlayerTwo };
         private PlayerNumber playerNumber;

@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TankProject
 {
+    /// <summary>
+    /// Third person camera that orbit around a GameObject. Use Mouse to controll.
+    /// </summary>
     class CameraThirdPerson : Camera
     {
         GameObject target;

@@ -1,11 +1,10 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System;
+﻿using Microsoft.Xna.Framework.Input;
 
 namespace TankProject
 {
+    /// <summary>
+    /// Class that holds a set of Keys for the player to interact.
+    /// </summary>
     class PlayerKeys
     {
         public Keys Forward, Backward, Left, Right, Shoot,

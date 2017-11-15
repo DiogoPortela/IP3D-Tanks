@@ -2,6 +2,9 @@
 
 namespace TankProject
 {
+    /// <summary>
+    /// Class to instanciate materials for use during Draw Time.
+    /// </summary>
     class Material
     {
         private Color diffuseColor;
@@ -25,8 +28,13 @@ namespace TankProject
         }
 
         //--------------------Instances--------------------//
-
+        /// <summary>
+        /// Full White material.(normal material)
+        /// </summary>
         internal static Material White = new Material(Color.White, Color.White, new Color(new Vector3(0.5f, 0.5f, 0.5f)), 75.0f);
+        /// <summary>
+        /// Full Black material. (for testing purposes)
+        /// </summary>
         internal static Material Black = new Material(Color.Black, Color.White, Color.Black, 75.0f);
     }   
 }

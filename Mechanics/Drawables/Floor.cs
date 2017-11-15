@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TankProject
 {
+    /// <summary>
+    ///Floor class. Generates a floor.
+    /// </summary>
     static class Floor
     {
         private static VertexBuffer vertexBuffer;

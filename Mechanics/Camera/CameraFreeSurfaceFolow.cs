@@ -4,6 +4,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace TankProject
 {
+    /// <summary>
+    /// Free camera that follow ground Height. Use numpad to control.
+    /// </summary>
     class CameraFreeSurfaceFolow : CameraFree
     {
         private float[] nearVertices;

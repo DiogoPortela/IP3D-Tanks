@@ -2,6 +2,9 @@
 
 namespace TankProject
 {
+    /// <summary>
+    /// Class to instanciate lights for use during Draw Time.
+    /// </summary>
     class Light
     {
         private Color diffuseColor;
@@ -22,7 +25,10 @@ namespace TankProject
         }
 
         //--------------------Instances--------------------//
-
+        
+        /// <summary>
+        /// Standard white light.
+        /// </summary>
         internal static Light White = new Light(-Vector3.One, Color.White, Color.White);
     }
 }

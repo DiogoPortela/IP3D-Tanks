@@ -2,6 +2,9 @@
 
 namespace TankProject
 {
+    /// <summary>
+    /// Generic class for any drawable GameObject.
+    /// </summary>
     class GameObject
     {
         internal Vector3 position;
