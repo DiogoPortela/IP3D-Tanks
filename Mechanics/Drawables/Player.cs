@@ -117,18 +117,18 @@ namespace TankProject
             if (Input.IsPressedDown(playerKeys.Forward) && !Input.IsPressedDown(playerKeys.Backward))
             {
                 this.position += this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                this.rightFrontWheelAngle -= MathHelper.ToRadians(10f);
-                this.leftFrontWheelAngle -= MathHelper.ToRadians(10f);
-                this.rightBackWheelAngle -= MathHelper.ToRadians(10f);
-                this.leftBackWheelAngle -= MathHelper.ToRadians(10f);
-            }
-            else if (Input.IsPressedDown(playerKeys.Backward) && !Input.IsPressedDown(playerKeys.Forward))
-            {
-                this.position -= this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.rightFrontWheelAngle += MathHelper.ToRadians(10f);
                 this.leftFrontWheelAngle += MathHelper.ToRadians(10f);
                 this.rightBackWheelAngle += MathHelper.ToRadians(10f);
                 this.leftBackWheelAngle += MathHelper.ToRadians(10f);
+            }
+            else if (Input.IsPressedDown(playerKeys.Backward) && !Input.IsPressedDown(playerKeys.Forward))
+            {
+                this.position -= this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                this.rightFrontWheelAngle -= MathHelper.ToRadians(10f);
+                this.leftFrontWheelAngle -= MathHelper.ToRadians(10f);
+                this.rightBackWheelAngle -= MathHelper.ToRadians(10f);
+                this.leftBackWheelAngle -= MathHelper.ToRadians(10f);
             }
         }
         private void Rotate(GameTime gameTime)
