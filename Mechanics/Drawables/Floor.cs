@@ -88,17 +88,8 @@ namespace TankProject
                     Vector3 normal6 = Vector3.Cross(vertices[(x + 1) * heightMap.Height + z].Position - currentPosition, vertices[(x + 1) * heightMap.Height + (z - 1)].Position - currentPosition);
                     Vector3 normal7 = Vector3.Cross(vertices[(x + 1) * heightMap.Height + (z - 1)].Position - currentPosition, vertices[x * heightMap.Height + (z - 1)].Position - currentPosition);
                     Vector3 normal8 = Vector3.Cross(vertices[x * heightMap.Height + (z - 1)].Position - currentPosition, vertices[(x - 1) * heightMap.Height + (z - 1)].Position - currentPosition);
-                    normal1.Normalize();
-                    normal2.Normalize();
-                    normal3.Normalize();
-                    normal4.Normalize();
-                    normal5.Normalize();
-                    normal6.Normalize();
-                    normal7.Normalize();
-                    normal8.Normalize();
-                    vertices[x * heightMap.Height + z].Normal = (normal1 + normal2 + normal3 + normal4 + normal5 + normal6 + normal7 + normal8) / 8.0f;
-                    VerticesNormals[x, z] = (normal1 + normal2 + normal3 + normal4 + normal5 + normal6 + normal7 + normal8) / 8.0f;
-                    VerticesNormals[x, z].Normalize();
+
+                    VerticesNormals[x, z] = vertices[x * heightMap.Height + z].Normal = Vector3.Normalize((normal1 + normal2 + normal3 + normal4 + normal5 + normal6 + normal7 + normal8) / 8.0f);
 
                 }
             }
@@ -110,13 +101,8 @@ namespace TankProject
                 Vector3 normal2 = Vector3.Cross(vertices[(x - 1) * heightMap.Height + 1].Position - currentPosition, vertices[x * heightMap.Height + 1].Position - currentPosition);
                 Vector3 normal3 = Vector3.Cross(vertices[x * heightMap.Height + 1].Position - currentPosition, vertices[(x + 1) * heightMap.Height + 1].Position - currentPosition);
                 Vector3 normal4 = Vector3.Cross(vertices[(x + 1) * heightMap.Height + 1].Position - currentPosition, vertices[(x + 1) * heightMap.Height].Position - currentPosition);
-                normal1.Normalize();
-                normal2.Normalize();
-                normal3.Normalize();
-                normal4.Normalize();
-                vertices[x * heightMap.Height].Normal = (normal1 + normal2 + normal3 + normal4) / 4.0f;
-                VerticesNormals[x, 0] = (normal1 + normal2 + normal3 + normal4) / 4.0f;
-                VerticesNormals[x, 0].Normalize();
+
+                VerticesNormals[x, 0] = vertices[x * heightMap.Height].Normal = Vector3.Normalize((normal1 + normal2 + normal3 + normal4) / 4.0f);
 
             }
             // Bottom
@@ -127,13 +113,8 @@ namespace TankProject
                 Vector3 normal2 = Vector3.Cross(vertices[(x + 1) * heightMap.Height + (heightMap.Height - 2)].Position - currentPosition, vertices[x * heightMap.Height + (heightMap.Height - 2)].Position - currentPosition);
                 Vector3 normal3 = Vector3.Cross(vertices[x * heightMap.Height + (heightMap.Height - 2)].Position - currentPosition, vertices[(x - 1) * heightMap.Height + (heightMap.Height - 2)].Position - currentPosition);
                 Vector3 normal4 = Vector3.Cross(vertices[(x - 1) * heightMap.Height + (heightMap.Height - 2)].Position - currentPosition, vertices[(x - 1) * heightMap.Height + (heightMap.Height - 1)].Position - currentPosition);
-                normal1.Normalize();
-                normal2.Normalize();
-                normal3.Normalize();
-                normal4.Normalize();
-                vertices[x * heightMap.Height + (heightMap.Height - 1)].Normal = (normal1 + normal2 + normal3 + normal4) / 4.0f;
-                VerticesNormals[x, heightMap.Height - 1] = (normal1 + normal2 + normal3 + normal4) / 4.0f;
-                VerticesNormals[x, heightMap.Height - 1].Normalize();
+
+                VerticesNormals[x, heightMap.Height - 1] = vertices[x * heightMap.Height + (heightMap.Height - 1)].Normal = Vector3.Normalize((normal1 + normal2 + normal3 + normal4) / 4.0f);
 
             }
             // Left
@@ -144,13 +125,8 @@ namespace TankProject
                 Vector3 normal2 = Vector3.Cross(vertices[heightMap.Height + (z + 1)].Position - currentPosition, vertices[heightMap.Height + z].Position - currentPosition);
                 Vector3 normal3 = Vector3.Cross(vertices[heightMap.Height + z].Position - currentPosition, vertices[heightMap.Height + (z - 1)].Position - currentPosition);
                 Vector3 normal4 = Vector3.Cross(vertices[heightMap.Height + (z - 1)].Position - currentPosition, vertices[z - 1].Position - currentPosition);
-                normal1.Normalize();
-                normal2.Normalize();
-                normal3.Normalize();
-                normal4.Normalize();
-                vertices[z].Normal = (normal1 + normal2 + normal3 + normal4) / 4.0f;
-                VerticesNormals[0, z] = (normal1 + normal2 + normal3 + normal4) / 4.0f;
-                VerticesNormals[0, z].Normalize();
+
+                VerticesNormals[0, z] = vertices[z].Normal = Vector3.Normalize((normal1 + normal2 + normal3 + normal4) / 4.0f);
 
             }
             //Right
@@ -161,13 +137,8 @@ namespace TankProject
                 Vector3 normal2 = Vector3.Cross(vertices[(heightMap.Width - 2) * heightMap.Height + (z - 1)].Position - currentPosition, vertices[(heightMap.Width - 2) * heightMap.Height + z].Position - currentPosition);
                 Vector3 normal3 = Vector3.Cross(vertices[(heightMap.Width - 2) * heightMap.Height + z].Position - currentPosition, vertices[(heightMap.Width - 2) * heightMap.Height + (z + 1)].Position - currentPosition);
                 Vector3 normal4 = Vector3.Cross(vertices[(heightMap.Width - 2) * heightMap.Height + (z + 1)].Position - currentPosition, vertices[(heightMap.Width - 1) * heightMap.Height + (z + 1)].Position - currentPosition);
-                normal1.Normalize();
-                normal2.Normalize();
-                normal3.Normalize();
-                normal4.Normalize();
-                vertices[(heightMap.Width - 1) * heightMap.Height + z].Normal = (normal1 + normal2 + normal3 + normal4) / 4.0f;
-                VerticesNormals[heightMap.Width - 1, z] = (normal1 + normal2 + normal3 + normal4) / 4.0f;
-                VerticesNormals[heightMap.Width - 1, z].Normalize();
+
+                VerticesNormals[heightMap.Width - 1, z] = vertices[(heightMap.Width - 1) * heightMap.Height + z].Normal = Vector3.Normalize((normal1 + normal2 + normal3 + normal4) / 4.0f);
 
             }
 
@@ -176,11 +147,8 @@ namespace TankProject
                 Vector3 currentPosition = vertices[0].Position;
                 Vector3 normal1 = Vector3.Cross(vertices[1].Position - currentPosition, vertices[heightMap.Height + 1].Position - currentPosition);
                 Vector3 normal2 = Vector3.Cross(vertices[heightMap.Height + 1].Position - currentPosition, vertices[heightMap.Height].Position - currentPosition);
-                normal1.Normalize();
-                normal2.Normalize();
-                vertices[0].Normal = (normal1 + normal2) / 2.0f;
-                VerticesNormals[0, 0] = (normal1 + normal2) / 2.0f;
-                VerticesNormals[0, 0].Normalize();
+
+                VerticesNormals[0, 0] = vertices[0].Normal = Vector3.Normalize((normal1 + normal2) / 2.0f);
 
             }
             //Top-Right;
@@ -188,11 +156,8 @@ namespace TankProject
                 Vector3 currentPosition = vertices[(heightMap.Width - 1) * heightMap.Height].Position;
                 Vector3 normal1 = Vector3.Cross(vertices[(heightMap.Width - 2) * heightMap.Height].Position - currentPosition, vertices[(heightMap.Width - 2) * heightMap.Height + 1].Position - currentPosition);
                 Vector3 normal2 = Vector3.Cross(vertices[(heightMap.Width - 2) * heightMap.Height + 1].Position - currentPosition, vertices[(heightMap.Width - 1) * heightMap.Height + 1].Position - currentPosition);
-                normal1.Normalize();
-                normal2.Normalize();
-                vertices[(heightMap.Width - 1) * heightMap.Height].Normal = (normal1 + normal2) / 2.0f;
-                VerticesNormals[heightMap.Width - 1, 0] = (normal1 + normal2) / 2.0f;
-                VerticesNormals[heightMap.Width - 1, 0].Normalize();
+
+                VerticesNormals[heightMap.Width - 1, 0] = vertices[(heightMap.Width - 1) * heightMap.Height].Normal = Vector3.Normalize((normal1 + normal2) / 2.0f);
 
             }
 
@@ -201,11 +166,8 @@ namespace TankProject
                 Vector3 currentPosition = vertices[heightMap.Height - 1].Position;
                 Vector3 normal1 = Vector3.Cross(vertices[heightMap.Height * 2 - 1].Position - currentPosition, vertices[heightMap.Height * 2 - 2].Position - currentPosition);
                 Vector3 normal2 = Vector3.Cross(vertices[heightMap.Height * 2 - 2].Position - currentPosition, vertices[heightMap.Height - 2].Position - currentPosition);
-                normal1.Normalize();
-                normal2.Normalize();
-                vertices[heightMap.Height - 1].Normal = (normal1 + normal2) / 2.0f;
-                VerticesNormals[0, heightMap.Height - 1] = (normal1 + normal2) / 2.0f;
-                VerticesNormals[0, heightMap.Height - 1].Normalize();
+
+                VerticesNormals[0, heightMap.Height - 1] = vertices[heightMap.Height - 1].Normal = Vector3.Normalize((normal1 + normal2) / 2.0f);
 
             }
 
@@ -214,11 +176,8 @@ namespace TankProject
                 Vector3 currentPosition = vertices[heightMap.Width * heightMap.Height - 1].Position;
                 Vector3 normal1 = Vector3.Cross(vertices[heightMap.Width * heightMap.Height - 2].Position - currentPosition, vertices[(heightMap.Width - 1) * heightMap.Height - 2].Position - currentPosition);
                 Vector3 normal2 = Vector3.Cross(vertices[(heightMap.Width - 1) * heightMap.Height - 2].Position - currentPosition, vertices[(heightMap.Width - 1) * heightMap.Height - 1].Position - currentPosition);
-                normal1.Normalize();
-                normal2.Normalize();
-                vertices[heightMap.Width * heightMap.Height - 1].Normal = (normal1 + normal2) / 2.0f;
-                VerticesNormals[heightMap.Width - 1, heightMap.Height - 1] = (normal1 + normal2) / 2.0f;
-                VerticesNormals[heightMap.Width - 1, heightMap.Height - 1].Normalize();
+
+                VerticesNormals[heightMap.Width - 1, heightMap.Height - 1] = vertices[heightMap.Width * heightMap.Height - 1].Normal = Vector3.Normalize((normal1 + normal2) / 2.0f);
 
             }
 
