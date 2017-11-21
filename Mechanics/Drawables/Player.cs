@@ -18,6 +18,8 @@ namespace TankProject
         private ModelBone turretBone, cannonBone, hatchBone, rightSteerBone, leftSteerBone, rightFrontWheelBone, leftFrontWheelBone, rightBackWheelBone, leftBackWheelBone;
         private Matrix turretTransform, cannonTransform, hatchTransform, rightSteerTransform, leftSteerTransform, rightFrontWheelTransform, leftFrontWheelTransform, rightBackWheelTransform, leftBackWheelTransform;
 
+        internal Bone turret;
+
         private float modelScale;
         private float turretAngle = 0, cannonAngle = 0, hatchetAngle = 0, rightSteerAngle = 0, leftSteerAngle = 0, rightFrontWheelAngle = 0, leftFrontWheelAngle = 0, rightBackWheelAngle = 0, leftBackWheelAngle = 0;
 
@@ -58,7 +60,8 @@ namespace TankProject
             this.cannonTransform = cannonBone.Transform;
 
             this.turretBone = tankModel.Bones["turret_geo"];
-            this.turretTransform = turretBone.Transform;
+            //this.turretTransform = turretBone.Transform;
+            turret = new Bone(turretBone.Transform, this.position, 0.0f);
 
             this.hatchBone = tankModel.Bones["hatch_geo"];
             this.hatchTransform = hatchBone.Transform;
@@ -181,9 +184,9 @@ namespace TankProject
 
             //torre
             if (Input.IsPressedDown(playerKeys.TurretLeft) && !Input.IsPressedDown(playerKeys.TurretRight))
-                this.turretAngle += MathHelper.ToRadians(1f);
+                this.turret.rotation.X += MathHelper.ToRadians(1f);
             else if (Input.IsPressedDown(playerKeys.TurretRight) && !Input.IsPressedDown(playerKeys.TurretLeft))
-                this.turretAngle -= MathHelper.ToRadians(1f);
+                this.turret.rotation.X -= MathHelper.ToRadians(1f);
         }
         private void UpdateHatchet(GameTime gameTime)
         {
@@ -245,8 +248,13 @@ namespace TankProject
             rotationMatrix.Right = -this.Right;
 
             tankModel.Root.Transform = Matrix.CreateScale(modelScale) * rotationMatrix * transformMatrix;
-            turretBone.Transform = Matrix.CreateRotationY(turretAngle) * turretTransform;
+            //turretBone.Transform = Matrix.CreateRotationY(turretAngle) * turretTransform;
+            turret.boneMatrix = Matrix.CreateRotationY(turret.rotation.X) * turret.originalBoneMatrix;
+            turret.Update();
+            turretBone.Transform = turret.boneMatrix;
+
             cannonBone.Transform = Matrix.CreateRotationX(cannonAngle) * cannonTransform;
+
             rightSteerBone.Transform = Matrix.CreateRotationY(rightSteerAngle) * rightSteerTransform;
             leftSteerBone.Transform = Matrix.CreateRotationY(leftSteerAngle) * leftSteerTransform;
             rightFrontWheelBone.Transform = Matrix.CreateRotationX(rightFrontWheelAngle) * rightFrontWheelTransform;
@@ -266,7 +274,6 @@ namespace TankProject
                     effect.World = boneTransformations[mesh.ParentBone.Index];
                     effect.View = cam.ViewMatrix;
                     effect.Projection = cam.ProjectionMatrix;
-                    effect.EnableDefaultLighting();
                 }
                 mesh.Draw();
             }

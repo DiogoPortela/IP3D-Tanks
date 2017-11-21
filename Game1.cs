@@ -19,6 +19,11 @@ namespace TankProject
 
         internal static Light currentLight;
 
+        //DEBUG
+        DebugLine debugLine1;
+        DebugLine debugLine2;
+        DebugLine debugLine3;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -67,10 +72,17 @@ namespace TankProject
             playerTwo = new Player(new Vector3(65, 10, 65), Vector3.Zero, Vector3.Zero, 0.0005f, Player.PlayerNumber.PlayerTwo);
             playerTwo.LoadModelBones(Content, Material.White, currentLight);
 
-            currentCameraPlayerOne = new CameraThirdPersonFixed(GraphicsDevice, new Vector3(64, 5, 65), playerOne, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f), upView.AspectRatio);
+            currentCameraPlayerOne = new CameraThirdPersonFixed(GraphicsDevice, new Vector3(64, 5, 65), playerOne.turret, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f), upView.AspectRatio);
             currentCameraPlayerTwo = new CameraThirdPersonFixed(GraphicsDevice, new Vector3(64, 5, 65), playerTwo, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f), downView.AspectRatio);
 
             Floor.Start(this, currentCameraPlayerOne, Material.White, currentLight);
+
+            debugLine1 = new DebugLine(playerOne.position, playerOne.position + playerOne.turret.Up, Color.Green);
+            debugLine2 = new DebugLine(playerOne.position, playerOne.position + playerOne.turret.Forward, Color.Blue);
+            debugLine3 = new DebugLine(playerOne.position, playerOne.position + playerOne.turret.Right, Color.Red);
+            Debug.AddLine("1", debugLine1);
+            Debug.AddLine("1", debugLine2);
+            Debug.AddLine("1", debugLine3);
         }
 
         /// <summary>
@@ -118,7 +130,7 @@ namespace TankProject
             #region Player Two Camera
             if (Input.IsPressedDown(Keys.F7) && !(currentCameraPlayerTwo is CameraThirdPerson))
             {
-                currentCameraPlayerTwo = new CameraThirdPerson(currentCameraPlayerTwo, playerOne, 2.0f, gameTime);
+                currentCameraPlayerTwo = new CameraThirdPerson(currentCameraPlayerTwo, playerTwo, 2.0f, gameTime);
             }
             else if (Input.IsPressedDown(Keys.F8) && !(currentCameraPlayerTwo is CameraFreeSurfaceFolow) && currentCameraPlayerTwo.Position.X > 0 && currentCameraPlayerTwo.Position.X < Floor.heightMap.Width && currentCameraPlayerTwo.Position.Z > 0 && currentCameraPlayerTwo.Position.Z < Floor.heightMap.Height)
             {
@@ -143,6 +155,10 @@ namespace TankProject
             playerOne.Update(gameTime);
             playerTwo.Update(gameTime);
 
+
+            debugLine1.Update(playerOne.position, playerOne.position + playerOne.turret.Up);
+            debugLine2.Update(playerOne.position, playerOne.position + playerOne.turret.Forward);
+            debugLine3.Update(playerOne.position, playerOne.position + playerOne.turret.Right);
             Debug.Update();
             base.Update(gameTime);
         }
@@ -159,14 +175,16 @@ namespace TankProject
             Floor.Draw(currentCameraPlayerOne);
             playerOne.Draw(currentCameraPlayerOne);
             playerTwo.Draw(currentCameraPlayerOne);
+            Debug.Draw(spriteBatch, currentCameraPlayerOne);
 
             GraphicsDevice.Viewport = downView;
             Floor.Draw(currentCameraPlayerTwo);
             playerOne.Draw(currentCameraPlayerTwo);
             playerTwo.Draw(currentCameraPlayerTwo);
+            Debug.Draw(spriteBatch, currentCameraPlayerTwo);
+
 
             GraphicsDevice.Viewport = defaultView;
-
 
             base.Draw(gameTime);
         }
