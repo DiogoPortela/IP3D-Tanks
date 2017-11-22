@@ -13,13 +13,16 @@ namespace TankProject
             this.Forward = boneMatrix.Up;
             this.Right = boneMatrix.Right;
             this.Up = boneMatrix.Forward;
+
         }
 
-        internal void Update()
+        internal void Update(Vector3 position, Matrix rotationMatrix)
         {
-            this.Forward = Vector3.Normalize(boneMatrix.Forward);
-            this.Right = Vector3.Normalize(boneMatrix.Right);
-            this.Up = Vector3.Normalize(boneMatrix.Up);
+            this.Forward = Vector3.Transform(Vector3.Normalize(boneMatrix.Backward), rotationMatrix);
+            this.Right = Vector3.Transform(Vector3.Normalize(boneMatrix.Right), rotationMatrix);
+            this.Up = Vector3.Transform(Vector3.Normalize(boneMatrix.Up), rotationMatrix);
+
+            this.position = position;
         }
     }
 }
