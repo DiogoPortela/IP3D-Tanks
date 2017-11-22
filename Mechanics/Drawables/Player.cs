@@ -263,7 +263,7 @@ namespace TankProject
             turretBone.Transform = turret.boneTransform;
 
             //Cannon bone
-            cannon.Update(this.position, rotationMatrix);
+            cannon.Update(this.position, rotationMatrix, turret);
             cannonBone.Transform = cannon.boneTransform;
 
             rightSteerBone.Transform = Matrix.CreateRotationY(rightSteerAngle) * rightSteerTransform;

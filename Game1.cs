@@ -84,12 +84,12 @@ namespace TankProject
 
             //TODO: END: CLEAN THIS BEFORE END
             //DEBUG
-            //debugLine1 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position - playerOne.cannon.Forward, Color.Blue);
-            //debugLine2 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Right, Color.Red);
-            //debugLine3 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Up, Color.Green);
-            debugLine1 = new DebugLine(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Forward, Color.Blue);
-            debugLine2 = new DebugLine(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Right, Color.Red);
-            debugLine3 = new DebugLine(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Up, Color.Green);
+            debugLine1 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Forward, Color.Blue);
+            debugLine2 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Right, Color.Red);
+            debugLine3 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Up, Color.Green);
+            //debugLine1 = new DebugLine(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Forward, Color.Blue);
+            //debugLine2 = new DebugLine(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Right, Color.Red);
+            //debugLine3 = new DebugLine(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Up, Color.Green);
             Debug.AddLine("1", debugLine1);
             Debug.AddLine("2", debugLine2);
             Debug.AddLine("3", debugLine3);
@@ -168,16 +168,16 @@ namespace TankProject
 
             foreach(Bullet b in bulletList)
             {
-                //b.Update(gameTime);
+                b.Update(gameTime);
             }
 
-            //debugLine1.Update(playerOne.cannon.position, playerOne.cannon.position - playerOne.cannon.Forward);
-            //debugLine2.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Right);
-            //debugLine3.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Up);
+            debugLine1.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Forward);
+            debugLine2.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Right);
+            debugLine3.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Up);
 
-            debugLine1.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Forward);
-            debugLine2.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Right);
-            debugLine3.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Up);
+            //debugLine1.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Forward);
+            //debugLine2.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Right);
+            //debugLine3.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Up);
 
             Debug.Update();
             base.Update(gameTime);

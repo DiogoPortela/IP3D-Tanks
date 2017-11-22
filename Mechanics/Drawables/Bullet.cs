@@ -7,7 +7,7 @@ namespace TankProject
     class Bullet : GameObject
     {
         private static float G = -9.8f;
-        private static float SHOOTING_POWER = 1f;
+        private static float SHOOTING_POWER = 10f;
         private static Model bulletModel;
 
         public Bullet(Vector3 startingPosition, Vector3 velocity, Vector3 normal) :
@@ -36,6 +36,8 @@ namespace TankProject
 
             this.velocity.Y += G * deltaTime;
             this.position += this.velocity * deltaTime;
+            this.rotationMatrix.Forward = -Vector3.Normalize(this.velocity);
+          
         }
 
         internal void Draw(Camera cam)
@@ -44,7 +46,7 @@ namespace TankProject
             {
                 foreach (BasicEffect effect in mesh.Effects)
                 {
-                    effect.World = Matrix.CreateScale(0.5f) * rotationMatrix * Matrix.CreateTranslation(position);
+                    effect.World = Matrix.CreateScale(0.25f) * rotationMatrix * Matrix.CreateTranslation(position);
                     effect.View = cam.ViewMatrix;
                     effect.Projection = cam.ProjectionMatrix;
                 }

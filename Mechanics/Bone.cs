@@ -30,7 +30,18 @@ namespace TankProject
             this.Forward = -(boneTransform * objRotationMatrix).Forward;
             this.Right = -(boneTransform * objRotationMatrix).Right;
             this.Up = (boneTransform * objRotationMatrix).Up;
+        }
+        internal void Update(Vector3 position, Matrix objRotationMatrix, Bone previousBone)
+        {
+            this.rotationMatrix = Matrix.CreateFromYawPitchRoll(rotation.Y, rotation.X, rotation.Z);
+            this.boneTransform = this.rotationMatrix * this.translationMatrix;
 
+            this.bonePositionOffset = Vector3.Transform(boneTransform.Translation * scale, previousBone.rotationMatrix * objRotationMatrix);
+            this.position = bonePositionOffset + position;
+
+            this.Forward = -(boneTransform * previousBone.rotationMatrix * objRotationMatrix).Forward;
+            this.Right = -(boneTransform * previousBone.rotationMatrix * objRotationMatrix).Right;
+            this.Up = (boneTransform * previousBone.rotationMatrix * objRotationMatrix).Up;
         }
     }
 }
