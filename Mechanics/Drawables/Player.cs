@@ -248,6 +248,7 @@ namespace TankProject
             rotationMatrix.Right = -this.Right;
 
             tankModel.Root.Transform = Matrix.CreateScale(modelScale) * rotationMatrix * transformMatrix;
+
             //turretBone.Transform = Matrix.CreateRotationY(turretAngle) * turretTransform;
             turret.boneMatrix = Matrix.CreateRotationY(turret.rotation.X) * turret.originalBoneMatrix;
             turret.Update(this.position, rotationMatrix);

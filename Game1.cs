@@ -77,12 +77,6 @@ namespace TankProject
 
             Floor.Start(this, currentCameraPlayerOne, Material.White, currentLight);
 
-            //debugLine1 = new DebugLine(playerOne.position, playerOne.position + playerOne.turret.Up, Color.Green);
-            //debugLine2 = new DebugLine(playerOne.position, playerOne.position + playerOne.turret.Forward, Color.Blue);
-            //debugLine3 = new DebugLine(playerOne.position, playerOne.position + playerOne.turret.Right, Color.Red);
-            //Debug.AddLine("1", debugLine1);
-            //Debug.AddLine("2", debugLine2);
-            //Debug.AddLine("3", debugLine3);
         }
 
         /// <summary>
@@ -156,9 +150,6 @@ namespace TankProject
             playerTwo.Update(gameTime);
 
 
-            //debugLine1.Update(playerOne.position, playerOne.position + playerOne.turret.Up);
-            //debugLine2.Update(playerOne.position, playerOne.position + playerOne.turret.Forward);
-            //debugLine3.Update(playerOne.position, playerOne.position + playerOne.turret.Right);
             Debug.Update();
             base.Update(gameTime);
         }
