@@ -22,6 +22,7 @@ namespace TankProject
             this.Up = Vector3.Transform(Vector3.Normalize(boneMatrix.Up), rotationMatrix);
 
             this.position = position;
+
         }
     }
 }

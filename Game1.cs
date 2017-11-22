@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace TankProject
 {
@@ -16,6 +17,7 @@ namespace TankProject
         internal static Camera currentCameraPlayerTwo;
         static private Viewport defaultView, upView, downView;
         internal static Player playerOne, playerTwo;
+        internal static List<Bullet> bulletList;
 
         internal static Light currentLight;
 
@@ -71,6 +73,9 @@ namespace TankProject
 
             playerTwo = new Player(new Vector3(65, 10, 65), Vector3.Zero, Vector3.Zero, 0.0005f, Player.PlayerNumber.PlayerTwo);
             playerTwo.LoadModelBones(Content, Material.White, currentLight);
+
+            Bullet.LoadModel(this.Content);
+            bulletList = new List<Bullet>();
 
             currentCameraPlayerOne = new CameraThirdPersonFixed(GraphicsDevice, new Vector3(64, 5, 65), playerOne.turret, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f), upView.AspectRatio);
             currentCameraPlayerTwo = new CameraThirdPersonFixed(GraphicsDevice, new Vector3(64, 5, 65), playerTwo.turret, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f), downView.AspectRatio);
@@ -149,6 +154,10 @@ namespace TankProject
             playerOne.Update(gameTime);
             playerTwo.Update(gameTime);
 
+            foreach(Bullet b in bulletList)
+            {
+                //b.Update(gameTime);
+            }
 
             Debug.Update();
             base.Update(gameTime);
@@ -166,12 +175,20 @@ namespace TankProject
             Floor.Draw(currentCameraPlayerOne);
             playerOne.Draw(currentCameraPlayerOne);
             playerTwo.Draw(currentCameraPlayerOne);
+            foreach (Bullet b in bulletList)
+            {
+                b.Draw(currentCameraPlayerOne);
+            }
             Debug.Draw(spriteBatch, currentCameraPlayerOne);
 
             GraphicsDevice.Viewport = downView;
             Floor.Draw(currentCameraPlayerTwo);
             playerOne.Draw(currentCameraPlayerTwo);
             playerTwo.Draw(currentCameraPlayerTwo);
+            foreach (Bullet b in bulletList)
+            {
+                b.Draw(currentCameraPlayerTwo);
+            }
             Debug.Draw(spriteBatch, currentCameraPlayerTwo);
 
             GraphicsDevice.Viewport = defaultView;

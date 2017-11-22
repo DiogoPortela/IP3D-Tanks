@@ -86,6 +86,9 @@
     <None Include="Content\tank.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Content\TankBullet.fbx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Content\turret_alt_diff_tex.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

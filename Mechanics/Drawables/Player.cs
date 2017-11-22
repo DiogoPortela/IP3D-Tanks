@@ -16,12 +16,13 @@ namespace TankProject
         //Model information
         private Model tankModel;
         private ModelBone turretBone, cannonBone, hatchBone, rightSteerBone, leftSteerBone, rightFrontWheelBone, leftFrontWheelBone, rightBackWheelBone, leftBackWheelBone;
-        private Matrix turretTransform, cannonTransform, hatchTransform, rightSteerTransform, leftSteerTransform, rightFrontWheelTransform, leftFrontWheelTransform, rightBackWheelTransform, leftBackWheelTransform;
+        private Matrix hatchTransform, rightSteerTransform, leftSteerTransform, rightFrontWheelTransform, leftFrontWheelTransform, rightBackWheelTransform, leftBackWheelTransform;
 
         internal Bone turret;
+        internal Bone cannon;
 
         private float modelScale;
-        private float turretAngle = 0, cannonAngle = 0, hatchetAngle = 0, rightSteerAngle = 0, leftSteerAngle = 0, rightFrontWheelAngle = 0, leftFrontWheelAngle = 0, rightBackWheelAngle = 0, leftBackWheelAngle = 0;
+        private float hatchetAngle = 0, rightSteerAngle = 0, leftSteerAngle = 0, rightFrontWheelAngle = 0, leftFrontWheelAngle = 0, rightBackWheelAngle = 0, leftBackWheelAngle = 0;
 
         private bool isOpenning; //used to slowly open hatchet
 
@@ -57,10 +58,9 @@ namespace TankProject
             this.tankModel = content.Load<Model>("tank");
 
             this.cannonBone = tankModel.Bones["canon_geo"];
-            this.cannonTransform = cannonBone.Transform;
+            cannon = new Bone(cannonBone.Transform, this.position, 0.0f);
 
             this.turretBone = tankModel.Bones["turret_geo"];
-            //this.turretTransform = turretBone.Transform;
             turret = new Bone(turretBone.Transform, this.position, 0.0f);
 
             this.hatchBone = tankModel.Bones["hatch_geo"];
@@ -175,12 +175,12 @@ namespace TankProject
             //canhao
             if (Input.IsPressedDown(playerKeys.CannonUp) && !Input.IsPressedDown(playerKeys.CannonDown))
             {
-                if (this.cannonAngle >= -Math.PI / 4)
-                    this.cannonAngle -= MathHelper.ToRadians(1f);
+                if (this.cannon.rotation.X >= -Math.PI / 4)
+                    this.cannon.rotation.X -= MathHelper.ToRadians(1f);
             }
             else if (Input.IsPressedDown(playerKeys.CannonDown) && !Input.IsPressedDown(playerKeys.CannonUp))
-                if (this.cannonAngle <= 0)
-                    this.cannonAngle += MathHelper.ToRadians(1f);
+                if (this.cannon.rotation.X <= 0)
+                    this.cannon.rotation.X += MathHelper.ToRadians(1f);
 
             //torre
             if (Input.IsPressedDown(playerKeys.TurretLeft) && !Input.IsPressedDown(playerKeys.TurretRight))
@@ -224,6 +224,11 @@ namespace TankProject
             this.Right = Vector3.Cross(relativeForward, Up);
             this.Right.Normalize();
         }
+        private void Shoot()
+        {
+            Bullet aux = new Bullet(cannon.position, cannon.Forward, cannon.Up);
+            Game1.bulletList.Add(aux);
+        }
 
         //--------------------Update&Draw--------------------//
 
@@ -254,7 +259,9 @@ namespace TankProject
             turret.Update(this.position, rotationMatrix);
             turretBone.Transform = turret.boneMatrix;
 
-            cannonBone.Transform = Matrix.CreateRotationX(cannonAngle) * cannonTransform;
+            cannon.boneMatrix = Matrix.CreateRotationX(cannon.rotation.X) * cannon.originalBoneMatrix;
+            cannon.Update(this.position, rotationMatrix);
+            cannonBone.Transform = cannon.boneMatrix;
 
             rightSteerBone.Transform = Matrix.CreateRotationY(rightSteerAngle) * rightSteerTransform;
             leftSteerBone.Transform = Matrix.CreateRotationY(leftSteerAngle) * leftSteerTransform;
@@ -265,6 +272,11 @@ namespace TankProject
             hatchBone.Transform = Matrix.CreateRotationX(hatchetAngle) * hatchTransform;
 
             tankModel.CopyAbsoluteBoneTransformsTo(boneTransformations);
+
+            if (Input.WasPressed(playerKeys.Shoot))
+            {
+                Shoot();
+            }
         }
         internal void Draw(Camera cam)
         {
