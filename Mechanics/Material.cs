@@ -31,10 +31,10 @@ namespace TankProject
         /// <summary>
         /// Full White material.(normal material)
         /// </summary>
-        internal static Material White = new Material(Color.White, Color.White, new Color(new Vector3(0.5f, 0.5f, 0.5f)), 75.0f);
+        internal static Material White = new Material(Color.White, Color.Black, new Color(new Vector3(0.5f,0.5f,0.5f)), 75.0f);
         /// <summary>
         /// Full Black material. (for testing purposes)
         /// </summary>
-        internal static Material Black = new Material(Color.Black, Color.White, Color.Black, 75.0f);
+        internal static Material Black = new Material(Color.Black, Color.White, Color.White, 75.0f);
     }   
 }
