@@ -16,7 +16,7 @@ namespace TankProject
             this.position = startingPosition;
             this.velocity = velocity * SHOOTING_POWER;
 
-            Forward = Vector3.Normalize(velocity);
+            Forward = -Vector3.Normalize(velocity);
             Up = normal;
             Right = Vector3.Cross(Up, Forward);
 

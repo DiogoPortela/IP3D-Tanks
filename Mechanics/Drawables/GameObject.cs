@@ -15,7 +15,7 @@ namespace TankProject
         internal Vector3 Up, Forward, Right;
 
         protected Matrix rotationMatrix;
-        protected Matrix transformMatrix;
+        protected Matrix translationMatrix;
 
         //--------------------Constructors--------------------//
 
@@ -25,7 +25,7 @@ namespace TankProject
             this.velocity = velocity;
             this.rotation = rotation;
             rotationMatrix = Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z);
-            transformMatrix = Matrix.CreateTranslation(position);
+            translationMatrix = Matrix.CreateTranslation(position);
         }
     }
 }

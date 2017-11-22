@@ -22,9 +22,9 @@ namespace TankProject
         internal static Light currentLight;
 
         //DEBUG
-        //DebugLine debugLine1;
-        //DebugLine debugLine2;
-        //DebugLine debugLine3;
+        DebugLine debugLine1;
+        DebugLine debugLine2;
+        DebugLine debugLine3;
 
         public Game1()
         {
@@ -81,6 +81,18 @@ namespace TankProject
             currentCameraPlayerTwo = new CameraThirdPersonFixed(GraphicsDevice, new Vector3(64, 5, 65), playerTwo.turret, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f), downView.AspectRatio);
 
             Floor.Start(this, currentCameraPlayerOne, Material.White, currentLight);
+
+            //TODO: END: CLEAN THIS BEFORE END
+            //DEBUG
+            //debugLine1 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position - playerOne.cannon.Forward, Color.Blue);
+            //debugLine2 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Right, Color.Red);
+            //debugLine3 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Up, Color.Green);
+            debugLine1 = new DebugLine(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Forward, Color.Blue);
+            debugLine2 = new DebugLine(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Right, Color.Red);
+            debugLine3 = new DebugLine(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Up, Color.Green);
+            Debug.AddLine("1", debugLine1);
+            Debug.AddLine("2", debugLine2);
+            Debug.AddLine("3", debugLine3);
 
         }
 
@@ -158,6 +170,14 @@ namespace TankProject
             {
                 //b.Update(gameTime);
             }
+
+            //debugLine1.Update(playerOne.cannon.position, playerOne.cannon.position - playerOne.cannon.Forward);
+            //debugLine2.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Right);
+            //debugLine3.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Up);
+
+            debugLine1.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Forward);
+            debugLine2.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Right);
+            debugLine3.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Up);
 
             Debug.Update();
             base.Update(gameTime);

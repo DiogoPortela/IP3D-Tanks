@@ -11,10 +11,10 @@ namespace TankProject
     /// </summary>
     class Player : GameObject
     {
-        //private Vector3 turretRotationVelocity;
+        private const float TANK_HEIGHT_FROM_FLOOR = 0.001f;
 
         //Model information
-        private Model tankModel;
+        private static Model tankModel;
         private ModelBone turretBone, cannonBone, hatchBone, rightSteerBone, leftSteerBone, rightFrontWheelBone, leftFrontWheelBone, rightBackWheelBone, leftBackWheelBone;
         private Matrix hatchTransform, rightSteerTransform, leftSteerTransform, rightFrontWheelTransform, leftFrontWheelTransform, rightBackWheelTransform, leftBackWheelTransform;
 
@@ -55,13 +55,13 @@ namespace TankProject
         //Loads
         internal void LoadModelBones(ContentManager content, Material material, Light light)
         {
-            this.tankModel = content.Load<Model>("tank");
+            tankModel = content.Load<Model>("tank");
 
             this.cannonBone = tankModel.Bones["canon_geo"];
-            cannon = new Bone(cannonBone.Transform, this.position, 0.0f);
+            cannon = new Bone(cannonBone.Transform, this.position, Vector3.Zero, modelScale);
 
             this.turretBone = tankModel.Bones["turret_geo"];
-            turret = new Bone(turretBone.Transform, this.position, 0.0f);
+            turret = new Bone(turretBone.Transform, this.position, Vector3.Zero, modelScale);
 
             this.hatchBone = tankModel.Bones["hatch_geo"];
             this.hatchTransform = hatchBone.Transform;
@@ -142,15 +142,19 @@ namespace TankProject
         }
         private void Rotate(GameTime gameTime)
         {
+            if (rotation.X > 2 * MathHelper.Pi || rotation.X < -2 * MathHelper.Pi)
+                rotation.X = 0; //TODO: END: VER SE ISTO ESTA A FAZER ALGUMA COISA?
+
+            #region wheels and movement
             if (Input.IsPressedDown(playerKeys.Left) && !Input.IsPressedDown(playerKeys.Right))
             {
                 rightSteerAngle = MathHelper.ToRadians(10f);
                 leftSteerAngle = MathHelper.ToRadians(10f);
 
                 if (Input.IsPressedDown(playerKeys.Forward))
-                    rotation.X += MathHelper.ToRadians(1f);
+                    rotation.Y += MathHelper.ToRadians(1f);
                 else if (Input.IsPressedDown(playerKeys.Backward))
-                    rotation.X -= MathHelper.ToRadians(1f);
+                    rotation.Y -= MathHelper.ToRadians(1f);
             }
             else if (Input.IsPressedDown(playerKeys.Right) && !Input.IsPressedDown(playerKeys.Left))
             {
@@ -158,9 +162,9 @@ namespace TankProject
                 leftSteerAngle = MathHelper.ToRadians(-10f);
 
                 if (Input.IsPressedDown(playerKeys.Forward))
-                    rotation.X -= MathHelper.ToRadians(1f);
+                    rotation.Y -= MathHelper.ToRadians(1f);
                 else if (Input.IsPressedDown(playerKeys.Backward))
-                    rotation.X += MathHelper.ToRadians(1f);
+                    rotation.Y += MathHelper.ToRadians(1f);
 
             }
             else
@@ -168,11 +172,9 @@ namespace TankProject
                 rightSteerAngle = MathHelper.ToRadians(0f);
                 leftSteerAngle = MathHelper.ToRadians(0f);
             }
+            #endregion
 
-            if (rotation.X > 2 * MathHelper.Pi || rotation.X < -2 * MathHelper.Pi)
-                rotation.X = 0;
-
-            //canhao
+            #region canhao
             if (Input.IsPressedDown(playerKeys.CannonUp) && !Input.IsPressedDown(playerKeys.CannonDown))
             {
                 if (this.cannon.rotation.X >= -Math.PI / 4)
@@ -181,12 +183,14 @@ namespace TankProject
             else if (Input.IsPressedDown(playerKeys.CannonDown) && !Input.IsPressedDown(playerKeys.CannonUp))
                 if (this.cannon.rotation.X <= 0)
                     this.cannon.rotation.X += MathHelper.ToRadians(1f);
+            #endregion
 
-            //torre
+            #region torre
             if (Input.IsPressedDown(playerKeys.TurretLeft) && !Input.IsPressedDown(playerKeys.TurretRight))
-                this.turret.rotation.X += MathHelper.ToRadians(1f);
+                this.turret.rotation.Y += MathHelper.ToRadians(1f);
             else if (Input.IsPressedDown(playerKeys.TurretRight) && !Input.IsPressedDown(playerKeys.TurretLeft))
-                this.turret.rotation.X -= MathHelper.ToRadians(1f);
+                this.turret.rotation.Y -= MathHelper.ToRadians(1f);
+            #endregion
         }
         private void UpdateHatchet(GameTime gameTime)
         {
@@ -205,7 +209,7 @@ namespace TankProject
             Vector2 positionXZ = new Vector2(position.X, position.Z);
             Vector2 roundedPositionXZ = new Vector2((int)this.position.X, (int)this.position.Z);
 
-            this.position.Y = 0.001f /*offset*/ + Interpolation.BiLinear(positionXZ, roundedPositionXZ, 1.0f,
+            this.position.Y = TANK_HEIGHT_FROM_FLOOR + Interpolation.BiLinear(positionXZ, roundedPositionXZ, 1.0f,
             Floor.VerticesHeight[(int)positionXZ.X, (int)positionXZ.Y], Floor.VerticesHeight[(int)positionXZ.X + 1, (int)positionXZ.Y],
             Floor.VerticesHeight[(int)positionXZ.X, (int)positionXZ.Y + 1], Floor.VerticesHeight[(int)positionXZ.X + 1, (int)positionXZ.Y + 1]);
         }
@@ -237,31 +241,30 @@ namespace TankProject
             Move(gameTime);
             Rotate(gameTime);
 
-            relativeForward = Vector3.Transform(Vector3.Forward, Matrix.CreateRotationY(rotation.X));
+            relativeForward = Vector3.Transform(Vector3.Forward, Matrix.CreateRotationY(rotation.Y));
             relativeForward.Normalize();
-            relativeRight = Vector3.Transform(Vector3.Right, Matrix.CreateRotationY(rotation.X));
+            relativeRight = Vector3.Transform(Vector3.Right, Matrix.CreateRotationY(rotation.Y));
             relativeRight.Normalize();
 
             UpdateHatchet(gameTime);
             HeightFollow();
             NormalFollow();
 
-            transformMatrix = Matrix.CreateTranslation(position); ;
+            translationMatrix = Matrix.CreateTranslation(position); ;
             rotationMatrix.Up = this.Up;
             //The 3d model is facing backwards.
             rotationMatrix.Forward = -this.Forward;
             rotationMatrix.Right = -this.Right;
 
-            tankModel.Root.Transform = Matrix.CreateScale(modelScale) * rotationMatrix * transformMatrix;
+            tankModel.Root.Transform = Matrix.CreateScale(modelScale) * rotationMatrix * translationMatrix;
 
-            //turretBone.Transform = Matrix.CreateRotationY(turretAngle) * turretTransform;
-            turret.boneMatrix = Matrix.CreateRotationY(turret.rotation.X) * turret.originalBoneMatrix;
-            turret.Update(this.position, rotationMatrix);
-            turretBone.Transform = turret.boneMatrix;
+            //Turret bone
+            turret.Update(this.position, this.rotationMatrix);
+            turretBone.Transform = turret.boneTransform;
 
-            cannon.boneMatrix = Matrix.CreateRotationX(cannon.rotation.X) * cannon.originalBoneMatrix;
+            //Cannon bone
             cannon.Update(this.position, rotationMatrix);
-            cannonBone.Transform = cannon.boneMatrix;
+            cannonBone.Transform = cannon.boneTransform;
 
             rightSteerBone.Transform = Matrix.CreateRotationY(rightSteerAngle) * rightSteerTransform;
             leftSteerBone.Transform = Matrix.CreateRotationY(leftSteerAngle) * leftSteerTransform;

@@ -4,24 +4,32 @@ namespace TankProject
 {
     class Bone : GameObject
     {
-        internal Matrix boneMatrix;
-        internal Matrix originalBoneMatrix;
+        internal Matrix boneTransform;
+        internal Vector3 bonePositionOffset;
+        private float scale;
 
-        internal Bone(Matrix boneMatrix, Vector3 objectPosition, float angle) : base(boneMatrix.Translation + objectPosition, new Vector3(angle, 0.0f, 0.0f), Vector3.Zero)
+        internal Bone(Matrix boneMatrix, Vector3 objectPosition, Vector3 rotation, float scale) : base(boneMatrix.Translation * scale + objectPosition, rotation, Vector3.Zero)
         {
-            this.boneMatrix = originalBoneMatrix = boneMatrix;
-            this.Forward = boneMatrix.Up;
+            this.boneTransform = boneMatrix;
+            this.Forward = boneMatrix.Forward;
             this.Right = boneMatrix.Right;
-            this.Up = boneMatrix.Forward;
+            this.Up = boneMatrix.Up;
+            this.scale = scale;
+            bonePositionOffset = boneMatrix.Translation * scale;
+            this.translationMatrix = Matrix.CreateTranslation(boneMatrix.Translation);
         }
 
-        internal void Update(Vector3 position, Matrix rotationMatrix)
+        internal void Update(Vector3 position, Matrix objRotationMatrix)
         {
-            this.Forward = Vector3.Transform(Vector3.Normalize(boneMatrix.Backward), rotationMatrix);
-            this.Right = Vector3.Transform(Vector3.Normalize(boneMatrix.Right), rotationMatrix);
-            this.Up = Vector3.Transform(Vector3.Normalize(boneMatrix.Up), rotationMatrix);
+            this.rotationMatrix = Matrix.CreateFromYawPitchRoll(rotation.Y, rotation.X, rotation.Z);
+            this.boneTransform = this.rotationMatrix * this.translationMatrix;
 
-            this.position = position;
+            this.bonePositionOffset = Vector3.Transform(boneTransform.Translation * scale, objRotationMatrix);
+            this.position = bonePositionOffset + position;
+
+            this.Forward = -(boneTransform * objRotationMatrix).Forward;
+            this.Right = -(boneTransform * objRotationMatrix).Right;
+            this.Up = (boneTransform * objRotationMatrix).Up;
 
         }
     }
