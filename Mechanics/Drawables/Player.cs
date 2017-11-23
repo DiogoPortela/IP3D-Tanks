@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace TankProject
 {
@@ -27,6 +28,7 @@ namespace TankProject
         private bool isOpenning; //used to slowly open hatchet
 
         internal Matrix[] boneTransformations;
+        private List<BoundingBox> boundingBoxes;
 
         //Player information
 
@@ -46,6 +48,7 @@ namespace TankProject
             this.Up = Vector3.Up;
             this.modelScale = modelScale;
             this.playerNumber = number;
+            boundingBoxes = new List<BoundingBox>();
 
             SetPlayerKeys();
         }
@@ -86,8 +89,11 @@ namespace TankProject
 
             this.boneTransformations = new Matrix[tankModel.Bones.Count];
 
+
             foreach (ModelMesh mesh in tankModel.Meshes)
             {
+                boundingBoxes.Add(BoundingBox.CreateFromSphere(mesh.BoundingSphere));
+
                 foreach (BasicEffect effect in mesh.Effects)
                 {
                     //Material
@@ -230,7 +236,7 @@ namespace TankProject
         }
         private void Shoot()
         {
-            Bullet aux = new Bullet(cannon.position + Vector3.Up/8f, cannon.Forward, cannon.Up);
+            Bullet aux = new Bullet(cannon.position + Vector3.Up / 8f, cannon.Forward, cannon.Up);
             Game1.bulletList.Add(aux);
         }
 

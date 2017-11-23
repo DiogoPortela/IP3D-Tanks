@@ -7,7 +7,7 @@ namespace TankProject
     class Bullet : GameObject
     {
         private static float G = -9.8f;
-        private static float SHOOTING_POWER = 10f;
+        private static float SHOOTING_POWER = 35f;
         private static Model bulletModel;
 
         public Bullet(Vector3 startingPosition, Vector3 velocity, Vector3 normal) :
