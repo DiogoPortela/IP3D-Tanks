@@ -230,7 +230,7 @@ namespace TankProject
         }
         private void Shoot()
         {
-            Bullet aux = new Bullet(cannon.position, cannon.Forward, cannon.Up);
+            Bullet aux = new Bullet(cannon.position + Vector3.Up/8f, cannon.Forward, cannon.Up);
             Game1.bulletList.Add(aux);
         }
 
