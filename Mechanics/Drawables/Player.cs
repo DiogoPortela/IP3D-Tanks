@@ -92,6 +92,7 @@ namespace TankProject
 
             foreach (ModelMesh mesh in tankModel.Meshes)
             {
+                //create the bounding boxes of each mesh in the tank model
                 boundingBoxes.Add(BoundingBox.CreateFromSphere(mesh.BoundingSphere));
 
                 foreach (BasicEffect effect in mesh.Effects)

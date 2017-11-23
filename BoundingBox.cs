@@ -19,13 +19,13 @@ namespace TankProject
             this.maxBound = maxBound;
         }
 
-        public static BoundingBox CreateFromSphere(BoundingSphere sphere)
+        internal static BoundingBox CreateFromSphere(BoundingSphere sphere)
         {
             Vector3 aux = new Vector3(sphere.Radius);
             return new BoundingBox(sphere.Center - aux, sphere.Center + aux);
         }
 
-        public bool Intersects(BoundingBox other)
+        internal bool Intersects(BoundingBox other)
         {
             return other.minBound.X >= this.minBound.X
                 && other.maxBound.X <= this.maxBound.X
@@ -35,7 +35,7 @@ namespace TankProject
                 && other.maxBound.Z <= this.maxBound.Z;
         }
 
-        public Vector3[] GetCorners()
+        internal Vector3[] GetCorners()
         {
             return new Vector3[] {
                 new Vector3(this.minBound.X, this.maxBound.Y, this.maxBound.Z),
