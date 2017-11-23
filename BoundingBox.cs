@@ -21,8 +21,32 @@ namespace TankProject
 
         public static BoundingBox CreateFromSphere(BoundingSphere sphere)
         {
-            Vector3 vector1 = new Vector3(sphere.Radius);
-            return new BoundingBox(sphere.Center - vector1, sphere.Center + vector1);
+            Vector3 aux = new Vector3(sphere.Radius);
+            return new BoundingBox(sphere.Center - aux, sphere.Center + aux);
+        }
+
+        public bool Intersects(BoundingBox other)
+        {
+            return other.minBound.X >= this.minBound.X
+                && other.maxBound.X <= this.maxBound.X
+                && other.minBound.Y >= this.minBound.Y
+                && other.maxBound.Y <= this.maxBound.Y
+                && other.minBound.Z >= this.minBound.Z
+                && other.maxBound.Z <= this.maxBound.Z;
+        }
+
+        public Vector3[] GetCorners()
+        {
+            return new Vector3[] {
+                new Vector3(this.minBound.X, this.maxBound.Y, this.maxBound.Z),
+                new Vector3(this.maxBound.X, this.maxBound.Y, this.maxBound.Z),
+                new Vector3(this.maxBound.X, this.minBound.Y, this.maxBound.Z),
+                new Vector3(this.minBound.X, this.minBound.Y, this.maxBound.Z),
+                new Vector3(this.minBound.X, this.maxBound.Y, this.minBound.Z),
+                new Vector3(this.maxBound.X, this.maxBound.Y, this.minBound.Z),
+                new Vector3(this.maxBound.X, this.minBound.Y, this.minBound.Z),
+                new Vector3(this.minBound.X, this.minBound.Y, this.minBound.Z)
+            };
         }
     }
 }
