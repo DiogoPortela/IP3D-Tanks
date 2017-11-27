@@ -7,8 +7,9 @@ namespace TankProject
     class Bullet : GameObject
     {
         private static float G = -9.8f;
-        private static float SHOOTING_POWER = 35f;
+        private static float SHOOTING_POWER = 15f;
         private static Model bulletModel;
+        private static float mass = 1.5f;
 
         public Bullet(Vector3 startingPosition, Vector3 velocity, Vector3 normal) :
             base(startingPosition, Vector3.Zero, velocity)
@@ -34,7 +35,7 @@ namespace TankProject
         {
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            this.velocity.Y += G * deltaTime;
+            this.velocity.Y += G * mass * deltaTime;
             this.position += this.velocity * deltaTime;
             this.rotationMatrix.Forward = -Vector3.Normalize(this.velocity);
           

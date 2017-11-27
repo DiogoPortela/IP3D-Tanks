@@ -1,10 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TankProject
 {
@@ -19,9 +13,9 @@ namespace TankProject
             this.maxBound = maxBound;
         }
 
-        internal static BoundingBox CreateFromSphere(BoundingSphere sphere)
+        internal static BoundingBox CreateFromSphere(BoundingSphere sphere, float scale)
         {
-            Vector3 aux = new Vector3(sphere.Radius);
+            Vector3 aux = new Vector3(sphere.Radius) * scale;
             return new BoundingBox(sphere.Center - aux, sphere.Center + aux);
         }
 
