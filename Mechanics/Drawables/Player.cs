@@ -28,7 +28,7 @@ namespace TankProject
         private bool isOpenning; //used to slowly open hatchet
 
         internal Matrix[] boneTransformations;
-        private List<BoundingBox> boundingBoxes;
+        internal List<BoundingBox> boundingBoxes;
 
         //Player information
 

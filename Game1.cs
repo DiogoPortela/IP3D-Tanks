@@ -25,6 +25,7 @@ namespace TankProject
         DebugLine debugLine1;
         DebugLine debugLine2;
         DebugLine debugLine3;
+        List<DebugBox> boxes;
 
         public Game1()
         {
@@ -93,6 +94,18 @@ namespace TankProject
             Debug.AddLine("1", debugLine1);
             Debug.AddLine("2", debugLine2);
             Debug.AddLine("3", debugLine3);
+
+            boxes = new List<DebugBox>();
+            int aux = 0;
+            foreach (BoundingBox b in playerOne.boundingBoxes)
+            {
+                boxes.Add(new DebugBox(b));
+            }
+            foreach (DebugBox b in boxes)
+            {
+                Debug.AddBox(aux.ToString(), b);
+                aux++;
+            }
 
         }
 
@@ -166,7 +179,7 @@ namespace TankProject
             playerOne.Update(gameTime);
             playerTwo.Update(gameTime);
 
-            foreach(Bullet b in bulletList)
+            foreach (Bullet b in bulletList)
             {
                 b.Update(gameTime);
             }
