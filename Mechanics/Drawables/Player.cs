@@ -211,7 +211,7 @@ namespace TankProject
         }
         private void Shoot()
         {
-            Game1.bulletList.Add(new Bullet(cannon.position + Vector3.Up / 8f, cannon.Forward, cannon.Up));
+            Game1.bulletList.Add(new Bullet(cannon.position, cannon.Forward, cannon.Up));
         }
 
         //Corrections
@@ -267,7 +267,7 @@ namespace TankProject
             turretBone.Transform = turret.boneTransform;
 
             //Cannon bone
-            cannon.Update(this.position, rotationMatrix, turret);
+            cannon.Update(this.position, this.rotationMatrix, turret);
             cannonBone.Transform = cannon.boneTransform;
 
             rightSteerBone.Transform = Matrix.CreateRotationY(rightSteerAngle) * rightSteerTransform;
