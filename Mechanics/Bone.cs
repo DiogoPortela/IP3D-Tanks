@@ -8,6 +8,7 @@ namespace TankProject
         internal Vector3 bonePositionOffset;
         private float scale;
 
+        //--------------------Constructors--------------------//
         internal Bone(Matrix boneMatrix, Vector3 objectPosition, Vector3 rotation, float scale) : base(boneMatrix.Translation * scale + objectPosition, rotation, Vector3.Zero)
         {
             this.boneTransform = boneMatrix;
@@ -19,6 +20,7 @@ namespace TankProject
             this.translationMatrix = Matrix.CreateTranslation(boneMatrix.Translation);
         }
 
+        //--------------------Update&Draw--------------------//
         internal void Update(Vector3 position, Matrix objRotationMatrix)
         {
             this.rotationMatrix = Matrix.CreateFromYawPitchRoll(rotation.Y, rotation.X, rotation.Z);

@@ -138,7 +138,7 @@ namespace TankProject
             {
                 currentCameraPlayerOne = new CameraFreeSurfaceFolow(currentCameraPlayerOne);
             }
-            else if (Input.IsPressedDown(Keys.F3) && !(currentCameraPlayerOne is CameraFree))
+            else if (Input.IsPressedDown(Keys.F3))
             {
                 currentCameraPlayerOne = new CameraFree(currentCameraPlayerOne);
             }
@@ -160,7 +160,7 @@ namespace TankProject
             {
                 currentCameraPlayerTwo = new CameraFreeSurfaceFolow(currentCameraPlayerTwo);
             }
-            else if (Input.IsPressedDown(Keys.F9) && !(currentCameraPlayerTwo is CameraFree))
+            else if (Input.IsPressedDown(Keys.F9))
             {
                 currentCameraPlayerTwo = new CameraFree(currentCameraPlayerTwo);
             }
