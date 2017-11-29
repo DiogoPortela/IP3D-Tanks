@@ -97,10 +97,11 @@ namespace TankProject
 
             boxes = new List<DebugBox>();
             int aux = 0;
-            foreach (BoundingBox b in playerOne.boundingBoxes)
-            {
-                boxes.Add(new DebugBox(b));
-            }
+            //foreach (BoundingBox b in playerOne.boundingBoxes)
+            //{
+            //    boxes.Add(new DebugBox(b));
+            //}
+            boxes.Add(new DebugBox(playerOne.boundingBox));
             foreach (DebugBox b in boxes)
             {
                 Debug.AddBox(aux.ToString(), b);
@@ -191,6 +192,8 @@ namespace TankProject
             //debugLine1.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Forward);
             //debugLine2.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Right);
             //debugLine3.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Up);
+
+            boxes[0].Update(playerOne.boundingBox);
 
             Debug.Update();
             base.Update(gameTime);

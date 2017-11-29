@@ -192,7 +192,7 @@ namespace TankProject
 
         internal void Update(BoundingBox box)
         {
-            Vector3[] aux = box.GetCorners(); //TODO: CLEAN THIS TOO
+            Vector3[] aux = box.GetCorners();
             for (int i = 0; i < 8; i++)
             {
                 vertexes[i] = new VertexPositionColor(aux[i], Color.Green);

@@ -27,7 +27,8 @@ namespace TankProject
         private bool isOpenning; //used to slowly open hatchet
 
         internal Matrix[] boneTransformations;
-        internal List<BoundingBox> boundingBoxes;
+        //internal List<BoundingBox> boundingBoxes;
+        internal BoundingBox boundingBox;
 
         //Player information
 
@@ -47,7 +48,7 @@ namespace TankProject
             this.Up = Vector3.Up;
             this.modelScale = modelScale;
             this.playerNumber = number;
-            boundingBoxes = new List<BoundingBox>();
+            //boundingBoxes = new List<BoundingBox>();
             SetPlayerKeys();
         }
 
@@ -87,10 +88,12 @@ namespace TankProject
 
             this.boneTransformations = new Matrix[tankModel.Bones.Count];
 
+            boundingBox = BoundingBox.CreateFromSphere(tankModel.Root.Meshes[0].BoundingSphere, this.position, modelScale);
+
             foreach (ModelMesh mesh in tankModel.Meshes)
             {
                 //create the bounding boxes of each mesh in the tank model
-                boundingBoxes.Add(BoundingBox.CreateFromSphere(mesh.BoundingSphere, this.position, modelScale));
+                //boundingBoxes.Add(BoundingBox.CreateFromSphere(mesh.BoundingSphere, this.position, modelScale));
 
                 foreach (BasicEffect effect in mesh.Effects)
                 {
@@ -277,6 +280,7 @@ namespace TankProject
 
             tankModel.CopyAbsoluteBoneTransformsTo(boneTransformations);
 
+            boundingBox.Update(position);
             if (Input.WasPressed(playerKeys.Shoot))
             {
                 Shoot();
