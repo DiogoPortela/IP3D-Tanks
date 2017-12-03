@@ -29,6 +29,7 @@ namespace TankProject
         DebugLine debugLine5;
         DebugLine debugLine6;
         List<DebugBox> boxes;
+        ParticleSystem teste;
 
         public Game1()
         {
@@ -100,6 +101,7 @@ namespace TankProject
             Debug.AddLine("4", debugLine4);
             Debug.AddLine("5", debugLine5);
             Debug.AddLine("6", debugLine6);
+            teste = new ParticleSystem(ParticleType.rain, playerOne.position, Content);
 
             boxes = new List<DebugBox>();
             int aux = 0;
@@ -221,6 +223,7 @@ namespace TankProject
             {
                 b.Draw(currentCameraPlayerOne);
             }
+            teste.Draw(GraphicsDevice, currentCameraPlayerOne);
             Debug.Draw(spriteBatch, currentCameraPlayerOne);
 
             GraphicsDevice.Viewport = downView;
