@@ -19,8 +19,7 @@ namespace TankProject
         private ModelBone turretBone, cannonBone, hatchBone, rightSteerBone, leftSteerBone, rightFrontWheelBone, leftFrontWheelBone, rightBackWheelBone, leftBackWheelBone;
         private Matrix hatchTransform, rightSteerTransform, leftSteerTransform, rightFrontWheelTransform, leftFrontWheelTransform, rightBackWheelTransform, leftBackWheelTransform;
 
-        internal Bone turret;
-        internal Bone cannon;
+        internal Bone turret, cannon;
 
         private float modelScale;
         private float hatchetAngle = 0, rightSteerAngle = 0, leftSteerAngle = 0, rightFrontWheelAngle = 0, leftFrontWheelAngle = 0, rightBackWheelAngle = 0, leftBackWheelAngle = 0;
@@ -28,7 +27,8 @@ namespace TankProject
         private bool isOpenning; //used to slowly open hatchet
 
         internal Matrix[] boneTransformations;
-        internal List<BoundingBox> boundingBoxes;
+        //internal List<BoundingBox> boundingBoxes;
+        internal BoundingBox boundingBox;
 
         //Player information
 
@@ -48,8 +48,7 @@ namespace TankProject
             this.Up = Vector3.Up;
             this.modelScale = modelScale;
             this.playerNumber = number;
-            boundingBoxes = new List<BoundingBox>();
-
+            //boundingBoxes = new List<BoundingBox>();
             SetPlayerKeys();
         }
 
@@ -89,11 +88,12 @@ namespace TankProject
 
             this.boneTransformations = new Matrix[tankModel.Bones.Count];
 
+            boundingBox = BoundingBox.CreateFromSphere(tankModel.Root.Meshes[0].BoundingSphere, this.position, modelScale);
 
             foreach (ModelMesh mesh in tankModel.Meshes)
             {
                 //create the bounding boxes of each mesh in the tank model
-                boundingBoxes.Add(BoundingBox.CreateFromSphere(mesh.BoundingSphere, modelScale));
+                //boundingBoxes.Add(BoundingBox.CreateFromSphere(mesh.BoundingSphere, this.position, modelScale));
 
                 foreach (BasicEffect effect in mesh.Effects)
                 {
@@ -209,6 +209,10 @@ namespace TankProject
             else if (hatchetAngle >= 0 && !isOpenning)
                 this.hatchetAngle -= MathHelper.ToRadians(100f) * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
+        private void Shoot()
+        {
+            Game1.bulletList.Add(new Bullet(cannon.position, cannon.Forward, cannon.Up));
+        }
 
         //Corrections
         private void HeightFollow()
@@ -235,11 +239,6 @@ namespace TankProject
             this.Right = Vector3.Cross(relativeForward, Up);
             this.Right.Normalize();
         }
-        private void Shoot()
-        {
-            Bullet aux = new Bullet(cannon.position + Vector3.Up / 8f, cannon.Forward, cannon.Up);
-            Game1.bulletList.Add(aux);
-        }
 
         //--------------------Update&Draw--------------------//
 
@@ -247,13 +246,11 @@ namespace TankProject
         {
             Move(gameTime);
             Rotate(gameTime);
-
-            relativeForward = Vector3.Transform(Vector3.Forward, Matrix.CreateRotationY(rotation.Y));
-            relativeForward.Normalize();
-            relativeRight = Vector3.Transform(Vector3.Right, Matrix.CreateRotationY(rotation.Y));
-            relativeRight.Normalize();
-
             UpdateHatchet(gameTime);
+
+            relativeForward = Vector3.Normalize(Vector3.Transform(Vector3.Forward, Matrix.CreateRotationY(rotation.Y)));
+            relativeRight = Vector3.Normalize(Vector3.Transform(Vector3.Right, Matrix.CreateRotationY(rotation.Y)));
+
             HeightFollow();
             NormalFollow();
 
@@ -270,7 +267,7 @@ namespace TankProject
             turretBone.Transform = turret.boneTransform;
 
             //Cannon bone
-            cannon.Update(this.position, rotationMatrix, turret);
+            cannon.Update(this.position, this.rotationMatrix, turret);
             cannonBone.Transform = cannon.boneTransform;
 
             rightSteerBone.Transform = Matrix.CreateRotationY(rightSteerAngle) * rightSteerTransform;
@@ -283,6 +280,7 @@ namespace TankProject
 
             tankModel.CopyAbsoluteBoneTransformsTo(boneTransformations);
 
+            boundingBox.Update(position);
             if (Input.WasPressed(playerKeys.Shoot))
             {
                 Shoot();

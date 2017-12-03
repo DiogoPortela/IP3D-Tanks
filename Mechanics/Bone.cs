@@ -8,6 +8,7 @@ namespace TankProject
         internal Vector3 bonePositionOffset;
         private float scale;
 
+        //--------------------Constructors--------------------//
         internal Bone(Matrix boneMatrix, Vector3 objectPosition, Vector3 rotation, float scale) : base(boneMatrix.Translation * scale + objectPosition, rotation, Vector3.Zero)
         {
             this.boneTransform = boneMatrix;
@@ -19,29 +20,34 @@ namespace TankProject
             this.translationMatrix = Matrix.CreateTranslation(boneMatrix.Translation);
         }
 
+        //--------------------Update&Draw--------------------//
         internal void Update(Vector3 position, Matrix objRotationMatrix)
         {
             this.rotationMatrix = Matrix.CreateFromYawPitchRoll(rotation.Y, rotation.X, rotation.Z);
             this.boneTransform = this.rotationMatrix * this.translationMatrix;
 
             this.bonePositionOffset = Vector3.Transform(boneTransform.Translation * scale, objRotationMatrix);
-            this.position = bonePositionOffset + position;
+            this.position = position + bonePositionOffset;
 
-            this.Forward = -(boneTransform * objRotationMatrix).Forward;
-            this.Right = -(boneTransform * objRotationMatrix).Right;
-            this.Up = (boneTransform * objRotationMatrix).Up;
+            Matrix aux = this.rotationMatrix * objRotationMatrix * this.translationMatrix;
+            this.Forward = -aux.Forward;
+            this.Right = -aux.Right;
+            this.Up = aux.Up;
         }
         internal void Update(Vector3 position, Matrix objRotationMatrix, Bone previousBone)
         {
             this.rotationMatrix = Matrix.CreateFromYawPitchRoll(rotation.Y, rotation.X, rotation.Z);
             this.boneTransform = this.rotationMatrix * this.translationMatrix;
 
-            this.bonePositionOffset = Vector3.Transform(boneTransform.Translation * scale, previousBone.rotationMatrix * objRotationMatrix);
-            this.position = bonePositionOffset + position;
+            this.bonePositionOffset = Vector3.Transform(translationMatrix.Translation * scale, previousBone.rotationMatrix * objRotationMatrix) + previousBone.bonePositionOffset;
+            this.position = position + bonePositionOffset;
 
-            this.Forward = -(boneTransform * previousBone.rotationMatrix * objRotationMatrix).Forward;
-            this.Right = -(boneTransform * previousBone.rotationMatrix * objRotationMatrix).Right;
-            this.Up = (boneTransform * previousBone.rotationMatrix * objRotationMatrix).Up;
+            System.Diagnostics.Debug.WriteLine(bonePositionOffset.Length());
+
+            Matrix aux = this.rotationMatrix * previousBone.rotationMatrix * objRotationMatrix * this.translationMatrix;
+            this.Forward = -aux.Forward;
+            this.Right = -aux.Right;
+            this.Up = aux.Up;
         }
     }
 }

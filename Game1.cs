@@ -25,6 +25,9 @@ namespace TankProject
         DebugLine debugLine1;
         DebugLine debugLine2;
         DebugLine debugLine3;
+        DebugLine debugLine4;
+        DebugLine debugLine5;
+        DebugLine debugLine6;
         List<DebugBox> boxes;
 
         public Game1()
@@ -88,19 +91,23 @@ namespace TankProject
             debugLine1 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Forward, Color.Blue);
             debugLine2 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Right, Color.Red);
             debugLine3 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Up, Color.Green);
-            //debugLine1 = new DebugLine(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Forward, Color.Blue);
-            //debugLine2 = new DebugLine(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Right, Color.Red);
-            //debugLine3 = new DebugLine(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Up, Color.Green);
+            debugLine4 = new DebugLine(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Forward, Color.Cyan);
+            debugLine5 = new DebugLine(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Right, Color.Magenta);
+            debugLine6 = new DebugLine(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Up, Color.Yellow);
             Debug.AddLine("1", debugLine1);
             Debug.AddLine("2", debugLine2);
             Debug.AddLine("3", debugLine3);
+            Debug.AddLine("4", debugLine4);
+            Debug.AddLine("5", debugLine5);
+            Debug.AddLine("6", debugLine6);
 
             boxes = new List<DebugBox>();
             int aux = 0;
-            foreach (BoundingBox b in playerOne.boundingBoxes)
-            {
-                boxes.Add(new DebugBox(b));
-            }
+            //foreach (BoundingBox b in playerOne.boundingBoxes)
+            //{
+            //    boxes.Add(new DebugBox(b));
+            //}
+            boxes.Add(new DebugBox(playerOne.boundingBox));
             foreach (DebugBox b in boxes)
             {
                 Debug.AddBox(aux.ToString(), b);
@@ -138,7 +145,7 @@ namespace TankProject
             {
                 currentCameraPlayerOne = new CameraFreeSurfaceFolow(currentCameraPlayerOne);
             }
-            else if (Input.IsPressedDown(Keys.F3) && !(currentCameraPlayerOne is CameraFree))
+            else if (Input.IsPressedDown(Keys.F3))
             {
                 currentCameraPlayerOne = new CameraFree(currentCameraPlayerOne);
             }
@@ -160,7 +167,7 @@ namespace TankProject
             {
                 currentCameraPlayerTwo = new CameraFreeSurfaceFolow(currentCameraPlayerTwo);
             }
-            else if (Input.IsPressedDown(Keys.F9) && !(currentCameraPlayerTwo is CameraFree))
+            else if (Input.IsPressedDown(Keys.F9))
             {
                 currentCameraPlayerTwo = new CameraFree(currentCameraPlayerTwo);
             }
@@ -188,9 +195,11 @@ namespace TankProject
             debugLine2.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Right);
             debugLine3.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Up);
 
-            //debugLine1.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Forward);
-            //debugLine2.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Right);
-            //debugLine3.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Up);
+            debugLine4.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Forward);
+            debugLine5.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Right);
+            debugLine6.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Up);
+
+            boxes[0].Update(playerOne.boundingBox);
 
             Debug.Update();
             base.Update(gameTime);
