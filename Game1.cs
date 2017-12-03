@@ -101,7 +101,7 @@ namespace TankProject
             Debug.AddLine("4", debugLine4);
             Debug.AddLine("5", debugLine5);
             Debug.AddLine("6", debugLine6);
-            teste = new ParticleSystem(ParticleType.rain, playerOne.position, Content);
+            teste = new ParticleSystem(ParticleType.Rain, new Vector3(64, 64, 64), new ParticleSpawner(30, false),Content, 1000, 1000, 10);
 
             boxes = new List<DebugBox>();
             int aux = 0;
@@ -193,6 +193,9 @@ namespace TankProject
                 b.Update(gameTime);
             }
 
+            //TODO: DELETE AT END
+            //DEBUG SECTION
+            teste.Update(gameTime);
             debugLine1.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Forward);
             debugLine2.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Right);
             debugLine3.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Up);
@@ -223,7 +226,7 @@ namespace TankProject
             {
                 b.Draw(currentCameraPlayerOne);
             }
-            teste.Draw(GraphicsDevice, currentCameraPlayerOne);
+            teste.Draw(GraphicsDevice, currentCameraPlayerOne); //DELETE
             Debug.Draw(spriteBatch, currentCameraPlayerOne);
 
             GraphicsDevice.Viewport = downView;

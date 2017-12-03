@@ -54,7 +54,7 @@
     <Compile Include="Mechanics\Debug.cs" />
     <Compile Include="Mechanics\Drawables\GameObject.cs" />
     <Compile Include="Mechanics\Drawables\Particle.cs" />
-    <Compile Include="Mechanics\Drawables\Square.cs" />
+    <Compile Include="Mechanics\Drawables\Billboard.cs" />
     <Compile Include="Mechanics\Input.cs" />
     <Compile Include="Mechanics\Interpolation.cs" />
     <Compile Include="Mechanics\Light.cs" />
