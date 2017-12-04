@@ -88,7 +88,7 @@ namespace TankProject
 
             this.boneTransformations = new Matrix[tankModel.Bones.Count];
 
-            boundingBox = OBB.CreateFromSphere(tankModel.Root.Meshes[0].BoundingSphere, this.position, modelScale);
+            boundingBox = OBB.CreateFromSphere(tankModel.Root.Meshes[0].BoundingSphere, this.position, modelScale, this.rotationMatrix);
 
             foreach (ModelMesh mesh in tankModel.Meshes)
             {

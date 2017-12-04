@@ -209,10 +209,10 @@ namespace TankProject
             boxes[0].Update(playerOne.boundingBox);
             boxes[1].Update(playerTwo.boundingBox);
 
-            if (playerOne.boundingBox.Intersects(playerTwo.boundingBox))
-            {
-                Console.WriteLine("COLLISION DETECTED");
-            }
+            //if (playerOne.boundingBox.Intersects(playerTwo.boundingBox))
+            //{
+            //    Console.WriteLine("COLLISION DETECTED");
+            //}
 
             Debug.Update();
             base.Update(gameTime);
