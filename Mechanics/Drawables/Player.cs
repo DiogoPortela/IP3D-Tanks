@@ -28,7 +28,7 @@ namespace TankProject
 
         internal Matrix[] boneTransformations;
         //internal List<BoundingBox> boundingBoxes;
-        internal BoundingBox boundingBox;
+        internal OBB boundingBox;
 
         //Player information
 
@@ -88,7 +88,7 @@ namespace TankProject
 
             this.boneTransformations = new Matrix[tankModel.Bones.Count];
 
-            boundingBox = BoundingBox.CreateFromSphere(tankModel.Root.Meshes[0].BoundingSphere, this.position, modelScale);
+            boundingBox = OBB.CreateFromSphere(tankModel.Root.Meshes[0].BoundingSphere, this.position, modelScale);
 
             foreach (ModelMesh mesh in tankModel.Meshes)
             {
@@ -280,7 +280,7 @@ namespace TankProject
 
             tankModel.CopyAbsoluteBoneTransformsTo(boneTransformations);
 
-            boundingBox.Update(position);
+            boundingBox.Update(position, Forward, Right, Up);
             if (Input.WasPressed(playerKeys.Shoot))
             {
                 Shoot();

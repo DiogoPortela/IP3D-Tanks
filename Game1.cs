@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace TankProject
@@ -110,6 +111,7 @@ namespace TankProject
             //    boxes.Add(new DebugBox(b));
             //}
             boxes.Add(new DebugBox(playerOne.boundingBox));
+            boxes.Add(new DebugBox(playerTwo.boundingBox));
             foreach (DebugBox b in boxes)
             {
                 Debug.AddBox(aux.ToString(), b);
@@ -205,6 +207,12 @@ namespace TankProject
             debugLine6.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Up);
 
             boxes[0].Update(playerOne.boundingBox);
+            boxes[1].Update(playerTwo.boundingBox);
+
+            if (playerOne.boundingBox.Intersects(playerTwo.boundingBox))
+            {
+                Console.WriteLine("COLLISION DETECTED");
+            }
 
             Debug.Update();
             base.Update(gameTime);
