@@ -62,7 +62,7 @@ namespace TankProject
                 lineDictionary.Remove(id);
             }
         }
-        internal static void AddBox(String id, BoundingBox box)
+        internal static void AddBox(String id, OBB box)
         {
             if (!boxDictionary.ContainsKey(id))
                 boxDictionary.Add(id, new DebugBox(box));
@@ -154,7 +154,7 @@ namespace TankProject
         private VertexPositionColor[] vertexes;
         private short[] indexes;
 
-        internal DebugBox(BoundingBox box)
+        internal DebugBox(OBB box)
         {
             vertexes = new VertexPositionColor[8];
             indexes = new short[24];
@@ -190,7 +190,7 @@ namespace TankProject
             indexes[23] = 3;
         }
 
-        internal void Update(BoundingBox box)
+        internal void Update(OBB box)
         {
             Vector3[] aux = box.GetCorners();
             for (int i = 0; i < 8; i++)
