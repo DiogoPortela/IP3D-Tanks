@@ -209,10 +209,11 @@ namespace TankProject
             boxes[0].Update(playerOne.boundingBox);
             boxes[1].Update(playerTwo.boundingBox);
 
-            //if (playerOne.boundingBox.Intersects(playerTwo.boundingBox))
-            //{
-            //    Console.WriteLine("COLLISION DETECTED");
-            //}
+            if (OBB.CheckCollision(playerOne.boundingBox, playerTwo.boundingBox))
+            {
+                Console.WriteLine("Collision Detected");
+            }
+            //TODO: Apply OBB's to all bones
 
             Debug.Update();
             base.Update(gameTime);
