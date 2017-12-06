@@ -131,7 +131,7 @@ namespace TankProject
             return longSpan < sumSpan;
         }
 
-        internal static bool CheckCollision(OBB a, OBB b)
+        internal static bool AreColliding(OBB a, OBB b)
         {
             Vector3[] axisList = OBB.GenerateAxis(a, b);
             bool separatingAxisChecker = false;

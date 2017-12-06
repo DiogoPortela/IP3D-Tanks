@@ -209,7 +209,7 @@ namespace TankProject
             boxes[0].Update(playerOne.boundingBox);
             boxes[1].Update(playerTwo.boundingBox);
 
-            if (OBB.CheckCollision(playerOne.boundingBox, playerTwo.boundingBox))
+            if (OBB.AreColliding(playerOne.boundingBox, playerTwo.boundingBox))
             {
                 Console.WriteLine("Collision Detected");
             }
