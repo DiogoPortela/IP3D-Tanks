@@ -166,7 +166,7 @@ namespace TankProject
                 case ParticleType.Rain:
                     particleTexture = content.Load<Texture2D>("waterTest");
                     typeUpdate = new UpdateFunction(RainUpdate);
-                    accelaration = new Vector3(0.0f, -9.8f, 0.0f);
+                    accelaration = new Vector3(0.0f, -0.98f, 0.0f);
                     break;
                 case ParticleType.Explosion:
                     break;
@@ -176,8 +176,9 @@ namespace TankProject
         }
         
         //--------------------Functions--------------------//
-        internal void Update(GameTime gameTime)
+        internal void Update(Vector3 position, GameTime gameTime)
         {
+            this.systemPosition = position;
             typeUpdate(gameTime);
         }
         private void RainUpdate(GameTime gameTime)
@@ -213,11 +214,15 @@ namespace TankProject
         }
         internal void Draw(GraphicsDevice device, Camera camera)
         {
+            device.BlendState = BlendState.AlphaBlend;
             effect.Texture = particleTexture;
             effect.View = camera.ViewMatrix;
             effect.Projection = camera.ProjectionMatrix;
             foreach (Particle p in currentParticles)
                 p.Draw(device, ref effect, ref camera);
+            device.BlendState = BlendState.Opaque;
+
         }
+
     }
 }

@@ -102,7 +102,7 @@ namespace TankProject
             Debug.AddLine("4", debugLine4);
             Debug.AddLine("5", debugLine5);
             Debug.AddLine("6", debugLine6);
-            teste = new ParticleSystem(ParticleType.Rain, new Vector3(64, 64, 64), new ParticleSpawner(30, false),Content, 1000, 1000, 10);
+            teste = new ParticleSystem(ParticleType.Rain, new Vector3(64, 10, 64), new ParticleSpawner(5, false),Content, 1000, 2500, 10);
 
             boxes = new List<DebugBox>();
             int aux = 0;
@@ -117,7 +117,6 @@ namespace TankProject
                 Debug.AddBox(aux.ToString(), b);
                 aux++;
             }
-
         }
 
         /// <summary>
@@ -190,14 +189,16 @@ namespace TankProject
             playerOne.Update(gameTime);
             playerTwo.Update(gameTime);
 
-            foreach (Bullet b in bulletList)
+            for(int i = (bulletList.Count - 1); i >= 0; i--)
             {
-                b.Update(gameTime);
+                bulletList[i].Update(gameTime);
+                if (bulletList[i].position.Y <= 0)
+                    bulletList.Remove(bulletList[i]);
             }
 
             //TODO: DELETE AT END
             //DEBUG SECTION
-            teste.Update(gameTime);
+            teste.Update(new Vector3(playerOne.position.X, 10, playerOne.position.Z),gameTime);
             debugLine1.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Forward);
             debugLine2.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Right);
             debugLine3.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Up);
