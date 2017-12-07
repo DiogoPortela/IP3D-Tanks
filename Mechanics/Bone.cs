@@ -36,7 +36,7 @@ namespace TankProject
             this.Right = -aux.Right;
             this.Up = aux.Up;
 
-            //this.boundingBox.Update(this.position, this.Forward, this.Right, this.Up);
+            this.boundingBox.Update(this.position, this.Forward, this.Right, this.Up);
         }
         internal void Update(Vector3 position, Matrix objRotationMatrix, Bone previousBone)
         {
@@ -51,7 +51,7 @@ namespace TankProject
             this.Right = -aux.Right;
             this.Up = aux.Up;
 
-            //this.boundingBox.Update(this.position, this.Forward, this.Right, this.Up);
+            this.boundingBox.Update(this.position, this.Forward, this.Right, this.Up);
         }
     }
 }

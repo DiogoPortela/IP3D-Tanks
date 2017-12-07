@@ -72,6 +72,10 @@ namespace TankProject
             boxes = new List<DebugBox>();
             boxes.Add(new DebugBox(playerOne.boundingBox));
             boxes.Add(new DebugBox(playerTwo.boundingBox));
+            boxes.Add(new DebugBox(playerOne.turret.boundingBox));
+            boxes.Add(new DebugBox(playerOne.cannon.boundingBox));
+            boxes.Add(new DebugBox(playerTwo.turret.boundingBox));
+            boxes.Add(new DebugBox(playerTwo.cannon.boundingBox));
             int aux = 0;
             foreach (DebugBox b in boxes)
             {
@@ -169,6 +173,10 @@ namespace TankProject
 
             boxes[0].Update(playerOne.boundingBox);
             boxes[1].Update(playerTwo.boundingBox);
+            boxes[2].Update(playerOne.turret.boundingBox);
+            boxes[3].Update(playerOne.cannon.boundingBox);
+            boxes[4].Update(playerTwo.turret.boundingBox);
+            boxes[5].Update(playerTwo.cannon.boundingBox);
         }
         internal override void Draw(GraphicsDevice device)
         {
