@@ -37,11 +37,13 @@ namespace TankProject
         private PlayerNumber playerNumber;
 
         private PlayerKeys playerKeys;
+    
+        private static GameStage gameState;
 
 
         //--------------------Constructors--------------------//
 
-        internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float modelScale, PlayerNumber number)
+        internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float modelScale, PlayerNumber number, GameStage currentState)
             : base(position, rotation, velocity)
         {
             this.relativeForward = this.Forward = Vector3.Forward;
@@ -52,6 +54,7 @@ namespace TankProject
             bulletList = new List<Bullet>();
             //boundingBoxes = new List<BoundingBox>();
             SetPlayerKeys();
+            gameState = currentState;   //TODO: CLEAN
         }
 
         //--------------------Functions--------------------//
@@ -289,7 +292,7 @@ namespace TankProject
             for(int i = bulletList.Count - 1; i >= 0; i--)
             {
                 bulletList[i].Update(gameTime);
-                if (bulletList[i].position.Y <= 0)
+                if (bulletList[i].position.Y <= 0 || OBB.AreColliding(bulletList[i].boundingBox, gameState.playerTwo.boundingBox))
                     bulletList.Remove(bulletList[i]);
             }
         }
