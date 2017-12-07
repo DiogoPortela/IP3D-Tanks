@@ -7,6 +7,7 @@ namespace TankProject
         internal Matrix boneTransform;
         internal Vector3 bonePositionOffset;
         private float scale;
+        internal OBB boundingBox;
 
         //--------------------Constructors--------------------//
         internal Bone(Matrix boneMatrix, Vector3 objectPosition, Vector3 rotation, float scale) : base(boneMatrix.Translation * scale + objectPosition, rotation, Vector3.Zero)
@@ -18,6 +19,7 @@ namespace TankProject
             this.scale = scale;
             bonePositionOffset = boneMatrix.Translation * scale;
             this.translationMatrix = Matrix.CreateTranslation(boneMatrix.Translation);
+            this.boundingBox = new OBB();
         }
 
         //--------------------Update&Draw--------------------//
@@ -33,6 +35,8 @@ namespace TankProject
             this.Forward = -aux.Forward;
             this.Right = -aux.Right;
             this.Up = aux.Up;
+
+            //this.boundingBox.Update(this.position, this.Forward, this.Right, this.Up);
         }
         internal void Update(Vector3 position, Matrix objRotationMatrix, Bone previousBone)
         {
@@ -46,6 +50,8 @@ namespace TankProject
             this.Forward = -aux.Forward;
             this.Right = -aux.Right;
             this.Up = aux.Up;
+
+            //this.boundingBox.Update(this.position, this.Forward, this.Right, this.Up);
         }
     }
 }

@@ -13,6 +13,8 @@ namespace TankProject
 
         //--------------------Constructors--------------------//
 
+        public OBB() { }
+        
         public OBB(Vector3 minBound, Vector3 maxBound, Vector3 position, Matrix rotationMatrix)
         {
             this.position = position;
@@ -41,6 +43,8 @@ namespace TankProject
         internal static OBB CreateFromSphere(BoundingSphere sphere, Vector3 position, float scale, Matrix rotationMatrix)
         {
             Vector3 aux = new Vector3(sphere.Radius);
+            aux.Y /= 3; //scale down the box in y
+            aux.X /= 1.2f;
             return new OBB((sphere.Center - aux) * scale, (sphere.Center + aux) * scale, position, rotationMatrix);
         }
 
@@ -103,7 +107,7 @@ namespace TankProject
 
             return axisList;
         }
-
+        
         internal static bool IntersectsWhenProjected(Vector3[] aCorners, Vector3[] bCorners, Vector3 axis)
         {
             //if a cross product returns zero, then the vectors are alined

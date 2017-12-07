@@ -27,7 +27,6 @@ namespace TankProject
         private bool isOpenning; //used to slowly open hatchet
 
         internal Matrix[] boneTransformations;
-        //internal List<BoundingBox> boundingBoxes;
         internal OBB boundingBox;
 
         internal List<Bullet> bulletList;
@@ -61,12 +60,15 @@ namespace TankProject
         internal void LoadModelBones(ContentManager content, Material material, Light light)
         {
             tankModel = content.Load<Model>("tank");
+            boundingBox = OBB.CreateFromSphere(tankModel.Root.Meshes[0].BoundingSphere, this.position, modelScale, this.rotationMatrix);
 
             this.cannonBone = tankModel.Bones["canon_geo"];
             cannon = new Bone(cannonBone.Transform, this.position, Vector3.Zero, modelScale);
+            cannon.boundingBox = OBB.CreateFromSphere(cannonBone.Meshes[0].BoundingSphere, cannon.position, modelScale, this.rotationMatrix);
 
             this.turretBone = tankModel.Bones["turret_geo"];
             turret = new Bone(turretBone.Transform, this.position, Vector3.Zero, modelScale);
+            turret.boundingBox = OBB.CreateFromSphere(turretBone.Meshes[0].BoundingSphere, turret.position, modelScale, this.rotationMatrix);
 
             this.hatchBone = tankModel.Bones["hatch_geo"];
             this.hatchTransform = hatchBone.Transform;
@@ -91,13 +93,8 @@ namespace TankProject
 
             this.boneTransformations = new Matrix[tankModel.Bones.Count];
 
-            boundingBox = OBB.CreateFromSphere(tankModel.Root.Meshes[0].BoundingSphere, this.position, modelScale, this.rotationMatrix);
-
             foreach (ModelMesh mesh in tankModel.Meshes)
             {
-                //create the bounding boxes of each mesh in the tank model
-                //boundingBoxes.Add(BoundingBox.CreateFromSphere(mesh.BoundingSphere, this.position, modelScale));
-
                 foreach (BasicEffect effect in mesh.Effects)
                 {
                     //Material
