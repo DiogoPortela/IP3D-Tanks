@@ -67,7 +67,7 @@ namespace TankProject
 
             this.cannonBone = tankModel.Bones["canon_geo"];
             cannon = new Bone(cannonBone.Transform, this.position, Vector3.Zero, modelScale);
-            cannon.boundingBox = OBB.CreateFromSphere(cannonBone.Meshes[0].BoundingSphere, cannon.position, modelScale, this.rotationMatrix);
+            cannon.boundingBox = OBB.CreateFromSphere(cannonBone.Meshes[1].BoundingSphere, cannon.position, modelScale, this.rotationMatrix);
 
             this.turretBone = tankModel.Bones["turret_geo"];
             turret = new Bone(turretBone.Transform, this.position, Vector3.Zero, modelScale);
