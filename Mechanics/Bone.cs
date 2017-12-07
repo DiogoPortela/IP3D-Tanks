@@ -46,8 +46,6 @@ namespace TankProject
             this.bonePositionOffset = Vector3.Transform(translationMatrix.Translation * scale, previousBone.rotationMatrix * objRotationMatrix) + previousBone.bonePositionOffset;
             this.position = position + bonePositionOffset;
 
-            System.Diagnostics.Debug.WriteLine(bonePositionOffset.Length());
-
             Matrix aux = this.rotationMatrix * previousBone.rotationMatrix * objRotationMatrix * this.translationMatrix;
             this.Forward = -aux.Forward;
             this.Right = -aux.Right;

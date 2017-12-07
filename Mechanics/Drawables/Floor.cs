@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace TankProject
@@ -18,10 +19,10 @@ namespace TankProject
 
         //--------------------Functions--------------------//
 
-        internal static void Start(Game1 game, Camera camera, Material material, Light light)
+        internal static void Start(ContentManager content, Camera camera, Material material, Light light)
         {
-            heightMap = game.Content.Load<Texture2D>("lh3d1");
-            texture = game.Content.Load<Texture2D>("sand");
+            heightMap = content.Load<Texture2D>("lh3d1");
+            texture = content.Load<Texture2D>("sand");
 
             VerticesHeight = new float[heightMap.Width, heightMap.Height];
             VerticesNormals = new Vector3[heightMap.Width, heightMap.Height];

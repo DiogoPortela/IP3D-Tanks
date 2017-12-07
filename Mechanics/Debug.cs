@@ -86,7 +86,7 @@ namespace TankProject
         {
 
         }
-        internal static void Draw(SpriteBatch batch, Camera cam)
+        internal static void Draw(/*SpriteBatch batch,*/ Camera cam)
         {
             effect.View = cam.ViewMatrix;
             effect.Projection = cam.ProjectionMatrix;
@@ -95,7 +95,7 @@ namespace TankProject
 
             foreach (KeyValuePair<String, DebugText> text in textDictionary)
             {
-                text.Value.Draw(batch);
+                //text.Value.Draw(batch);
             }
             foreach (KeyValuePair<String, DebugLine> line in lineDictionary)
             {

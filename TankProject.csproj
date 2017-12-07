@@ -61,6 +61,8 @@
     <Compile Include="Mechanics\Material.cs" />
     <Compile Include="Mechanics\Drawables\Player.cs" />
     <Compile Include="Mechanics\PlayerKeys.cs" />
+    <Compile Include="Mechanics\Stages\GameStage.cs" />
+    <Compile Include="Mechanics\Stages\Stage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -29,6 +29,8 @@ namespace TankProject
         internal Matrix[] boneTransformations;
         internal OBB boundingBox;
 
+        internal List<Bullet> bulletList;
+
         //Player information
 
         internal enum PlayerNumber { PlayerOne = 1, PlayerTwo };
@@ -47,6 +49,7 @@ namespace TankProject
             this.Up = Vector3.Up;
             this.modelScale = modelScale;
             this.playerNumber = number;
+            bulletList = new List<Bullet>();
             //boundingBoxes = new List<BoundingBox>();
             SetPlayerKeys();
         }
@@ -208,7 +211,7 @@ namespace TankProject
         }
         private void Shoot()
         {
-            Game1.bulletList.Add(new Bullet(cannon.position, cannon.Forward, cannon.Up));
+            bulletList.Add(new Bullet(cannon.position, cannon.Forward, cannon.Up));
         }
 
         //Corrections
@@ -282,6 +285,13 @@ namespace TankProject
             {
                 Shoot();
             }
+
+            for(int i = bulletList.Count - 1; i >= 0; i--)
+            {
+                bulletList[i].Update(gameTime);
+                if (bulletList[i].position.Y <= 0)
+                    bulletList.Remove(bulletList[i]);
+            }
         }
         internal void Draw(Camera cam)
         {
@@ -294,6 +304,11 @@ namespace TankProject
                     effect.Projection = cam.ProjectionMatrix;
                 }
                 mesh.Draw();
+            }
+
+            foreach(Bullet b in bulletList)
+            {
+                b.Draw(cam);
             }
         }
     }

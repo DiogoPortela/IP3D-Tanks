@@ -45,7 +45,7 @@ namespace TankProject
             }
             catch
             {
-                Game1.currentCameraPlayerOne = new CameraFree(this);
+                throw new System.Exception("Camera out of bounds.");
             }
 
             Position.Y = 1.0f + Interpolation.BiLinear(new Vector2(this.Position.X, this.Position.Z),
