@@ -40,11 +40,15 @@ namespace TankProject
     
         private static GameStage gameState;
 
+        //test zone
+        Vector3 aceleration;
+        Vector3 velocity;
+
 
         //--------------------Constructors--------------------//
 
-        internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float modelScale, PlayerNumber number, GameStage currentState)
-            : base(position, rotation, velocity)
+        internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float mass, float modelScale, PlayerNumber number, GameStage currentState)
+            : base(position, rotation, velocity, mass)
         {
             this.relativeForward = this.Forward = Vector3.Forward;
             this.relativeRight = this.Right = Vector3.Right;
@@ -55,6 +59,8 @@ namespace TankProject
             //boundingBoxes = new List<BoundingBox>();
             SetPlayerKeys();
             gameState = currentState;   //TODO: CLEAN
+            aceleration = Vector3.Zero;
+            velocity = Vector3.Zero;
         }
 
         //--------------------Functions--------------------//
@@ -67,7 +73,7 @@ namespace TankProject
 
             this.cannonBone = tankModel.Bones["canon_geo"];
             cannon = new Bone(cannonBone.Transform, this.position, Vector3.Zero, modelScale);
-            cannon.boundingBox = OBB.CreateFromSphere(cannonBone.Meshes[1].BoundingSphere, cannon.position, modelScale, this.rotationMatrix);
+            cannon.boundingBox = OBB.CreateFromSphere(cannonBone.Meshes[0].BoundingSphere, cannon.position, modelScale, this.rotationMatrix);
 
             this.turretBone = tankModel.Bones["turret_geo"];
             turret = new Bone(turretBone.Transform, this.position, Vector3.Zero, modelScale);
@@ -135,7 +141,10 @@ namespace TankProject
         {
             if (Input.IsPressedDown(playerKeys.Forward) && !Input.IsPressedDown(playerKeys.Backward))
             {
-                this.position += this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                this.aceleration += this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                this.velocity += aceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                this.position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                //this.position += this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.rightFrontWheelAngle += MathHelper.ToRadians(10f);
                 this.leftFrontWheelAngle += MathHelper.ToRadians(10f);
                 this.rightBackWheelAngle += MathHelper.ToRadians(10f);
@@ -143,12 +152,21 @@ namespace TankProject
             }
             else if (Input.IsPressedDown(playerKeys.Backward) && !Input.IsPressedDown(playerKeys.Forward))
             {
-                this.position -= this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                this.aceleration -= this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                this.velocity += aceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                this.position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                //this.position -= this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.rightFrontWheelAngle -= MathHelper.ToRadians(10f);
                 this.leftFrontWheelAngle -= MathHelper.ToRadians(10f);
                 this.rightBackWheelAngle -= MathHelper.ToRadians(10f);
                 this.leftBackWheelAngle -= MathHelper.ToRadians(10f);
             }
+            if(aceleration != Vector3.Zero)
+            {
+                this.aceleration -= this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            this.velocity += aceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            this.position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
         private void Rotate(GameTime gameTime)
         {
@@ -282,7 +300,6 @@ namespace TankProject
             hatchBone.Transform = Matrix.CreateRotationX(hatchetAngle) * hatchTransform;
 
             tankModel.CopyAbsoluteBoneTransformsTo(boneTransformations);
-
             boundingBox.Update(position, Forward, Right, Up);
             if (Input.WasPressed(playerKeys.Shoot))
             {
