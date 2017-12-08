@@ -41,6 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Mechanics\Drawables\Skybox.cs" />
     <Compile Include="Mechanics\OBB.cs" />
     <Compile Include="Mechanics\Bone.cs" />
     <Compile Include="Mechanics\Camera\CameraThirdPersonFixed.cs" />

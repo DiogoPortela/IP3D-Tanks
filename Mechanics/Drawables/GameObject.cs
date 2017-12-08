@@ -5,7 +5,7 @@ namespace TankProject
     /// <summary>
     /// Generic class for any drawable GameObject.
     /// </summary>
-    class GameObject
+    abstract class GameObject
     {
         internal Vector3 position;
         internal Vector3 rotation;

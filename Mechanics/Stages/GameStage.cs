@@ -26,6 +26,9 @@ namespace TankProject
         List<DebugBox> boxes;
         ParticleSystem teste;
 
+        Bullet testbullet;
+
+        //--------------------Constructors--------------------//
         internal GameStage(ContentManager content, GraphicsDevice device)
         {
             #region Camera. Split screen
@@ -46,7 +49,8 @@ namespace TankProject
             playerTwo = new Player(new Vector3(65, 10, 65), Vector3.Zero, Vector3.Zero, 0.0005f, Player.PlayerNumber.PlayerTwo, this);
             playerTwo.LoadModelBones(content, Material.White, currentLight);
 
-            Bullet.LoadModel(content);
+            Bullet.LoadModel(content, Material.White, currentLight);
+            Skybox.Load(content);
 
             currentCameraPlayerOne = new CameraThirdPersonFixed(device, new Vector3(64, 5, 65), playerOne.turret, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f), upView.AspectRatio);
             currentCameraPlayerTwo = new CameraThirdPersonFixed(device, new Vector3(64, 5, 65), playerTwo.turret, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f), downView.AspectRatio);
@@ -82,9 +86,10 @@ namespace TankProject
                 Debug.AddBox(aux.ToString(), b);
                 aux++;
             }
+            testbullet = new Bullet(Vector3.One, Vector3.Forward, Vector3.Up);
         }
 
-
+        //--------------------Functions--------------------//
         internal override void Update(GameTime gameTime)
         {
             #region Player One Camera
@@ -181,13 +186,16 @@ namespace TankProject
         internal override void Draw(GraphicsDevice device)
         {
             device.Viewport = upView;
+            Skybox.Draw(device, currentCameraPlayerOne);
             Floor.Draw(currentCameraPlayerOne);
             playerOne.Draw(currentCameraPlayerOne);
             playerTwo.Draw(currentCameraPlayerOne);
             teste.Draw(device, currentCameraPlayerOne); //DELETE
+            testbullet.Draw(currentCameraPlayerOne);
             Debug.Draw(currentCameraPlayerOne);
 
             device.Viewport = downView;
+            Skybox.Draw(device, currentCameraPlayerTwo);
             Floor.Draw(currentCameraPlayerTwo);
             playerOne.Draw(currentCameraPlayerTwo);
             playerTwo.Draw(currentCameraPlayerTwo);
