@@ -53,6 +53,10 @@ namespace TankProject
         {
             return (MouseState.ScrollWheelValue - LastFrameMouseState.ScrollWheelValue);
         }
+        internal static bool LeftMouseClick()
+        {
+            return (MouseState.LeftButton == ButtonState.Pressed);
+        }
 
         //--------------------Update&Draw--------------------//
 

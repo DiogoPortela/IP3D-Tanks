@@ -41,6 +41,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Mechanics\Boid.cs" />
+    <Compile Include="Mechanics\Drawables\Enemy.cs" />
     <Compile Include="Mechanics\Drawables\Skybox.cs" />
     <Compile Include="Mechanics\OBB.cs" />
     <Compile Include="Mechanics\Bone.cs" />
@@ -63,6 +65,7 @@
     <Compile Include="Mechanics\Drawables\Player.cs" />
     <Compile Include="Mechanics\PlayerKeys.cs" />
     <Compile Include="Mechanics\Stages\GameStage.cs" />
+    <Compile Include="Mechanics\Stages\MenuStage.cs" />
     <Compile Include="Mechanics\Stages\Stage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
