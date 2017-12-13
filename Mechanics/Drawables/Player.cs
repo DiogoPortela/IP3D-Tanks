@@ -42,13 +42,12 @@ namespace TankProject
 
         //test zone
         Vector3 aceleration;
-        Vector3 velocity;
-
+        const float mass = 57000; //aprox. weight of a M1A1 Abrams
 
         //--------------------Constructors--------------------//
 
-        internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float mass, float modelScale, PlayerNumber number, GameStage currentState)
-            : base(position, rotation, velocity, mass)
+        internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float modelScale, PlayerNumber number, GameStage currentState)
+            : base(position, rotation, velocity)
         {
             this.relativeForward = this.Forward = Vector3.Forward;
             this.relativeRight = this.Right = Vector3.Right;
@@ -136,15 +135,50 @@ namespace TankProject
             }
         }
 
+        private void ApplyForce(Vector3 force, float alpha)
+        {
+            String staticFrictionCoeficient, kineticFrictionCoeficient;
+            Vector3 fgx, fgy, maxStaticFriction, kineticFriction, totalForce;
+
+            if (Physics.isRaining)
+            {
+                kineticFrictionCoeficient = "kinetic- metal on wet sand";
+                staticFrictionCoeficient = "static- metal on wet sand";
+            }
+            else
+            {
+                kineticFrictionCoeficient = "kinetic- metal on dry sand";
+                staticFrictionCoeficient = "static- metal on dry sand";
+            }
+
+            fgx = -this.Forward * (float)Math.Sin(alpha); //inclinacao
+            fgy = -GetNormal(this.position) * (float)Math.Cos(alpha);
+
+            if (this.velocity.Length() == 0)
+            {
+                maxStaticFriction = Physics.FRICTION_COEFICIENTS[staticFrictionCoeficient] * fgy;
+
+                if ((force + fgx).Length() > maxStaticFriction.Length())
+                    totalForce = force + fgx + maxStaticFriction;
+                else
+                    totalForce = Vector3.Zero;
+            }
+            else
+            {
+                kineticFriction = fgy * Physics.FRICTION_COEFICIENTS[kineticFrictionCoeficient];
+                totalForce = force + fgx + kineticFriction;
+            }
+            this.aceleration = totalForce / mass;
+        }
+
         //Inputs
         private void Move(GameTime gameTime)
         {
             if (Input.IsPressedDown(playerKeys.Forward) && !Input.IsPressedDown(playerKeys.Backward))
             {
-                this.aceleration += this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                this.velocity += aceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                this.position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                //this.position += this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                ApplyForce(this.Forward * 5000f, 0f);
+                this.velocity += this.aceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                this.position += this.velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.rightFrontWheelAngle += MathHelper.ToRadians(10f);
                 this.leftFrontWheelAngle += MathHelper.ToRadians(10f);
                 this.rightBackWheelAngle += MathHelper.ToRadians(10f);
@@ -152,21 +186,17 @@ namespace TankProject
             }
             else if (Input.IsPressedDown(playerKeys.Backward) && !Input.IsPressedDown(playerKeys.Forward))
             {
-                this.aceleration -= this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                this.velocity += aceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                this.position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                //this.position -= this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                ApplyForce(-this.Forward * 5000f, 0);
+                this.velocity += this.aceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                this.position += this.velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.rightFrontWheelAngle -= MathHelper.ToRadians(10f);
                 this.leftFrontWheelAngle -= MathHelper.ToRadians(10f);
                 this.rightBackWheelAngle -= MathHelper.ToRadians(10f);
                 this.leftBackWheelAngle -= MathHelper.ToRadians(10f);
             }
-            if(aceleration != Vector3.Zero)
-            {
-                this.aceleration -= this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-            this.velocity += aceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            this.position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            ApplyForce(Vector3.Zero, 0f);
+            this.velocity += this.aceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            this.position += this.velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
         private void Rotate(GameTime gameTime)
         {
@@ -180,9 +210,14 @@ namespace TankProject
                 leftSteerAngle = MathHelper.ToRadians(10f);
 
                 if (Input.IsPressedDown(playerKeys.Forward))
+                {
                     rotation.Y += MathHelper.ToRadians(1f);
+
+                }
                 else if (Input.IsPressedDown(playerKeys.Backward))
+                {
                     rotation.Y -= MathHelper.ToRadians(1f);
+                }
             }
             else if (Input.IsPressedDown(playerKeys.Right) && !Input.IsPressedDown(playerKeys.Left))
             {
@@ -261,6 +296,15 @@ namespace TankProject
             this.Right.Normalize();
         }
 
+        private Vector3 GetNormal(Vector3 position)
+        {
+            Vector2 positionXZ = new Vector2(position.X, position.Z);
+            Vector2 roundedPositionXZ = new Vector2((int)this.position.X, (int)this.position.Z);
+
+            return Interpolation.BiLinear(positionXZ, roundedPositionXZ, 1.0f,
+                Floor.VerticesNormals[(int)positionXZ.X, (int)positionXZ.Y], Floor.VerticesNormals[(int)positionXZ.X + 1, (int)positionXZ.Y],
+                Floor.VerticesNormals[(int)positionXZ.X, (int)positionXZ.Y + 1], Floor.VerticesNormals[(int)positionXZ.X + 1, (int)positionXZ.Y + 1]);
+        }
         //--------------------Update&Draw--------------------//
 
         internal void Update(GameTime gameTime)

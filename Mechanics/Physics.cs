@@ -9,11 +9,14 @@ namespace TankProject
 {
     class Physics
     {
+        internal static bool isRaining = false;
         internal static Vector3 g = new Vector3(0, -9.8f, 0);
         internal static Dictionary<string, float> FRICTION_COEFICIENTS = new Dictionary<string, float>()
         {
-            { "metal on dry sand", 0.3f},
-            { "metal on wet sand", 0.4f}
+            { "kinetic- metal on dry sand", 0.3f},
+            { "kinetic- metal on wet sand", 0.4f},
+            { "static- metal on dry sand", 0.6f},
+            { "static- metal on wet sand", 0.7f}
         };
 
         /// <summary>
@@ -28,19 +31,16 @@ namespace TankProject
 
         /// <summary>
         /// Decomposes mg into two vectors with the x and y component.
-        /// Used for friction physics.
+        /// Used for motion physics.
         /// </summary>
         /// <param name="gForce">mg</param>
-        /// <param name="theta">angle between a ramp and the horizontal axis</param>
+        /// <param name="theta">angle between a ramp and the axis we are using</param>
         /// <param name="gForceX">result: component x</param>
         /// <param name="gForceY">result: component y</param>
-        internal static void DecomposeGravitationalForce(Vector3 gForce, float theta, out Vector3 gForceX, out Vector3 gForceY)
+        internal static void DecomposeVector(Vector3 v, float theta, out Vector3 vX, out Vector3 vY)
         {
-            gForceX = gForce * (float)Math.Sin(theta);
-            gForceY = gForce * (float)Math.Cos(theta);
+            vY = v * (float)Math.Sin(theta);
+            vX = v * (float)Math.Cos(theta);
         }
-
-        
-
     }
 }
