@@ -23,9 +23,15 @@ namespace TankProject
         DebugLine debugLine4;
         DebugLine debugLine5;
         DebugLine debugLine6;
+
+        DebugLine debugLineEnemyVelocity;
         List<DebugBox> boxes;
         ParticleSystem teste;
 
+        Bullet testbullet;
+        Enemy testEnemy;
+
+        //--------------------Constructors--------------------//
         internal GameStage(ContentManager content, GraphicsDevice device)
         {
             #region Camera. Split screen
@@ -46,8 +52,9 @@ namespace TankProject
             playerTwo = new Player(new Vector3(65, 10, 65), Vector3.Zero, Vector3.Zero, 0.0005f, Player.PlayerNumber.PlayerTwo, this);
             playerTwo.LoadModelBones(content, Material.White, currentLight);
 
-            Bullet.LoadModel(content);
-
+            Bullet.LoadModel(content, Material.White, currentLight);
+            Skybox.Load(content);
+            Enemy.Load(content);
             currentCameraPlayerOne = new CameraThirdPersonFixed(device, new Vector3(64, 5, 65), playerOne.turret, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f), upView.AspectRatio);
             currentCameraPlayerTwo = new CameraThirdPersonFixed(device, new Vector3(64, 5, 65), playerTwo.turret, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f), downView.AspectRatio);
 
@@ -55,18 +62,23 @@ namespace TankProject
 
             //TODO: END: CLEAN THIS BEFORE END
             //DEBUG
+            testEnemy = new Enemy(new Vector3(80, 0, 80), Vector3.Zero);
+
             debugLine1 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Forward, Color.Blue);
             debugLine2 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Right, Color.Red);
             debugLine3 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Up, Color.Green);
             debugLine4 = new DebugLine(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Forward, Color.Cyan);
             debugLine5 = new DebugLine(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Right, Color.Magenta);
             debugLine6 = new DebugLine(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Up, Color.Yellow);
+            debugLineEnemyVelocity = new DebugLine(testEnemy.position, testEnemy.position + testEnemy.velocity, Color.Pink);
+
             Debug.AddLine("1", debugLine1);
             Debug.AddLine("2", debugLine2);
             Debug.AddLine("3", debugLine3);
             Debug.AddLine("4", debugLine4);
             Debug.AddLine("5", debugLine5);
             Debug.AddLine("6", debugLine6);
+            Debug.AddLine("7", debugLineEnemyVelocity);
             teste = new ParticleSystem(ParticleType.Rain, new Vector3(64, 64, 64), new ParticleSpawner(30, false), content, 1000, 1000, 10);
 
             boxes = new List<DebugBox>();
@@ -82,9 +94,12 @@ namespace TankProject
                 Debug.AddBox(aux.ToString(), b);
                 aux++;
             }
+
+
+
         }
 
-
+        //--------------------Functions--------------------//
         internal override void Update(GameTime gameTime)
         {
             #region Player One Camera
@@ -158,6 +173,7 @@ namespace TankProject
             //TODO: DELETE AT END
             //DEBUG SECTION
             teste.Update(new Vector3(playerOne.position.X, 10, playerOne.position.Z), gameTime);
+            testEnemy.Update(playerOne.position, gameTime);
             debugLine1.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Forward);
             debugLine2.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Right);
             debugLine3.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Up);
@@ -165,6 +181,8 @@ namespace TankProject
             debugLine4.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Forward);
             debugLine5.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Right);
             debugLine6.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Up);
+            debugLineEnemyVelocity.Update(testEnemy.position, testEnemy.position + testEnemy.velocity);
+
             if (OBB.AreColliding(playerOne.boundingBox, playerTwo.boundingBox))
             {
                 Console.WriteLine("Collision Detected");
@@ -181,13 +199,16 @@ namespace TankProject
         internal override void Draw(GraphicsDevice device)
         {
             device.Viewport = upView;
+            Skybox.Draw(device, currentCameraPlayerOne);
             Floor.Draw(currentCameraPlayerOne);
             playerOne.Draw(currentCameraPlayerOne);
             playerTwo.Draw(currentCameraPlayerOne);
             teste.Draw(device, currentCameraPlayerOne); //DELETE
+            testEnemy.Draw(device, currentCameraPlayerOne);
             Debug.Draw(currentCameraPlayerOne);
 
             device.Viewport = downView;
+            Skybox.Draw(device, currentCameraPlayerTwo);
             Floor.Draw(currentCameraPlayerTwo);
             playerOne.Draw(currentCameraPlayerTwo);
             playerTwo.Draw(currentCameraPlayerTwo);
