@@ -9,7 +9,7 @@ namespace TankProject
         //Statics
         public static float BULLET_SCALE = 0.25f;
         private static float G = -9.8f;
-        private static float SHOOTING_POWER = 15f;
+        private static float SHOOTING_POWER = 30f;
         private static Model bulletModel;
         private static Texture2D bulletTexture;
         private static float mass = 1.5f;

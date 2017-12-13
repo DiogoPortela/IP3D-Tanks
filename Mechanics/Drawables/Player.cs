@@ -47,8 +47,8 @@ namespace TankProject
 
         //--------------------Constructors--------------------//
 
-        internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float mass, float modelScale, PlayerNumber number, GameStage currentState)
-            : base(position, rotation, velocity, mass)
+        internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float modelScale, PlayerNumber number, GameStage currentState)
+            : base(position, rotation, velocity)
         {
             this.relativeForward = this.Forward = Vector3.Forward;
             this.relativeRight = this.Right = Vector3.Right;
@@ -141,10 +141,7 @@ namespace TankProject
         {
             if (Input.IsPressedDown(playerKeys.Forward) && !Input.IsPressedDown(playerKeys.Backward))
             {
-                this.aceleration += this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                this.velocity += aceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                this.position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                //this.position += this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                this.position += this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.rightFrontWheelAngle += MathHelper.ToRadians(10f);
                 this.leftFrontWheelAngle += MathHelper.ToRadians(10f);
                 this.rightBackWheelAngle += MathHelper.ToRadians(10f);
@@ -152,21 +149,13 @@ namespace TankProject
             }
             else if (Input.IsPressedDown(playerKeys.Backward) && !Input.IsPressedDown(playerKeys.Forward))
             {
-                this.aceleration -= this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                this.velocity += aceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                this.position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                //this.position -= this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                this.position -= this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.rightFrontWheelAngle -= MathHelper.ToRadians(10f);
                 this.leftFrontWheelAngle -= MathHelper.ToRadians(10f);
                 this.rightBackWheelAngle -= MathHelper.ToRadians(10f);
                 this.leftBackWheelAngle -= MathHelper.ToRadians(10f);
             }
-            if(aceleration != Vector3.Zero)
-            {
-                this.aceleration -= this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-            this.velocity += aceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            this.position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            
         }
         private void Rotate(GameTime gameTime)
         {
