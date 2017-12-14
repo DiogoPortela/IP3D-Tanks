@@ -1,11 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace TankProject
 {
     class OBB
     {
-        private Vector3 position;
+        internal Vector3 position;
         private Vector3[] originalCorners;
         private Vector3[] corners;
         private Matrix rotationMatrix;
@@ -108,7 +109,7 @@ namespace TankProject
             return axisList;
         }
         
-        internal static bool IntersectsWhenProjected(Vector3[] aCorners, Vector3[] bCorners, Vector3 axis)
+        internal static bool IntersectsWhenProjected(OBB a, OBB b, Vector3 axis)
         {
             //if a cross product returns zero, then the vectors are alined
             if (axis == Vector3.Zero)
@@ -121,10 +122,10 @@ namespace TankProject
 
             for (int i = 0; i < 8; i++)
             {
-                float aDist = Vector3.Dot(aCorners[i], axis);
+                float aDist = Vector3.Dot(a.GetCorners()[i], axis);
                 aMin = (aDist < aMin) ? aDist : aMin;
                 aMax = (aDist > aMax) ? aDist : aMax;
-                float bDist = Vector3.Dot(bCorners[i], axis);
+                float bDist = Vector3.Dot(b.GetCorners()[i], axis);
                 bMin = (bDist < bMin) ? bDist : bMin;
                 bMax = (bDist > bMax) ? bDist : bMax;
             }
@@ -132,6 +133,7 @@ namespace TankProject
             //1d test for intersection of a and b
             float longSpan = Math.Max(aMax, bMax) - Math.Min(aMin, bMin);
             float sumSpan = aMax - aMin + bMax - bMin;
+
             return longSpan < sumSpan;
         }
 
@@ -142,11 +144,12 @@ namespace TankProject
 
             foreach (Vector3 axis in axisList)
             {
-                separatingAxisChecker = OBB.IntersectsWhenProjected(a.GetCorners(), b.GetCorners(), axis);
+                separatingAxisChecker = OBB.IntersectsWhenProjected(a, b, axis);
                 if (!separatingAxisChecker)
                     break;
             }
             return separatingAxisChecker;
         }   
+
     }
 }

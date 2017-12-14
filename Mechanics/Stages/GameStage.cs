@@ -166,6 +166,8 @@ namespace TankProject
                     currentCameraPlayerTwo = new CameraFree(currentCameraPlayerTwo);
             }
 
+            Vector3 tempPosition = playerOne.position;
+
             playerOne.Update(gameTime);
             playerTwo.Update(gameTime);
 
@@ -183,10 +185,6 @@ namespace TankProject
             debugLine6.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Up);
             debugLineEnemyVelocity.Update(testEnemy.position, testEnemy.position + testEnemy.velocity);
 
-            if (OBB.AreColliding(playerOne.boundingBox, playerTwo.boundingBox))
-            {
-                Console.WriteLine("Collision Detected");
-            }
             //TODO: Apply OBB's to all bones
 
             boxes[0].Update(playerOne.boundingBox);
@@ -195,6 +193,12 @@ namespace TankProject
             boxes[3].Update(playerOne.cannon.boundingBox);
             boxes[4].Update(playerTwo.turret.boundingBox);
             boxes[5].Update(playerTwo.cannon.boundingBox);
+
+            //TODO: apply to all objects
+            if (OBB.AreColliding(playerOne.boundingBox, playerTwo.boundingBox))
+            {
+                playerOne.position = tempPosition;
+            }
         }
         internal override void Draw(GraphicsDevice device)
         {
