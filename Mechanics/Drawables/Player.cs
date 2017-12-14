@@ -78,8 +78,8 @@ namespace TankProject
         //Loads
         internal void LoadModelBones(ContentManager content, Material material, Light light)
         {
-            leftSmoke = new ParticleSystem(ParticleType.Smoke, this.position + leftSmokeOffset, new ParticleSpawner(0.01f, true), content, 100, 500, 10);
-            rightSmoke = new ParticleSystem(ParticleType.Smoke, this.position + rightSmokeOffset, new ParticleSpawner(0.01f, true), content, 100, 500, 10);
+            leftSmoke = new ParticleSystem(ParticleType.Smoke, this.position + leftSmokeOffset, new ParticleSpawner(0.01f, true), content, 250, 500, 1);
+            rightSmoke = new ParticleSystem(ParticleType.Smoke, this.position + rightSmokeOffset, new ParticleSpawner(0.01f, true), content, 250, 500, 1);
 
             tankModel = content.Load<Model>("tank");
             boundingBox = OBB.CreateFromSphere(tankModel.Root.Meshes[0].BoundingSphere, this.position, modelScale, this.rotationMatrix);

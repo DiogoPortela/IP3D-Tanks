@@ -142,6 +142,8 @@ namespace TankProject
         private GameTime lastParticleSpawn;
         internal Vector3 systemPosition;
         private Vector3 accelaration;
+        private Random random;
+        private const float MAX_ROT = 0.05f;
 
         private UpdateFunction typeUpdate;
 
@@ -160,6 +162,7 @@ namespace TankProject
             effect.TextureEnabled = true;
             systemPosition = position;
             this.spawner = spawner;
+            random = new Random();
 
             switch (type)
             {
@@ -223,7 +226,7 @@ namespace TankProject
                 lastParticleSpawn.TotalGameTime = lastParticleSpawn.TotalGameTime.Add(TimeSpan.FromMilliseconds(particleSpawnRate));
                 if (particleCount < particleMax)
                 {
-                    currentParticles.Add(new Particle(spawner.GetPositions(1, systemPosition)[0], Vector3.Zero, 0.005f));
+                    currentParticles.Add(new Particle(spawner.GetPositions(1, systemPosition)[0], Vector3.Zero, 0.008f));
                     particleCount++;
                 }
             }
@@ -231,7 +234,7 @@ namespace TankProject
             for (int i = particleCount - 1; i >= 0; i--)
             {
                 #region Update Particles              
-                currentParticles[i].Update(accelaration, gameTime);
+                currentParticles[i].Update(accelaration + new Vector3((float)random.NextDouble() * MAX_ROT * 2.0f - MAX_ROT, (float)random.NextDouble() * MAX_ROT * 2.0f - MAX_ROT, (float)random.NextDouble() * MAX_ROT * 2.0f - MAX_ROT), gameTime);
                 #endregion
 
                 #region Kill Particles

@@ -102,7 +102,6 @@ namespace TankProject
             }
 
 
-
         }
 
         //--------------------Functions--------------------//
@@ -218,24 +217,26 @@ namespace TankProject
             device.Viewport = upView;
             Skybox.Draw(device, currentCameraPlayerOne);
             Floor.Draw(currentCameraPlayerOne);
-            playerOne.Draw(device, currentCameraPlayerOne);
-            playerTwo.Draw(device, currentCameraPlayerOne);
-            foreach(Enemy e in enemyList)
+            foreach (Enemy e in enemyList)
             {
                 e.Draw(device, currentCameraPlayerOne);
             }
+            playerOne.Draw(device, currentCameraPlayerOne);
+            playerTwo.Draw(device, currentCameraPlayerOne);
+         
             teste.Draw(device, currentCameraPlayerOne); //DELETE
             Debug.Draw(currentCameraPlayerOne);
 
             device.Viewport = downView;
             Skybox.Draw(device, currentCameraPlayerTwo);
             Floor.Draw(currentCameraPlayerTwo);
-            playerOne.Draw(device, currentCameraPlayerTwo);
-            playerTwo.Draw(device, currentCameraPlayerTwo);
             foreach (Enemy e in enemyList)
             {
                 e.Draw(device, currentCameraPlayerTwo);
             }
+            playerOne.Draw(device, currentCameraPlayerTwo);
+            playerTwo.Draw(device, currentCameraPlayerTwo);
+           
             Debug.Draw(currentCameraPlayerTwo);
 
             device.Viewport = defaultView;
