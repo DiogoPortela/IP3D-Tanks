@@ -63,6 +63,7 @@
     <Compile Include="Mechanics\Light.cs" />
     <Compile Include="Mechanics\Material.cs" />
     <Compile Include="Mechanics\Drawables\Player.cs" />
+    <Compile Include="Mechanics\Physics.cs" />
     <Compile Include="Mechanics\PlayerKeys.cs" />
     <Compile Include="Mechanics\Stages\GameStage.cs" />
     <Compile Include="Mechanics\Stages\MenuStage.cs" />

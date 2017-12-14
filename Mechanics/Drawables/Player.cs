@@ -40,6 +40,10 @@ namespace TankProject
     
         private static GameStage gameState;
 
+        //test zone
+        Vector3 aceleration;
+        Vector3 velocity;
+
 
         //--------------------Constructors--------------------//
 
@@ -55,6 +59,8 @@ namespace TankProject
             //boundingBoxes = new List<BoundingBox>();
             SetPlayerKeys();
             gameState = currentState;   //TODO: CLEAN
+            aceleration = Vector3.Zero;
+            velocity = Vector3.Zero;
         }
 
         //--------------------Functions--------------------//
@@ -149,6 +155,7 @@ namespace TankProject
                 this.rightBackWheelAngle -= MathHelper.ToRadians(10f);
                 this.leftBackWheelAngle -= MathHelper.ToRadians(10f);
             }
+            
         }
         private void Rotate(GameTime gameTime)
         {
@@ -282,7 +289,6 @@ namespace TankProject
             hatchBone.Transform = Matrix.CreateRotationX(hatchetAngle) * hatchTransform;
 
             tankModel.CopyAbsoluteBoneTransformsTo(boneTransformations);
-
             boundingBox.Update(position, Forward, Right, Up);
             if (Input.WasPressed(playerKeys.Shoot))
             {

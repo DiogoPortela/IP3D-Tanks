@@ -32,20 +32,27 @@ namespace TankProject
                 acceleration = seekVelocity - velocity;
 
                 double cosSteeringAngle;
+                double angle;
                 if (Vector3.Dot(Right, acceleration) < 0)
+                {
                     cosSteeringAngle = Vector3.Dot(Vector3.Normalize(velocity), Vector3.Normalize(acceleration));
+                    angle = Math.Acos(cosSteeringAngle);
+                }
                 else
-                    cosSteeringAngle = Vector3.Dot(Vector3.Normalize(acceleration), Vector3.Normalize(velocity));
-                double angle = Math.Acos(cosSteeringAngle);
+                {
+                    cosSteeringAngle = Vector3.Dot(Vector3.Normalize(velocity), Vector3.Normalize(acceleration));
+                    angle = -Math.Acos(cosSteeringAngle);
+                }
 
-                if(angle > MAX_ROTATION)
+
+                if (angle > MAX_ROTATION)
                 {
                     Matrix angleRotation = Matrix.CreateFromAxisAngle(Up, MAX_ROTATION - (float)angle);
                     acceleration = Vector3.Transform(acceleration, angleRotation);
                 }
                 else if (angle < -MAX_ROTATION)
                 {
-                    Matrix angleRotation = Matrix.CreateFromAxisAngle(Up, -MAX_ROTATION - (float)angle);
+                    Matrix angleRotation = Matrix.CreateFromAxisAngle(Up, -(float)angle - MAX_ROTATION);
                     acceleration = Vector3.Transform(acceleration, angleRotation);
                 }
 
