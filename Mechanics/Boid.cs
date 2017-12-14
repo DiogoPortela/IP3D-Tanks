@@ -24,7 +24,7 @@ namespace TankProject
 
         internal virtual void Update(Vector3 targetPosition, GameTime deltaTime)
         {
-            if ((targetPosition - position).Length() > 1.0f)
+            if ((targetPosition - position).Length() > 0.5f)
             {
                 if (velocity == Vector3.Zero)
                     velocity = relativeForward * 0.01f;

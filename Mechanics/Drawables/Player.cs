@@ -43,6 +43,13 @@ namespace TankProject
         //test zone
         Vector3 aceleration;
         Vector3 velocity;
+        private ParticleSystem leftSmoke;
+        private Vector3 leftSmokeOffset;
+        private Vector3 initialLeftSmokeOffset;
+        private ParticleSystem rightSmoke;
+        private Vector3 rightSmokeOffset;
+        private Vector3 initialRightSmokeOffset;
+
 
 
         //--------------------Constructors--------------------//
@@ -56,11 +63,14 @@ namespace TankProject
             this.modelScale = modelScale;
             this.playerNumber = number;
             bulletList = new List<Bullet>();
-            //boundingBoxes = new List<BoundingBox>();
             SetPlayerKeys();
+
             gameState = currentState;   //TODO: CLEAN
             aceleration = Vector3.Zero;
             velocity = Vector3.Zero;
+        
+            initialLeftSmokeOffset = leftSmokeOffset = new Vector3(0.08f, 0.15f, -0.15f);
+            initialRightSmokeOffset = rightSmokeOffset = new Vector3(-0.08f, 0.15f, -0.15f);
         }
 
         //--------------------Functions--------------------//
@@ -68,6 +78,9 @@ namespace TankProject
         //Loads
         internal void LoadModelBones(ContentManager content, Material material, Light light)
         {
+            leftSmoke = new ParticleSystem(ParticleType.Smoke, this.position + leftSmokeOffset, new ParticleSpawner(0.01f, true), content, 100, 500, 10);
+            rightSmoke = new ParticleSystem(ParticleType.Smoke, this.position + rightSmokeOffset, new ParticleSpawner(0.01f, true), content, 100, 500, 10);
+
             tankModel = content.Load<Model>("tank");
             boundingBox = OBB.CreateFromSphere(tankModel.Root.Meshes[0].BoundingSphere, this.position, modelScale, this.rotationMatrix);
 
@@ -301,8 +314,14 @@ namespace TankProject
                 if (bulletList[i].position.Y <= 0 || OBB.AreColliding(bulletList[i].boundingBox, gameState.playerTwo.boundingBox))
                     bulletList.Remove(bulletList[i]);
             }
+
+            leftSmokeOffset = Vector3.Transform(initialLeftSmokeOffset, rotationMatrix);
+            leftSmoke.Update(this.position + leftSmokeOffset, gameTime);
+            rightSmokeOffset = Vector3.Transform(initialRightSmokeOffset, rotationMatrix);
+            rightSmoke.Update(this.position + rightSmokeOffset, gameTime);
+
         }
-        internal void Draw(Camera cam)
+        internal void Draw(GraphicsDevice device, Camera cam)
         {
             foreach (ModelMesh mesh in tankModel.Meshes)
             {
@@ -319,6 +338,8 @@ namespace TankProject
             {
                 b.Draw(cam);
             }
+            leftSmoke.Draw(device, cam);
+            rightSmoke.Draw(device, cam);
         }
     }
 }

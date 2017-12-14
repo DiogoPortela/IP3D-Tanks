@@ -171,14 +171,18 @@ namespace TankProject
                 case ParticleType.Explosion:
                     break;
                 case ParticleType.Smoke:
+                    particleTexture = content.Load<Texture2D>("Smoke");
+                    typeUpdate = new UpdateFunction(SmokeUpdate);
+                    accelaration = new Vector3(0.0f, 0.01f, 0.0f);
                     break;
             }
         }
         
         //--------------------Functions--------------------//
         internal void Update(Vector3 position, GameTime gameTime)
-        {
+        {          
             this.systemPosition = position;
+          
             typeUpdate(gameTime);
         }
         private void RainUpdate(GameTime gameTime)
@@ -194,7 +198,6 @@ namespace TankProject
                 }
             }
             #endregion
-
             for (int i = particleCount - 1; i >= 0; i--)
             {
                 #region Update Particles              
@@ -211,6 +214,35 @@ namespace TankProject
 
             }
 
+        }
+        private void SmokeUpdate(GameTime gameTime)
+        {
+            #region Add Particles
+            while (gameTime.TotalGameTime.TotalMilliseconds - lastParticleSpawn.TotalGameTime.TotalMilliseconds - particleSpawnRate > 0)
+            {
+                lastParticleSpawn.TotalGameTime = lastParticleSpawn.TotalGameTime.Add(TimeSpan.FromMilliseconds(particleSpawnRate));
+                if (particleCount < particleMax)
+                {
+                    currentParticles.Add(new Particle(spawner.GetPositions(1, systemPosition)[0], Vector3.Zero, 0.005f));
+                    particleCount++;
+                }
+            }
+            #endregion
+            for (int i = particleCount - 1; i >= 0; i--)
+            {
+                #region Update Particles              
+                currentParticles[i].Update(accelaration, gameTime);
+                #endregion
+
+                #region Kill Particles
+                if ((currentParticles.Count > 0 && (DateTime.Now.TimeOfDay - currentParticles[i].dateTime.TimeOfDay).Milliseconds > particleMaxTime))
+                {
+                    currentParticles.Remove(currentParticles[i]);
+                    particleCount--;
+                }
+                #endregion
+
+            }
         }
         internal void Draw(GraphicsDevice device, Camera camera)
         {
