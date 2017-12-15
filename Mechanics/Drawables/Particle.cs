@@ -147,8 +147,19 @@ namespace TankProject
 
         private UpdateFunction typeUpdate;
 
+        private bool shouldSpawn;
+
+        internal void SetShouldSpawn(bool shouldSpawn)
+        {
+            this.shouldSpawn = shouldSpawn;
+        }
+        internal bool GetShouldSpawn()
+        {
+            return shouldSpawn;
+        }
+
         //--------------------Constructors--------------------//
-        internal ParticleSystem(ParticleType type, Vector3 position, ParticleSpawner spawner, ContentManager content, int particleMax, int particleMaxTime, float particleSpawnRate)
+        internal ParticleSystem(ParticleType type, Vector3 position, ParticleSpawner spawner, ContentManager content, int particleMax, int particleMaxTime, float particleSpawnRate, bool shouldStartSpawing = true)
         {
             particleType = type;
             currentParticles = new List<Particle>();
@@ -163,6 +174,7 @@ namespace TankProject
             systemPosition = position;
             this.spawner = spawner;
             random = new Random();
+            shouldSpawn = shouldStartSpawing;
 
             switch (type)
             {
@@ -191,7 +203,7 @@ namespace TankProject
         private void RainUpdate(GameTime gameTime)
         {
             #region Add Particles
-            while (gameTime.TotalGameTime.TotalMilliseconds - lastParticleSpawn.TotalGameTime.TotalMilliseconds - particleSpawnRate > 0)
+            while (shouldSpawn && gameTime.TotalGameTime.TotalMilliseconds - lastParticleSpawn.TotalGameTime.TotalMilliseconds - particleSpawnRate > 0)
             {
                 lastParticleSpawn.TotalGameTime = lastParticleSpawn.TotalGameTime.Add(TimeSpan.FromMilliseconds(particleSpawnRate));
                 if (particleCount < particleMax)
@@ -221,7 +233,7 @@ namespace TankProject
         private void SmokeUpdate(GameTime gameTime)
         {
             #region Add Particles
-            while (gameTime.TotalGameTime.TotalMilliseconds - lastParticleSpawn.TotalGameTime.TotalMilliseconds - particleSpawnRate > 0)
+            while (shouldSpawn && gameTime.TotalGameTime.TotalMilliseconds - lastParticleSpawn.TotalGameTime.TotalMilliseconds - particleSpawnRate > 0)
             {
                 lastParticleSpawn.TotalGameTime = lastParticleSpawn.TotalGameTime.Add(TimeSpan.FromMilliseconds(particleSpawnRate));
                 if (particleCount < particleMax)
@@ -256,8 +268,6 @@ namespace TankProject
             foreach (Particle p in currentParticles)
                 p.Draw(device, ref effect, ref camera);
             device.BlendState = BlendState.Opaque;
-
         }
-
     }
 }
