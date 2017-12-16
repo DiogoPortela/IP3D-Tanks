@@ -36,6 +36,8 @@ namespace TankProject
         internal enum PlayerNumber { PlayerOne = 1, PlayerTwo };
         private PlayerNumber playerNumber;
 
+        internal float hp;
+
         private PlayerKeys playerKeys;
     
         private static GameStage gameState;
@@ -63,6 +65,7 @@ namespace TankProject
         internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float modelScale, PlayerNumber number, GameStage currentState)
             : base(position, rotation, velocity, 100)
         {
+            this.hp = base.hp;
             this.relativeForward = this.Forward = Vector3.Forward;
             this.relativeRight = this.Right = Vector3.Right;
             this.Up = Vector3.Up;
@@ -98,6 +101,7 @@ namespace TankProject
             this.cannonBone = tankModel.Bones["canon_geo"];
             cannon = new Bone(cannonBone.Transform, this.position, Vector3.Zero, modelScale);
             cannon.boundingBox = OBB.CreateFromSphere(cannonBone.Meshes[0].BoundingSphere, cannon.position, modelScale, this.rotationMatrix);
+            //TODO: FIX CANNON's BOUNDING BOX
 
             this.turretBone = tankModel.Bones["turret_geo"];
             turret = new Bone(turretBone.Transform, this.position, Vector3.Zero, modelScale);

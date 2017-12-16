@@ -13,6 +13,7 @@ namespace TankProject
         private Camera currentCameraPlayerTwo;
         private Viewport defaultView, upView, downView;
         internal Player playerOne, playerTwo;
+        internal List<Player> playerList;
         internal List<Enemy> enemyList;
         internal List<ParticleSystem> particleSystemList;
 
@@ -28,8 +29,6 @@ namespace TankProject
 
         List<DebugBox> boxes;
         ParticleSystem teste;
-
-        Bullet testbullet;
 
         //--------------------Constructors--------------------//
         internal GameStage(ContentManager content, GraphicsDevice device)
@@ -104,8 +103,6 @@ namespace TankProject
                 Debug.AddBox(aux.ToString(), b);
                 aux++;
             }
-
-
         }
 
         //--------------------Functions--------------------//
@@ -179,13 +176,13 @@ namespace TankProject
 
             foreach(Player p in playerList)
             {
-                p.Update(gameTime);
+                if(p.hp > 0)
+                    p.Update(gameTime);
+                else
+                {
+                    //TODO: explosion on tank ?and gameover screen?
+                }
             }
-            foreach(Enemy e in enemyList)
-            {
-                e.Update(playerOne.position, gameTime);
-            }
-
 
             foreach(Enemy e in enemyList)
             {
