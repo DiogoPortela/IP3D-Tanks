@@ -142,11 +142,24 @@ namespace TankProject
         private GameTime lastParticleSpawn;
         internal Vector3 systemPosition;
         private Vector3 accelaration;
+        private Random random;
+        private const float MAX_ROT = 0.05f;
 
         private UpdateFunction typeUpdate;
 
+        private bool shouldSpawn;
+
+        internal void SetShouldSpawn(bool shouldSpawn)
+        {
+            this.shouldSpawn = shouldSpawn;
+        }
+        internal bool GetShouldSpawn()
+        {
+            return shouldSpawn;
+        }
+
         //--------------------Constructors--------------------//
-        internal ParticleSystem(ParticleType type, Vector3 position, ParticleSpawner spawner, ContentManager content, int particleMax, int particleMaxTime, float particleSpawnRate)
+        internal ParticleSystem(ParticleType type, Vector3 position, ParticleSpawner spawner, ContentManager content, int particleMax, int particleMaxTime, float particleSpawnRate, bool shouldStartSpawing = true)
         {
             particleType = type;
             currentParticles = new List<Particle>();
@@ -160,6 +173,8 @@ namespace TankProject
             effect.TextureEnabled = true;
             systemPosition = position;
             this.spawner = spawner;
+            random = new Random();
+            shouldSpawn = shouldStartSpawing;
 
             switch (type)
             {
@@ -171,20 +186,24 @@ namespace TankProject
                 case ParticleType.Explosion:
                     break;
                 case ParticleType.Smoke:
+                    particleTexture = content.Load<Texture2D>("Smoke");
+                    typeUpdate = new UpdateFunction(SmokeUpdate);
+                    accelaration = new Vector3(0.0f, 0.01f, 0.0f);
                     break;
             }
         }
         
         //--------------------Functions--------------------//
         internal void Update(Vector3 position, GameTime gameTime)
-        {
+        {          
             this.systemPosition = position;
+          
             typeUpdate(gameTime);
         }
         private void RainUpdate(GameTime gameTime)
         {
             #region Add Particles
-            while (gameTime.TotalGameTime.TotalMilliseconds - lastParticleSpawn.TotalGameTime.TotalMilliseconds - particleSpawnRate > 0)
+            while (shouldSpawn && gameTime.TotalGameTime.TotalMilliseconds - lastParticleSpawn.TotalGameTime.TotalMilliseconds - particleSpawnRate > 0)
             {
                 lastParticleSpawn.TotalGameTime = lastParticleSpawn.TotalGameTime.Add(TimeSpan.FromMilliseconds(particleSpawnRate));
                 if (particleCount < particleMax)
@@ -194,7 +213,6 @@ namespace TankProject
                 }
             }
             #endregion
-
             for (int i = particleCount - 1; i >= 0; i--)
             {
                 #region Update Particles              
@@ -212,6 +230,35 @@ namespace TankProject
             }
 
         }
+        private void SmokeUpdate(GameTime gameTime)
+        {
+            #region Add Particles
+            while (shouldSpawn && gameTime.TotalGameTime.TotalMilliseconds - lastParticleSpawn.TotalGameTime.TotalMilliseconds - particleSpawnRate > 0)
+            {
+                lastParticleSpawn.TotalGameTime = lastParticleSpawn.TotalGameTime.Add(TimeSpan.FromMilliseconds(particleSpawnRate));
+                if (particleCount < particleMax)
+                {
+                    currentParticles.Add(new Particle(spawner.GetPositions(1, systemPosition)[0], Vector3.Zero, 0.008f));
+                    particleCount++;
+                }
+            }
+            #endregion
+            for (int i = particleCount - 1; i >= 0; i--)
+            {
+                #region Update Particles              
+                currentParticles[i].Update(accelaration + new Vector3((float)random.NextDouble() * MAX_ROT * 2.0f - MAX_ROT, (float)random.NextDouble() * MAX_ROT * 2.0f - MAX_ROT, (float)random.NextDouble() * MAX_ROT * 2.0f - MAX_ROT), gameTime);
+                #endregion
+
+                #region Kill Particles
+                if ((currentParticles.Count > 0 && (DateTime.Now.TimeOfDay - currentParticles[i].dateTime.TimeOfDay).Milliseconds > particleMaxTime))
+                {
+                    currentParticles.Remove(currentParticles[i]);
+                    particleCount--;
+                }
+                #endregion
+
+            }
+        }
         internal void Draw(GraphicsDevice device, Camera camera)
         {
             device.BlendState = BlendState.AlphaBlend;
@@ -221,8 +268,6 @@ namespace TankProject
             foreach (Particle p in currentParticles)
                 p.Draw(device, ref effect, ref camera);
             device.BlendState = BlendState.Opaque;
-
         }
-
     }
 }

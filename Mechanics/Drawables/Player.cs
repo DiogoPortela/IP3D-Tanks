@@ -43,6 +43,21 @@ namespace TankProject
         //test zone
         Vector3 aceleration;
 
+        private ParticleSystem leftSmoke;
+        private Vector3 leftSmokeOffset;
+        private Vector3 initialLeftSmokeOffset;
+        private ParticleSystem rightSmoke;
+        private Vector3 rightSmokeOffset;
+        private Vector3 initialRightSmokeOffset;
+
+        private ParticleSystem leftDirt;
+        private Vector3 leftDirtOffset;
+        private Vector3 initialLeftDirtOffset;
+        private ParticleSystem rightDirt;
+        private Vector3 rightDirtOffset;
+        private Vector3 initialRightDirtOffset;
+
+
         //--------------------Constructors--------------------//
 
         internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float modelScale, PlayerNumber number, GameStage currentState)
@@ -54,11 +69,16 @@ namespace TankProject
             this.modelScale = modelScale;
             this.playerNumber = number;
             bulletList = new List<Bullet>();
-            //boundingBoxes = new List<BoundingBox>();
             SetPlayerKeys();
+
             gameState = currentState;   //TODO: CLEAN
             aceleration = Vector3.Zero;
             velocity = Vector3.Zero;
+        
+            initialLeftSmokeOffset = leftSmokeOffset = new Vector3(0.08f, 0.15f, -0.15f);
+            initialRightSmokeOffset = rightSmokeOffset = new Vector3(-0.08f, 0.15f, -0.15f);
+            initialLeftDirtOffset = leftDirtOffset = new Vector3(0.08f, 0.0f, -0.15f);
+            initialRightDirtOffset = rightDirtOffset = new Vector3(-0.08f, 0.0f, -0.15f);
         }
 
         //--------------------Functions--------------------//
@@ -66,6 +86,12 @@ namespace TankProject
         //Loads
         internal void LoadModelBones(ContentManager content, Material material, Light light)
         {
+            leftDirt = new ParticleSystem(ParticleType.Smoke, this.position + leftDirtOffset, new ParticleSpawner(0.01f, true), content, 250, 500, 5);
+            rightDirt = new ParticleSystem(ParticleType.Smoke, this.position + rightDirtOffset, new ParticleSpawner(0.01f, true), content, 250, 500, 5);
+
+            leftSmoke = new ParticleSystem(ParticleType.Smoke, this.position + leftSmokeOffset, new ParticleSpawner(0.01f, true), content, 250, 400, 5);
+            rightSmoke = new ParticleSystem(ParticleType.Smoke, this.position + rightSmokeOffset, new ParticleSpawner(0.01f, true), content, 250, 400, 5);
+
             tankModel = content.Load<Model>("tank");
             boundingBox = OBB.CreateFromSphere(tankModel.Root.Meshes[0].BoundingSphere, this.position, modelScale, this.rotationMatrix);
 
@@ -144,6 +170,8 @@ namespace TankProject
                 this.leftFrontWheelAngle += MathHelper.ToRadians(10f);
                 this.rightBackWheelAngle += MathHelper.ToRadians(10f);
                 this.leftBackWheelAngle += MathHelper.ToRadians(10f);
+                leftDirt.SetShouldSpawn(true);
+                rightDirt.SetShouldSpawn(true);
             }
             else if (Input.IsPressedDown(playerKeys.Backward) && !Input.IsPressedDown(playerKeys.Forward))
             {
@@ -152,6 +180,8 @@ namespace TankProject
                 this.leftFrontWheelAngle -= MathHelper.ToRadians(10f);
                 this.rightBackWheelAngle -= MathHelper.ToRadians(10f);
                 this.leftBackWheelAngle -= MathHelper.ToRadians(10f);
+                leftDirt.SetShouldSpawn(true);
+                rightDirt.SetShouldSpawn(true);
             }
             
         }
@@ -252,6 +282,8 @@ namespace TankProject
 
         internal void Update(GameTime gameTime)
         {
+            leftDirt.SetShouldSpawn(false);
+            rightDirt.SetShouldSpawn(false);
             Move(gameTime);
             Rotate(gameTime);
             UpdateHatchet(gameTime);
@@ -302,8 +334,19 @@ namespace TankProject
                     gameState.playerTwo.hp -= 25f;
                 }
             }
+
+            leftSmokeOffset = Vector3.Transform(initialLeftSmokeOffset, rotationMatrix);
+            leftSmoke.Update(this.position + leftSmokeOffset, gameTime);
+            rightSmokeOffset = Vector3.Transform(initialRightSmokeOffset, rotationMatrix);
+            rightSmoke.Update(this.position + rightSmokeOffset, gameTime);
+
+            leftDirtOffset = Vector3.Transform(initialLeftDirtOffset, rotationMatrix);
+            leftDirt.Update(this.position + leftDirtOffset, gameTime);
+            rightDirtOffset = Vector3.Transform(initialRightDirtOffset, rotationMatrix);
+            rightDirt.Update(this.position + rightDirtOffset, gameTime);
+
         }
-        internal void Draw(Camera cam)
+        internal void Draw(GraphicsDevice device, Camera cam)
         {
             foreach (ModelMesh mesh in tankModel.Meshes)
             {
@@ -320,6 +363,10 @@ namespace TankProject
             {
                 b.Draw(cam);
             }
+            leftSmoke.Draw(device, cam);
+            rightSmoke.Draw(device, cam);
+            leftDirt.Draw(device, cam);
+            rightDirt.Draw(device, cam);
         }
     }
 }
