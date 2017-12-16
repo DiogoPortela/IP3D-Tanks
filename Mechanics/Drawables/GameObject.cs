@@ -17,13 +17,16 @@ namespace TankProject
         protected Matrix rotationMatrix;
         protected Matrix translationMatrix;
 
+        protected float hp;
+
         //--------------------Constructors--------------------//
 
-        internal GameObject(Vector3 position, Vector3 rotation, Vector3 velocity)
+        internal GameObject(Vector3 position, Vector3 rotation, Vector3 velocity, float hp)
         {
             this.position = position;
             this.velocity = velocity;
             this.rotation = rotation;
+            this.hp = hp;
             rotationMatrix = Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z);
             translationMatrix = Matrix.CreateTranslation(position);
         }

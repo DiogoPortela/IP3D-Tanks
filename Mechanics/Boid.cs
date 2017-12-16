@@ -16,7 +16,7 @@ namespace TankProject
 
         List<Boid> neighboardhood;
 
-        internal Boid(Vector3 position, Vector3 rotation) : base(position, rotation, Vector3.Zero)
+        internal Boid(Vector3 position, Vector3 rotation) : base(position, rotation, Vector3.Zero, 100)
         {
             this.position = position;
             acceleration = velocity = seekVelocity = Vector3.Zero;

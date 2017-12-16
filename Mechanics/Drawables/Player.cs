@@ -42,13 +42,11 @@ namespace TankProject
 
         //test zone
         Vector3 aceleration;
-        Vector3 velocity;
-
 
         //--------------------Constructors--------------------//
 
         internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float modelScale, PlayerNumber number, GameStage currentState)
-            : base(position, rotation, velocity)
+            : base(position, rotation, velocity, 100)
         {
             this.relativeForward = this.Forward = Vector3.Forward;
             this.relativeRight = this.Right = Vector3.Right;
@@ -299,7 +297,10 @@ namespace TankProject
             {
                 bulletList[i].Update(gameTime);
                 if (bulletList[i].position.Y <= 0 || OBB.AreColliding(bulletList[i].boundingBox, gameState.playerTwo.boundingBox))
+                {
                     bulletList.Remove(bulletList[i]);
+                    gameState.playerTwo.hp -= 25f;
+                }
             }
         }
         internal void Draw(Camera cam)

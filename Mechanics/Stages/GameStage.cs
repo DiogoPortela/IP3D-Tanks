@@ -13,6 +13,8 @@ namespace TankProject
         private Camera currentCameraPlayerTwo;
         private Viewport defaultView, upView, downView;
         internal Player playerOne, playerTwo;
+        internal List<Player> playerList;
+        internal List<Enemy> enemyList;
 
         internal static Light currentLight;
 
@@ -47,10 +49,14 @@ namespace TankProject
             currentLight = new Light(-Vector3.One, new Color(new Vector3(0.5f, 0.5f, 0.5f)), new Color(new Vector3(0.1f, 0.1f, 0.1f)));
 
             //Load Players
+            playerList = new List<Player>();
+            enemyList = new List<Enemy>();
             playerOne = new Player(new Vector3(64, 10, 64), Vector3.Zero, Vector3.Zero, 0.0005f, Player.PlayerNumber.PlayerOne, this);
             playerOne.LoadModelBones(content, Material.White, currentLight);
+            playerList.Add(playerOne);
             playerTwo = new Player(new Vector3(65, 10, 65), Vector3.Zero, Vector3.Zero, 0.0005f, Player.PlayerNumber.PlayerTwo, this);
             playerTwo.LoadModelBones(content, Material.White, currentLight);
+            playerList.Add(playerTwo);
 
             Bullet.LoadModel(content, Material.White, currentLight);
             Skybox.Load(content);
@@ -63,6 +69,7 @@ namespace TankProject
             //TODO: END: CLEAN THIS BEFORE END
             //DEBUG
             testEnemy = new Enemy(new Vector3(80, 0, 80), Vector3.Zero);
+            enemyList.Add(testEnemy);
 
             debugLine1 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Forward, Color.Blue);
             debugLine2 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Right, Color.Red);
@@ -94,9 +101,6 @@ namespace TankProject
                 Debug.AddBox(aux.ToString(), b);
                 aux++;
             }
-
-
-
         }
 
         //--------------------Functions--------------------//
@@ -168,14 +172,19 @@ namespace TankProject
 
             Vector3 tempPosition = playerOne.position;
 
-            playerOne.Update(gameTime);
-            playerTwo.Update(gameTime);
+            foreach(Player p in playerList)
+            {
+                p.Update(gameTime);
+            }
+            foreach(Enemy e in enemyList)
+            {
+                e.Update(playerOne.position, gameTime);
+            }
 
 
             //TODO: DELETE AT END
             //DEBUG SECTION
             teste.Update(new Vector3(playerOne.position.X, 10, playerOne.position.Z), gameTime);
-            testEnemy.Update(playerOne.position, gameTime);
             debugLine1.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Forward);
             debugLine2.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Right);
             debugLine3.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Up);
@@ -186,7 +195,6 @@ namespace TankProject
             debugLineEnemyVelocity.Update(testEnemy.position, testEnemy.position + testEnemy.velocity);
 
             //TODO: Apply OBB's to all bones
-
             boxes[0].Update(playerOne.boundingBox);
             boxes[1].Update(playerTwo.boundingBox);
             boxes[2].Update(playerOne.turret.boundingBox);
@@ -205,17 +213,35 @@ namespace TankProject
             device.Viewport = upView;
             Skybox.Draw(device, currentCameraPlayerOne);
             Floor.Draw(currentCameraPlayerOne);
-            playerOne.Draw(currentCameraPlayerOne);
-            playerTwo.Draw(currentCameraPlayerOne);
+
+            foreach(Player p in playerList)
+            {
+                p.Draw(currentCameraPlayerOne);
+            }
+
             teste.Draw(device, currentCameraPlayerOne); //DELETE
-            testEnemy.Draw(device, currentCameraPlayerOne);
+
+            foreach(Enemy e in enemyList)
+            {
+                e.Draw(device, currentCameraPlayerOne);
+            }
+            
             Debug.Draw(currentCameraPlayerOne);
 
             device.Viewport = downView;
             Skybox.Draw(device, currentCameraPlayerTwo);
             Floor.Draw(currentCameraPlayerTwo);
-            playerOne.Draw(currentCameraPlayerTwo);
-            playerTwo.Draw(currentCameraPlayerTwo);
+
+            foreach (Player p in playerList)
+            {
+                p.Draw(currentCameraPlayerTwo);
+            }
+
+            foreach(Enemy e in enemyList)
+            {
+                e.Draw(device, currentCameraPlayerTwo);
+            }
+
             Debug.Draw(currentCameraPlayerTwo);
 
             device.Viewport = defaultView;

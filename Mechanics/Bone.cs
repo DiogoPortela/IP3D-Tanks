@@ -10,7 +10,7 @@ namespace TankProject
         internal OBB boundingBox;
 
         //--------------------Constructors--------------------//
-        internal Bone(Matrix boneMatrix, Vector3 objectPosition, Vector3 rotation, float scale) : base(boneMatrix.Translation * scale + objectPosition, rotation, Vector3.Zero)
+        internal Bone(Matrix boneMatrix, Vector3 objectPosition, Vector3 rotation, float scale) : base(boneMatrix.Translation * scale + objectPosition, rotation, Vector3.Zero, 0) //TODO: PODIAMOS DAR VIDA AOS BONES E FICAREM DISABLED QUANDO LEVAM DANO.
         {
             this.boneTransform = boneMatrix;
             this.Forward = boneMatrix.Forward;

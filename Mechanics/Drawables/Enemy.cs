@@ -65,7 +65,6 @@ namespace TankProject
 
             model.Root.Transform = Matrix.CreateScale(0.0005f) * rotationMatrix * Matrix.CreateTranslation(position);
             model.CopyAbsoluteBoneTransformsTo(boneTransformations);
-
         }
 
         internal void Draw(GraphicsDevice device, Camera cam)
