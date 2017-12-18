@@ -79,7 +79,9 @@ namespace TankProject
                 Vector3 repulsionAcceleration = Vector3.Zero;
                 for(int i = 0; i < neighboardhood.Count; i++)
                 {
-                    repulsionAcceleration += neighboardhoodDistanceNormalized[i] * (1.0f / neighboardhoodDistances[i]);
+                    if(!((1.0f / neighboardhoodDistances[i]) > float.MaxValue))
+                        repulsionAcceleration *= neighboardhoodDistanceNormalized[i] * (1.0f / neighboardhoodDistances[i]);
+
                 }
                 ///
 
