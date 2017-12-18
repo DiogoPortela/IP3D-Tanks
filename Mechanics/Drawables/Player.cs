@@ -41,7 +41,7 @@ namespace TankProject
         private static GameStage gameState;
 
         //test zone
-        Vector3 aceleration;
+        internal Vector3 aceleration;
         const float mass = 57000; //aprox. weight of a M1A1 Abrams
 
         //--------------------Constructors--------------------//
@@ -174,9 +174,12 @@ namespace TankProject
         //Inputs
         private void Move(GameTime gameTime)
         {
+            float theta = (float)(Math.Acos(Vector3.Dot(Forward, relativeForward)) /
+                                            Forward.Length() * relativeForward.Length());
+           
             if (Input.IsPressedDown(playerKeys.Forward) && !Input.IsPressedDown(playerKeys.Backward))
             {
-                ApplyForce(this.Forward * 5000f, 0f);
+                ApplyForce(this.Forward * 5000f, theta);
                 this.velocity += this.aceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.position += this.velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.rightFrontWheelAngle += MathHelper.ToRadians(10f);
@@ -186,7 +189,7 @@ namespace TankProject
             }
             else if (Input.IsPressedDown(playerKeys.Backward) && !Input.IsPressedDown(playerKeys.Forward))
             {
-                ApplyForce(-this.Forward * 5000f, 0);
+                ApplyForce(-this.Forward * 5000f, theta);
                 this.velocity += this.aceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.position += this.velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.rightFrontWheelAngle -= MathHelper.ToRadians(10f);
@@ -194,7 +197,7 @@ namespace TankProject
                 this.rightBackWheelAngle -= MathHelper.ToRadians(10f);
                 this.leftBackWheelAngle -= MathHelper.ToRadians(10f);
             }
-            ApplyForce(Vector3.Zero, 0f);
+            ApplyForce(Vector3.Zero, theta);
             this.velocity += this.aceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
             this.position += this.velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
@@ -212,7 +215,7 @@ namespace TankProject
                 if (Input.IsPressedDown(playerKeys.Forward))
                 {
                     rotation.Y += MathHelper.ToRadians(1f);
-
+                    
                 }
                 else if (Input.IsPressedDown(playerKeys.Backward))
                 {
