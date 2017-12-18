@@ -32,9 +32,7 @@ namespace TankProject
         internal List<Bullet> bulletList;
 
         //Player information
-
-        internal enum PlayerNumber { PlayerOne = 1, PlayerTwo };
-        private PlayerNumber playerNumber;
+        private PlayerIndex playerIndex;
 
         internal float hp;
 
@@ -62,7 +60,7 @@ namespace TankProject
 
         //--------------------Constructors--------------------//
 
-        internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float modelScale, PlayerNumber number, GameStage currentState)
+        internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float modelScale, PlayerIndex index, GameStage currentState)
             : base(position, rotation, velocity, 100)
         {
             this.hp = base.hp;
@@ -70,7 +68,7 @@ namespace TankProject
             this.relativeRight = this.Right = Vector3.Right;
             this.Up = Vector3.Up;
             this.modelScale = modelScale;
-            this.playerNumber = number;
+            this.playerIndex = index;
             bulletList = new List<Bullet>();
             SetPlayerKeys();
 
@@ -152,12 +150,12 @@ namespace TankProject
         }
         private void SetPlayerKeys()
         {
-            if (playerNumber == PlayerNumber.PlayerOne)
+            if (playerIndex == PlayerIndex.One)
             {
                 this.playerKeys = new PlayerKeys(Keys.W, Keys.S, Keys.A, Keys.D, Keys.Space,
                     Keys.O, Keys.Left, Keys.Right, Keys.Up, Keys.Down);
             }
-            else if (playerNumber == PlayerNumber.PlayerTwo)
+            else if (playerIndex == PlayerIndex.Two)
             {
                 this.playerKeys = new PlayerKeys(Keys.I, Keys.K, Keys.J, Keys.L, Keys.U,
                     Keys.D0, Keys.N, Keys.M, Keys.Y, Keys.H);
@@ -167,7 +165,9 @@ namespace TankProject
         //Inputs
         private void Move(GameTime gameTime)
         {
-            if (Input.IsPressedDown(playerKeys.Forward) && !Input.IsPressedDown(playerKeys.Backward))
+            if ((Input.IsPressedDown(playerKeys.Forward) && !Input.IsPressedDown(playerKeys.Backward)) ||
+                (Input.IsPressedDown(Buttons.DPadUp, playerIndex) && !Input.IsPressedDown(Buttons.DPadDown, playerIndex)) ||
+                (Input.IsPressedDown(Buttons.LeftThumbstickUp, playerIndex) && !Input.IsPressedDown(Buttons.LeftThumbstickDown, playerIndex)))
             {
                 this.position += this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.rightFrontWheelAngle += MathHelper.ToRadians(10f);
@@ -177,7 +177,9 @@ namespace TankProject
                 leftDirt.SetShouldSpawn(true);
                 rightDirt.SetShouldSpawn(true);
             }
-            else if (Input.IsPressedDown(playerKeys.Backward) && !Input.IsPressedDown(playerKeys.Forward))
+            else if ((Input.IsPressedDown(playerKeys.Backward) && !Input.IsPressedDown(playerKeys.Forward)) ||
+                     (Input.IsPressedDown(Buttons.DPadDown, playerIndex) && !Input.IsPressedDown(Buttons.DPadUp, playerIndex)) ||
+                     (Input.IsPressedDown(Buttons.LeftThumbstickDown, playerIndex) && !Input.IsPressedDown(Buttons.LeftThumbstickUp, playerIndex)))
             {
                 this.position -= this.relativeForward * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 this.rightFrontWheelAngle -= MathHelper.ToRadians(10f);
@@ -195,24 +197,36 @@ namespace TankProject
                 rotation.X = 0; //TODO: END: VER SE ISTO ESTA A FAZER ALGUMA COISA?
 
             #region wheels and movement
-            if (Input.IsPressedDown(playerKeys.Left) && !Input.IsPressedDown(playerKeys.Right))
+            if ((Input.IsPressedDown(playerKeys.Left) && !Input.IsPressedDown(playerKeys.Right)) ||
+                (Input.IsPressedDown(Buttons.DPadLeft, playerIndex) && !Input.IsPressedDown(Buttons.DPadRight, playerIndex)) ||
+                (Input.IsPressedDown(Buttons.LeftThumbstickLeft, playerIndex) && !Input.IsPressedDown(Buttons.LeftThumbstickRight, playerIndex)))
             {
                 rightSteerAngle = MathHelper.ToRadians(10f);
                 leftSteerAngle = MathHelper.ToRadians(10f);
 
-                if (Input.IsPressedDown(playerKeys.Forward))
+                if (Input.IsPressedDown(playerKeys.Forward) ||
+                    Input.IsPressedDown(Buttons.DPadUp, playerIndex) ||
+                    Input.IsPressedDown(Buttons.LeftThumbstickUp, playerIndex))
                     rotation.Y += MathHelper.ToRadians(1f);
-                else if (Input.IsPressedDown(playerKeys.Backward))
+                else if (Input.IsPressedDown(playerKeys.Backward) ||
+                         Input.IsPressedDown(Buttons.DPadDown, playerIndex) ||
+                         Input.IsPressedDown(Buttons.LeftThumbstickDown, playerIndex))
                     rotation.Y -= MathHelper.ToRadians(1f);
             }
-            else if (Input.IsPressedDown(playerKeys.Right) && !Input.IsPressedDown(playerKeys.Left))
+            else if ((Input.IsPressedDown(playerKeys.Right) && !Input.IsPressedDown(playerKeys.Left)) ||
+                     (Input.IsPressedDown(Buttons.DPadRight, playerIndex) && !Input.IsPressedDown(Buttons.DPadLeft, playerIndex)) ||
+                     (Input.IsPressedDown(Buttons.LeftThumbstickRight, playerIndex) && !Input.IsPressedDown(Buttons.LeftThumbstickLeft, playerIndex)))
             {
                 rightSteerAngle = MathHelper.ToRadians(-10f);
                 leftSteerAngle = MathHelper.ToRadians(-10f);
 
-                if (Input.IsPressedDown(playerKeys.Forward))
+                if (Input.IsPressedDown(playerKeys.Forward) ||
+                    Input.IsPressedDown(Buttons.DPadUp, playerIndex) ||
+                    Input.IsPressedDown(Buttons.LeftThumbstickUp, playerIndex))
                     rotation.Y -= MathHelper.ToRadians(1f);
-                else if (Input.IsPressedDown(playerKeys.Backward))
+                else if (Input.IsPressedDown(playerKeys.Backward) ||
+                         Input.IsPressedDown(Buttons.DPadDown, playerIndex) ||
+                         Input.IsPressedDown(Buttons.LeftThumbstickDown, playerIndex))
                     rotation.Y += MathHelper.ToRadians(1f);
 
             }
@@ -224,26 +238,31 @@ namespace TankProject
             #endregion
 
             #region canhao
-            if (Input.IsPressedDown(playerKeys.CannonUp) && !Input.IsPressedDown(playerKeys.CannonDown))
+            if ((Input.IsPressedDown(playerKeys.CannonUp) && !Input.IsPressedDown(playerKeys.CannonDown)) ||
+                (Input.IsPressedDown(Buttons.RightThumbstickUp, playerIndex) && !Input.IsPressedDown(Buttons.RightThumbstickDown, playerIndex)))
             {
                 if (this.cannon.rotation.X >= -Math.PI / 4)
                     this.cannon.rotation.X -= MathHelper.ToRadians(1f);
             }
-            else if (Input.IsPressedDown(playerKeys.CannonDown) && !Input.IsPressedDown(playerKeys.CannonUp))
+            else if ((Input.IsPressedDown(playerKeys.CannonDown) && !Input.IsPressedDown(playerKeys.CannonUp)) ||
+                     (Input.IsPressedDown(Buttons.RightThumbstickDown, playerIndex) && !Input.IsPressedDown(Buttons.RightThumbstickUp, playerIndex)))
                 if (this.cannon.rotation.X <= 0)
                     this.cannon.rotation.X += MathHelper.ToRadians(1f);
             #endregion
 
             #region torre
-            if (Input.IsPressedDown(playerKeys.TurretLeft) && !Input.IsPressedDown(playerKeys.TurretRight))
+            if ((Input.IsPressedDown(playerKeys.TurretLeft) && !Input.IsPressedDown(playerKeys.TurretRight)) ||
+                (Input.IsPressedDown(Buttons.RightThumbstickLeft, playerIndex) && !Input.IsPressedDown(Buttons.RightThumbstickRight, playerIndex)))
                 this.turret.rotation.Y += MathHelper.ToRadians(1f);
-            else if (Input.IsPressedDown(playerKeys.TurretRight) && !Input.IsPressedDown(playerKeys.TurretLeft))
+            else if ((Input.IsPressedDown(playerKeys.TurretRight) && !Input.IsPressedDown(playerKeys.TurretLeft)) ||
+                     (Input.IsPressedDown(Buttons.RightThumbstickRight, playerIndex) && !Input.IsPressedDown(Buttons.RightThumbstickLeft, playerIndex)))
                 this.turret.rotation.Y -= MathHelper.ToRadians(1f);
             #endregion
         }
         private void UpdateHatchet(GameTime gameTime)
         {
-            if (Input.WasPressed(playerKeys.HatchetOpen))
+            if (Input.WasPressed(playerKeys.HatchetOpen) ||
+                Input.WasPressed(Buttons.Y, playerIndex))
                 isOpenning = !isOpenning;
 
             if (hatchetAngle <= Math.PI / 2f && isOpenning)
@@ -324,7 +343,9 @@ namespace TankProject
 
             tankModel.CopyAbsoluteBoneTransformsTo(boneTransformations);
             boundingBox.Update(position, Forward, Right, Up);
-            if (Input.WasPressed(playerKeys.Shoot))
+            if (Input.WasPressed(playerKeys.Shoot) ||
+                Input.WasPressed(Buttons.RightTrigger, playerIndex) ||
+                Input.WasPressed(Buttons.LeftTrigger, playerIndex))
             {
                 Shoot();
             }

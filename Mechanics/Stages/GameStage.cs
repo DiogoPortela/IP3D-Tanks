@@ -51,10 +51,10 @@ namespace TankProject
             //Load Players
             playerList = new List<Player>();
             enemyList = new List<Enemy>();
-            playerOne = new Player(new Vector3(64, 10, 64), Vector3.Zero, Vector3.Zero, 0.0005f, Player.PlayerNumber.PlayerOne, this);
+            playerOne = new Player(new Vector3(64, 10, 64), Vector3.Zero, Vector3.Zero, 0.0005f, PlayerIndex.One, this);
             playerOne.LoadModelBones(content, Material.White, currentLight);
             playerList.Add(playerOne);
-            playerTwo = new Player(new Vector3(65, 10, 65), Vector3.Zero, Vector3.Zero, 0.0005f, Player.PlayerNumber.PlayerTwo, this);
+            playerTwo = new Player(new Vector3(65, 10, 65), Vector3.Zero, Vector3.Zero, 0.0005f, PlayerIndex.Two, this);
             playerTwo.LoadModelBones(content, Material.White, currentLight);
             playerList.Add(playerTwo);
 
