@@ -65,6 +65,7 @@
     <Compile Include="Mechanics\Drawables\Player.cs" />
     <Compile Include="Mechanics\Physics.cs" />
     <Compile Include="Mechanics\PlayerKeys.cs" />
+    <Compile Include="Mechanics\Stages\EscStage.cs" />
     <Compile Include="Mechanics\Stages\GameStage.cs" />
     <Compile Include="Mechanics\Stages\MenuStage.cs" />
     <Compile Include="Mechanics\Stages\Stage.cs" />

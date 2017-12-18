@@ -228,7 +228,6 @@ namespace TankProject
                 #endregion
 
             }
-
         }
         private void SmokeUpdate(GameTime gameTime)
         {
@@ -262,12 +261,15 @@ namespace TankProject
         internal void Draw(GraphicsDevice device, Camera camera)
         {
             device.BlendState = BlendState.AlphaBlend;
+            device.DepthStencilState = DepthStencilState.None;
+
             effect.Texture = particleTexture;
             effect.View = camera.ViewMatrix;
             effect.Projection = camera.ProjectionMatrix;
             foreach (Particle p in currentParticles)
                 p.Draw(device, ref effect, ref camera);
             device.BlendState = BlendState.Opaque;
+            device.DepthStencilState = DepthStencilState.Default;
         }
     }
 }

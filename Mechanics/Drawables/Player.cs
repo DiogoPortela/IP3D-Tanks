@@ -380,6 +380,7 @@ namespace TankProject
                     effect.World = boneTransformations[mesh.ParentBone.Index];
                     effect.View = cam.ViewMatrix;
                     effect.Projection = cam.ProjectionMatrix;
+                    effect.CurrentTechnique.Passes[0].Apply();
                 }
                 mesh.Draw();
             }

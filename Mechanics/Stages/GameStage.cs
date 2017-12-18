@@ -31,7 +31,7 @@ namespace TankProject
         ParticleSystem teste;
 
         //--------------------Constructors--------------------//
-        internal GameStage(ContentManager content, GraphicsDevice device)
+        internal GameStage(Game1 game1) : base (game1)
         {
             #region Camera. Split screen
             //Viewports           
@@ -44,22 +44,22 @@ namespace TankProject
             #endregion
 
             currentLight = new Light(-Vector3.One, new Color(new Vector3(0.5f, 0.5f, 0.5f)), new Color(new Vector3(0.1f, 0.1f, 0.1f)));
-            Bullet.LoadModel(content, Material.White, currentLight);
-            Skybox.Load(content);
-            Enemy.Load(content, Material.White, currentLight);
+            Bullet.LoadModel(game1.Content, Material.White, currentLight);
+            Skybox.Load(game1.Content);
+            Enemy.Load(game1.Content, Material.White, currentLight);
 
             //Load Players
             playerList = new List<Player>();
             enemyList = new List<Enemy>();
             playerOne = new Player(new Vector3(64, 10, 64), Vector3.Zero, Vector3.Zero, 0.0005f, PlayerIndex.One, this);
-            playerOne.LoadModelBones(content, Material.White, currentLight);
+            playerOne.LoadModelBones(game1.Content, Material.White, currentLight);
             playerList.Add(playerOne);
             playerTwo = new Player(new Vector3(65, 10, 65), Vector3.Zero, Vector3.Zero, 0.0005f, PlayerIndex.Two, this);
-            playerTwo.LoadModelBones(content, Material.White, currentLight);
+            playerTwo.LoadModelBones(game1.Content, Material.White, currentLight);
             playerList.Add(playerTwo);
 
-            currentCameraPlayerOne = new CameraThirdPersonFixed(device, new Vector3(64, 5, 65), playerOne.turret, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f), upView.AspectRatio);
-            currentCameraPlayerTwo = new CameraThirdPersonFixed(device, new Vector3(64, 5, 65), playerTwo.turret, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f), downView.AspectRatio);
+            currentCameraPlayerOne = new CameraThirdPersonFixed(game1.GraphicsDevice, new Vector3(64, 5, 65), playerOne.turret, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f), upView.AspectRatio);
+            currentCameraPlayerTwo = new CameraThirdPersonFixed(game1.GraphicsDevice, new Vector3(64, 5, 65), playerTwo.turret, 2.0f, new Vector3(0.0f, 0.1f, 1.0f), new Vector3(-0.2f, 0.3f, 0.2f), downView.AspectRatio);
 
             Random r = new Random();
             enemyList = new List<Enemy>();
@@ -70,7 +70,7 @@ namespace TankProject
 
             particleSystemList = new List<ParticleSystem>();
 
-            Floor.Start(content, currentCameraPlayerOne, Material.White, currentLight);
+            Floor.Start(game1.Content, currentCameraPlayerOne, Material.White, currentLight);
 
             //TODO: END: CLEAN THIS BEFORE END
             //DEBUG
@@ -88,7 +88,7 @@ namespace TankProject
             Debug.AddLine("4", debugLine4);
             Debug.AddLine("5", debugLine5);
             Debug.AddLine("6", debugLine6);
-            teste = new ParticleSystem(ParticleType.Rain, new Vector3(64, 64, 64), new ParticleSpawner(30, false), content, 1000, 1000, 1);
+            teste = new ParticleSystem(ParticleType.Rain, new Vector3(64, 64, 64), new ParticleSpawner(30, false), game1.Content, 1000, 1000, 1);
 
             boxes = new List<DebugBox>();
             boxes.Add(new DebugBox(playerOne.boundingBox));
@@ -108,6 +108,9 @@ namespace TankProject
         //--------------------Functions--------------------//
         internal override void Update(GameTime gameTime)
         {
+            if (Input.WasPressed(Keys.Escape))
+                thisGame.ChangeCurrentStage(new EscStage(this, thisGame));
+
             #region Player One Camera
             if (Input.IsPressedDown(Keys.F1) && !(currentCameraPlayerOne is CameraThirdPerson))
             {
@@ -221,7 +224,7 @@ namespace TankProject
                 playerOne.position = tempPosition;
             }
         }
-        internal override void Draw(GraphicsDevice device)
+        internal override void Draw(GraphicsDevice device, SpriteBatch batch)
         {
             device.Viewport = upView;
             Skybox.Draw(device, currentCameraPlayerOne);

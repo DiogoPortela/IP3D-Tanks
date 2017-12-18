@@ -109,7 +109,7 @@ namespace TankProject
         }
         internal static bool LeftMouseClick()
         {
-            return (MouseState.LeftButton == ButtonState.Pressed);
+            return (MouseState.LeftButton == ButtonState.Pressed && LastFrameMouseState.LeftButton == ButtonState.Released);
         }
 
         //--------------------Update&Draw--------------------//

@@ -36,6 +36,10 @@ namespace TankProject
             graphics.PreferredBackBufferHeight = 800;
             graphics.ApplyChanges();
 
+            this.Window.IsBorderless = true;
+            this.Window.Title = "Super Awesome Game";
+            this.IsMouseVisible = true;
+
             base.Initialize();
         }
 
@@ -47,7 +51,8 @@ namespace TankProject
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            currentStage = new GameStage(Content, GraphicsDevice);
+            currentStage = new MenuStage(this);
+            Button.Load(Content);
         }
 
         /// <summary>
@@ -65,9 +70,6 @@ namespace TankProject
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
             Input.Update();
 
             currentStage.Update(gameTime);
@@ -84,9 +86,27 @@ namespace TankProject
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            currentStage.Draw(GraphicsDevice);
-
+            currentStage.Draw(GraphicsDevice, spriteBatch);
             base.Draw(gameTime);
+           
+        }
+
+        internal void ChangeCurrentStage(Stage changeTo)
+        {
+            if (changeTo is EscStage || changeTo is MenuStage)
+                IsMouseVisible = true;
+            else if(changeTo is GameStage)
+            {
+                GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+                GraphicsDevice.BlendState = BlendState.Opaque;
+                GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+                IsMouseVisible = false;
+            }
+            currentStage = changeTo;
+        }
+        internal void Quit()
+        {
+            Exit();
         }
     }
 }
