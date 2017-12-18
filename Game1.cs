@@ -14,7 +14,7 @@ namespace TankProject
         internal static GraphicsDeviceManager graphics;
         internal static SpriteBatch spriteBatch;
 
-        private static Stage currentStage;
+        internal static Stage currentStage;
 
         public Game1()
         {

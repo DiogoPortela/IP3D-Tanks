@@ -10,20 +10,39 @@ namespace TankProject
     class Boid : GameObject
     {
         private const float MAX_VELOCITY = 0.02f;
-        private const float MAX_ROTATION = 1.0f;
+        private const float MAX_ROTATION = 2.0f;
         private Vector3 seekVelocity;
         private Vector3 acceleration;
 
-        List<Boid> neighboardhood;
+        private List<Boid> neighboardhood;
+        private List<float> neighboardhoodDistances;
+        private List<Vector3> neighboardhoodDistanceNormalized;
 
-        internal Boid(Vector3 position, Vector3 rotation) : base(position, rotation, Vector3.Zero, 100)
+        private GameStage game;
+
+        internal Boid(Vector3 position, Vector3 rotation, GameStage game) : base(position, rotation, Vector3.Zero, 100)
         {
             this.position = position;
             acceleration = velocity = seekVelocity = Vector3.Zero;
+            this.game = game;
         }
 
         internal virtual void Update(Vector3 targetPosition, GameTime deltaTime)
         {
+            neighboardhood = new List<Boid>();
+            neighboardhoodDistances = new List<float>();
+            neighboardhoodDistanceNormalized = new List<Vector3>();
+            foreach (Boid b in game.enemyList)
+            {
+                float d = (this.position - b.position).Length();
+                if (d < 3.0f)
+                {
+                    neighboardhood.Add(b);
+                    neighboardhoodDistances.Add(d);
+                    neighboardhoodDistanceNormalized.Add(Vector3.Normalize(this.position - b.position));
+                }
+            }
+
             if ((targetPosition - position).Length() > 0.5f)
             {
                 if (velocity == Vector3.Zero)
@@ -56,18 +75,30 @@ namespace TankProject
                     acceleration = Vector3.Transform(acceleration, angleRotation);
                 }
 
+                ///
+                Vector3 repulsionAcceleration = Vector3.Zero;
+                for(int i = 0; i < neighboardhood.Count; i++)
+                {
+                    repulsionAcceleration += neighboardhoodDistanceNormalized[i] * (1.0f / neighboardhoodDistances[i]);
+                }
+                ///
+
+                acceleration = (acceleration + repulsionAcceleration) / 2;
+
                 velocity += acceleration * (float)deltaTime.ElapsedGameTime.TotalSeconds;
                 if (velocity.Length() > MAX_VELOCITY)
                     velocity = Vector3.Normalize(velocity) * MAX_VELOCITY;
 
                 relativeForward = Vector3.Normalize(velocity);
                 relativeRight = Vector3.Cross(relativeForward, Vector3.Up);
+
             }
             else
             {
                 acceleration = Vector3.Zero;
                 velocity = Vector3.Zero;
             }
+
             this.position += velocity;
         }
     }

@@ -65,7 +65,7 @@ namespace TankProject
             enemyList = new List<Enemy>();
             for(int i = 0; i < 60; i++)
             {
-                enemyList.Add(new Enemy(new Vector3((float)r.NextDouble() * 128.0f, 0, (float)r.NextDouble() * 128.0f), Vector3.Zero));
+                enemyList.Add(new Enemy(new Vector3((float)r.NextDouble() * 128.0f, 0, (float)r.NextDouble() * 128.0f), Vector3.Zero, this));
             }
 
             particleSystemList = new List<ParticleSystem>();

@@ -12,7 +12,7 @@ namespace TankProject
         internal Matrix[] boneTransformations;
 
 
-        internal Enemy(Vector3 position, Vector3 rotation) : base(position, rotation)
+        internal Enemy(Vector3 position, Vector3 rotation, GameStage game) : base(position, rotation, game)
         {
             this.relativeForward = this.Forward = Vector3.Forward;
             this.relativeRight = this.Right = Vector3.Right;
@@ -21,7 +21,7 @@ namespace TankProject
 
         internal static void Load(ContentManager content, Material material, Light light)
         {
-            model = content.Load<Model>("tank");
+            model = content.Load<Model>("body");
 
             foreach (ModelMesh mesh in model.Meshes)
             {
@@ -50,13 +50,13 @@ namespace TankProject
             Vector2 positionXZ = new Vector2(position.X, position.Z);
             Vector2 roundedPositionXZ = new Vector2((int)this.position.X, (int)this.position.Z);
 
-            try
+            if(position.X > 0 && position.X < Floor.heightMap.Width - 1 && position.Y > 0 && position.Y < Floor.heightMap.Height - 1)
             {
                 this.position.Y = TANK_HEIGHT_FROM_FLOOR + Interpolation.BiLinear(positionXZ, roundedPositionXZ, 1.0f,
             Floor.VerticesHeight[(int)positionXZ.X, (int)positionXZ.Y], Floor.VerticesHeight[(int)positionXZ.X + 1, (int)positionXZ.Y],
             Floor.VerticesHeight[(int)positionXZ.X, (int)positionXZ.Y + 1], Floor.VerticesHeight[(int)positionXZ.X + 1, (int)positionXZ.Y + 1]);
             }
-            catch
+            else
             {
                 this.position.Y = 1;
             }
@@ -67,13 +67,13 @@ namespace TankProject
             Vector2 positionXZ = new Vector2(position.X, position.Z);
             Vector2 roundedPositionXZ = new Vector2((int)this.position.X, (int)this.position.Z);
 
-            try
+            if(position.X > 0 && position.X < Floor.heightMap.Width - 1 && position.Y > 0 && position.Y < Floor.heightMap.Height - 1)
             {
                 this.Up = Interpolation.BiLinear(positionXZ, roundedPositionXZ, 1.0f,
                 Floor.VerticesNormals[(int)positionXZ.X, (int)positionXZ.Y], Floor.VerticesNormals[(int)positionXZ.X + 1, (int)positionXZ.Y],
                 Floor.VerticesNormals[(int)positionXZ.X, (int)positionXZ.Y + 1], Floor.VerticesNormals[(int)positionXZ.X + 1, (int)positionXZ.Y + 1]);
             }
-            catch
+            else
             {
                 this.Up = Vector3.Up;
             }
@@ -100,7 +100,7 @@ namespace TankProject
             rotationMatrix.Forward = -this.Forward;
             rotationMatrix.Right = -this.Right;
 
-            model.Root.Transform = Matrix.CreateScale(0.0005f) * rotationMatrix * Matrix.CreateTranslation(position);
+            model.Root.Transform = Matrix.CreateScale(0.002f) * rotationMatrix * Matrix.CreateTranslation(position);
             model.CopyAbsoluteBoneTransformsTo(boneTransformations);
         }
 
