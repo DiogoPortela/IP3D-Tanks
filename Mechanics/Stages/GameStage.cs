@@ -24,7 +24,7 @@ namespace TankProject
 
         internal static Light currentLight;
 
-        //DEBUG
+        /*//DEBUG
         DebugLine debugLine1;
         DebugLine debugLine2;
         DebugLine debugLine3;
@@ -32,7 +32,7 @@ namespace TankProject
         DebugLine debugLine5;
         DebugLine debugLine6;
 
-        List<DebugBox> boxes;
+        List<DebugBox> boxes;*/
 
         //--------------------Constructors--------------------//
         internal GameStage(Game1 game1) : base (game1)
@@ -80,7 +80,7 @@ namespace TankProject
 
             //TODO: END: CLEAN THIS BEFORE END
             //DEBUG
-
+            /*
             debugLine1 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Forward, Color.Blue);
             debugLine2 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Right, Color.Red);
             debugLine3 = new DebugLine(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Up, Color.Green);
@@ -111,13 +111,13 @@ namespace TankProject
             {
                 Debug.AddBox(aux.ToString(), b);
                 aux++;
-            }
+            }*/
         }
 
         //--------------------Functions--------------------//
         internal override void Update(GameTime gameTime)
         {
-            if (Input.WasPressed(Keys.Escape))
+            if (Input.WasPressed(Keys.Escape) || Input.WasPressed(Buttons.Start, PlayerIndex.One))
                 thisGame.ChangeCurrentStage(new EscStage(this, thisGame));
 
             #region Player One Camera
@@ -191,7 +191,7 @@ namespace TankProject
                 else
                 {
                     //TODO: explosion on tank ?and gameover screen?
-                }
+                }   
             }
 
             #region Collisions between players and enemies
@@ -202,17 +202,13 @@ namespace TankProject
                 {
                     for (int j = enemyList.Count - 1; j >= 0; j--)
                     {
-                        try
+                        if((p.bulletList[i].position - enemyList[j].position).Length() < 1 && OBB.AreColliding(p.bulletList[i].boundingBox, enemyList[j].boundingBox))
                         {
-                            if (OBB.AreColliding(p.bulletList[i].boundingBox, enemyList[j].boundingBox))
-                            {
-                                p.bulletList.Remove(p.bulletList[i]);
-                                enemyList.Remove(enemyList[j]);
-                            }
-                        }
-                        catch
-                        {
-                            Console.WriteLine("DEU MERDA");
+                            p.bulletList.Remove(p.bulletList[i]);
+                            enemyList.Remove(enemyList[j]);
+                            i--;
+                            if (i < 0)
+                                break;
                         }
                     }
                 }
@@ -256,6 +252,7 @@ namespace TankProject
 
             //TODO: DELETE AT END
             //DEBUG SECTION
+            /*
             debugLine1.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Forward);
             debugLine2.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Right);
             debugLine3.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Up);
@@ -272,9 +269,16 @@ namespace TankProject
             boxes[4].Update(playerTwo.turret.boundingBox);
             boxes[5].Update(playerTwo.cannon.boundingBox);
 
-            for(int i = 6; i < boxes.Count-1; i++)
+            //for(int i = 6; i < boxes.Count-1; i++)
+            //{
+            //    boxes[i].Update(enemyList[i - 6].boundingBox);
+            //}
+            */
+
+            //TODO: apply to all objects
+            if (OBB.AreColliding(playerOne.boundingBox, playerTwo.boundingBox))
             {
-                boxes[i].Update(enemyList[i - 6].boundingBox);
+                playerOne.position = playerOne.lastFramePosition;
             }
         }
         internal override void Draw(GraphicsDevice device, SpriteBatch batch)
