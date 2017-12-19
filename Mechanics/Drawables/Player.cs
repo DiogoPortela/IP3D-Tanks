@@ -35,6 +35,7 @@ namespace TankProject
         private PlayerIndex playerIndex;
 
         internal float hp;
+        internal int score;
 
         private PlayerKeys playerKeys;
     
@@ -65,6 +66,7 @@ namespace TankProject
             : base(position, rotation, velocity, 100)
         {
             this.hp = base.hp;
+            this.score = 0;
             this.relativeForward = this.Forward = Vector3.Forward;
             this.relativeRight = this.Right = Vector3.Right;
             this.Up = Vector3.Up;

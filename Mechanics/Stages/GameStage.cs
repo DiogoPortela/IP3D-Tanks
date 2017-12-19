@@ -209,6 +209,7 @@ namespace TankProject
                     {
                         if((p.bulletList[i].position - enemyList[j].position).Length() < 1 && OBB.AreColliding(p.bulletList[i].boundingBox, enemyList[j].boundingBox))
                         {
+                            p.score += (int)Vector3.Distance(p.position, enemyList[j].position) * 50;
                             p.bulletList.Remove(p.bulletList[i]);
                             enemyList.Remove(enemyList[j]);
                             i--;
