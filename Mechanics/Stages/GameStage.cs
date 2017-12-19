@@ -194,22 +194,51 @@ namespace TankProject
                 }
             }
 
+            #region Collisions between players and enemies
             foreach(Player p in playerList)
             {
+                #region bullets and enemies
                 for (int i = p.bulletList.Count - 1; i >= 0; i--)
                 {
                     for (int j = enemyList.Count - 1; j >= 0; j--)
                     {
-                        if(OBB.AreColliding(p.bulletList[i].boundingBox, enemyList[j].boundingBox))
+                        try
                         {
-                            p.bulletList.Remove(p.bulletList[i]);
-                            enemyList.Remove(enemyList[j]);
+                            if (OBB.AreColliding(p.bulletList[i].boundingBox, enemyList[j].boundingBox))
+                            {
+                                p.bulletList.Remove(p.bulletList[i]);
+                                enemyList.Remove(enemyList[j]);
+                            }
+                        }
+                        catch
+                        {
+                            Console.WriteLine("DEU MERDA");
                         }
                     }
                 }
-            }
+                #endregion
 
-            foreach(Enemy e in enemyList)
+                #region tank and enemies
+                foreach(Enemy e in enemyList)
+                {
+                    if(OBB.AreColliding(p.boundingBox, e.boundingBox))
+                    {
+                        e.position = e.lastFramePosition;
+                        p.position = p.lastFramePosition;
+                    }
+                }
+                #endregion
+            }
+            #endregion
+            #region Collision between players
+            if (OBB.AreColliding(playerOne.boundingBox, playerTwo.boundingBox))
+            {
+                playerOne.position = playerOne.lastFramePosition;
+                playerTwo.position = playerTwo.lastFramePosition;
+            }
+            #endregion
+
+            foreach (Enemy e in enemyList)
             {
                 if((e.position - playerOne.position).Length() < (e.position - playerTwo.position).Length())
                 {
@@ -235,7 +264,7 @@ namespace TankProject
             debugLine5.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Right);
             debugLine6.Update(playerOne.turret.position, playerOne.turret.position + playerOne.turret.Up);
 
-            //TODO: Apply OBB's to all bones
+            //TODO: fix cannon box
             boxes[0].Update(playerOne.boundingBox);
             boxes[1].Update(playerTwo.boundingBox);
             boxes[2].Update(playerOne.turret.boundingBox);
@@ -246,12 +275,6 @@ namespace TankProject
             for(int i = 6; i < boxes.Count-1; i++)
             {
                 boxes[i].Update(enemyList[i - 6].boundingBox);
-            }
-
-            //TODO: apply to all objects
-            if (OBB.AreColliding(playerOne.boundingBox, playerTwo.boundingBox))
-            {
-                playerOne.position = playerOne.lastFramePosition;
             }
         }
         internal override void Draw(GraphicsDevice device, SpriteBatch batch)
