@@ -7,22 +7,27 @@ namespace TankProject
     class Enemy : Boid
     {
         private static Model model;
-        private const float TANK_HEIGHT_FROM_FLOOR = 0.01f;
-        internal Matrix[] boneTransformations;
         private float modelScale;
-
+        private const float TANK_HEIGHT_FROM_FLOOR = 0.01f;
+        internal Vector3 lastFramePosition;
+        internal Matrix[] boneTransformations;
+        internal OBB boundingBox;
 
         internal Enemy(Vector3 position, Vector3 rotation, float modelScale, GameStage game) : base(position, rotation, game)
         {
             this.relativeForward = this.Forward = Vector3.Forward;
             this.relativeRight = this.Right = Vector3.Right;
-            boneTransformations = new Matrix[model.Bones.Count];
+            this.lastFramePosition = position;
             this.modelScale = modelScale;
+            boneTransformations = new Matrix[model.Bones.Count];
+
+            this.boundingBox = OBB.CreateFromSphereForEnemies(model.Meshes[0].BoundingSphere, position, 0.04f, base.rotationMatrix); ;
         }
 
         internal static void Load(ContentManager content, Material material, Light light)
         {
             model = content.Load<Model>("body");
+
             foreach (ModelMesh mesh in model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
@@ -88,6 +93,7 @@ namespace TankProject
 
         internal override void Update(Vector3 targetPosition, GameTime deltaTime)
         {
+            lastFramePosition = position;
             base.Update(targetPosition, deltaTime);
 
             HeightFollow();
@@ -100,6 +106,7 @@ namespace TankProject
 
             model.Root.Transform = Matrix.CreateScale(modelScale) * rotationMatrix * Matrix.CreateTranslation(position);
             model.CopyAbsoluteBoneTransformsTo(boneTransformations);
+            this.boundingBox.Update(this.position, rotationMatrix.Forward, rotationMatrix.Right, rotationMatrix.Up);
         }
 
         internal void Draw(GraphicsDevice device, Camera cam)
@@ -115,6 +122,5 @@ namespace TankProject
                 mesh.Draw();
             }
         }
-
     }
 }

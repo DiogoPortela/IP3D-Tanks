@@ -49,6 +49,15 @@ namespace TankProject
             return new OBB((sphere.Center - aux) * scale, (sphere.Center + aux) * scale, position, rotationMatrix);
         }
 
+        internal static OBB CreateFromSphereForEnemies(BoundingSphere sphere, Vector3 position, float scale, Matrix rotationMatrix)
+        {
+            Vector3 aux = new Vector3(sphere.Radius);
+            Vector3 aux2 = aux;
+            aux2.Y *= 8.4f;
+
+            return new OBB((sphere.Center - aux) * scale, (sphere.Center + aux2) * scale, position, rotationMatrix);
+        }
+
         internal Vector3[] GetCorners()
         {
             return corners;

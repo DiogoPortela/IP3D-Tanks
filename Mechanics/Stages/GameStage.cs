@@ -102,6 +102,10 @@ namespace TankProject
             boxes.Add(new DebugBox(playerOne.cannon.boundingBox));
             boxes.Add(new DebugBox(playerTwo.turret.boundingBox));
             boxes.Add(new DebugBox(playerTwo.cannon.boundingBox));
+            foreach(Enemy e in enemyList)
+            {
+                boxes.Add(new DebugBox(e.boundingBox));
+            }
             int aux = 0;
             foreach (DebugBox b in boxes)
             {
@@ -180,8 +184,6 @@ namespace TankProject
                     currentCameraPlayerTwo = new CameraFree(currentCameraPlayerTwo);
             }
 
-            Vector3 tempPosition = playerOne.position;  //TODO: CLEAN
-
             foreach(Player p in playerList)
             {
                 if(p.hp > 0)
@@ -189,6 +191,21 @@ namespace TankProject
                 else
                 {
                     //TODO: explosion on tank ?and gameover screen?
+                }
+            }
+
+            foreach(Player p in playerList)
+            {
+                for (int i = p.bulletList.Count - 1; i >= 0; i--)
+                {
+                    for (int j = enemyList.Count - 1; j >= 0; j--)
+                    {
+                        if(OBB.AreColliding(p.bulletList[i].boundingBox, enemyList[j].boundingBox))
+                        {
+                            p.bulletList.Remove(p.bulletList[i]);
+                            enemyList.Remove(enemyList[j]);
+                        }
+                    }
                 }
             }
 
@@ -226,10 +243,15 @@ namespace TankProject
             boxes[4].Update(playerTwo.turret.boundingBox);
             boxes[5].Update(playerTwo.cannon.boundingBox);
 
+            for(int i = 6; i < boxes.Count-1; i++)
+            {
+                boxes[i].Update(enemyList[i - 6].boundingBox);
+            }
+
             //TODO: apply to all objects
             if (OBB.AreColliding(playerOne.boundingBox, playerTwo.boundingBox))
             {
-                playerOne.position = tempPosition;
+                playerOne.position = playerOne.lastFramePosition;
             }
         }
         internal override void Draw(GraphicsDevice device, SpriteBatch batch)

@@ -41,7 +41,8 @@ namespace TankProject
         private static GameStage gameState;
 
         //test zone
-        Vector3 aceleration;
+        internal Vector3 lastFramePosition;
+        private Vector3 aceleration;
 
         private ParticleSystem leftSmoke;
         private Vector3 leftSmokeOffset;
@@ -69,6 +70,7 @@ namespace TankProject
             this.Up = Vector3.Up;
             this.modelScale = modelScale;
             this.playerIndex = index;
+            this.lastFramePosition = position;
             bulletList = new List<Bullet>();
             SetPlayerKeys();
 
@@ -304,6 +306,7 @@ namespace TankProject
         {
             leftDirt.SetShouldSpawn(false);
             rightDirt.SetShouldSpawn(false);
+            lastFramePosition = position;
             Move(gameTime);
             Rotate(gameTime);
             UpdateHatchet(gameTime);
@@ -350,10 +353,9 @@ namespace TankProject
             for(int i = bulletList.Count - 1; i >= 0; i--)
             {
                 bulletList[i].Update(gameTime);
-                if (bulletList[i].position.Y <= 0 || OBB.AreColliding(bulletList[i].boundingBox, gameState.playerTwo.boundingBox))
+                if (bulletList[i].position.Y <= 0)
                 {
                     bulletList.Remove(bulletList[i]);
-                    gameState.playerTwo.hp -= 25f;
                 }
             }
 
