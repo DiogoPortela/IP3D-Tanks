@@ -24,7 +24,7 @@ namespace TankProject
             {
                 if(back.IsPointInside(Input.MouseState.Position))
                 {
-                    thisGame.ChangeCurrentStage(previousStage);
+                    thisGame.ChangeCurrentStage(this, previousStage);
                 }
             }
         }

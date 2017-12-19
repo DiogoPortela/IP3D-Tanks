@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 
 namespace TankProject
 {
@@ -21,6 +21,7 @@ namespace TankProject
         internal ParticleSystem playerOneRain;
         internal ParticleSystem playerTwoRain;
 
+        private SoundEffectInstance engineSoundFX;
 
         internal static Light currentLight;
 
@@ -75,8 +76,12 @@ namespace TankProject
             playerOneRain = new ParticleSystem(ParticleType.Rain, new Vector3(64, 64, 64), new ParticleSpawner(30, false), game1.Content, 1000, 1000, 1);
             playerTwoRain = new ParticleSystem(ParticleType.Rain, new Vector3(64, 64, 64), new ParticleSpawner(30, false), game1.Content, 1000, 1000, 1);
 
-
             Floor.Start(game1.Content, currentCameraPlayerOne, Material.White, currentLight);
+
+            engineSoundFX = game1.Content.Load<SoundEffect>("engine").CreateInstance();
+            engineSoundFX.IsLooped = true;
+            engineSoundFX.Volume = 0.1f;
+            engineSoundFX.Play();
 
             //TODO: END: CLEAN THIS BEFORE END
             //DEBUG
@@ -118,7 +123,7 @@ namespace TankProject
         internal override void Update(GameTime gameTime)
         {
             if (Input.WasPressed(Keys.Escape) || Input.WasPressed(Buttons.Start, PlayerIndex.One))
-                thisGame.ChangeCurrentStage(new EscStage(this, thisGame));
+                thisGame.ChangeCurrentStage(this, new EscStage(this, thisGame));
 
             #region Player One Camera
             if (Input.IsPressedDown(Keys.F1) && !(currentCameraPlayerOne is CameraThirdPerson))
@@ -308,6 +313,23 @@ namespace TankProject
             Debug.Draw(currentCameraPlayerTwo);
 
             device.Viewport = defaultView;
+        }
+
+        internal void Stop()
+        {
+            engineSoundFX.Stop();
+        }
+        internal void Resume()
+        {
+            if(engineSoundFX == null)
+            {
+                engineSoundFX = thisGame.Content.Load<SoundEffect>("engine").CreateInstance();
+                engineSoundFX.IsLooped = true;
+                engineSoundFX.Volume = 0.1f;
+                engineSoundFX.Play();
+            }
+
+            engineSoundFX.Play();
         }
     }
 }

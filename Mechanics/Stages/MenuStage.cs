@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 
 namespace TankProject
 {
@@ -18,6 +19,9 @@ namespace TankProject
         private int selected;
         private Button[] buttons;
 
+        private SoundEffect menuScrollSoundFX;
+        private SoundEffect selectionSoundFX;
+
         internal MenuStage(Game1 game1) : base (game1)
         {
             StartCoop = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 75, Game1.graphics.PreferredBackBufferHeight / 3), new Point(150, 50), Color.Yellow, Color.Black, "Start Coop");
@@ -29,6 +33,9 @@ namespace TankProject
             buttons[2] = Quit;
 
             selected = 0;
+
+            menuScrollSoundFX = game1.Content.Load<SoundEffect>("menuScroll");
+            selectionSoundFX = game1.Content.Load<SoundEffect>("selection");
         }
 
         internal override void Update(GameTime gameTime)
@@ -36,20 +43,22 @@ namespace TankProject
             if (Input.LeftMouseClick())
             {
                 if (StartCoop.IsPointInside(Input.MouseState.Position))
-                    thisGame.ChangeCurrentStage(new GameStage(thisGame));
+                    thisGame.ChangeCurrentStage(this, new GameStage(thisGame));
                 else if(Controls.IsPointInside(Input.MouseState.Position))
-                    thisGame.ChangeCurrentStage(new ControlsStage(thisGame, this));
+                    thisGame.ChangeCurrentStage(this, new ControlsStage(thisGame, this));
                 else if (Quit.IsPointInside(Input.MouseState.Position))
                     thisGame.Quit();
+                selectionSoundFX.Play();
             }
             if (Input.WasPressed(Buttons.A, PlayerIndex.One) || Input.WasPressed(Keys.Enter))
             {
                 if (selected == 0)
-                    thisGame.ChangeCurrentStage(new GameStage(thisGame));
+                    thisGame.ChangeCurrentStage(this, new GameStage(thisGame));
                 else if (selected == 1)
-                    thisGame.ChangeCurrentStage(new ControlsStage(thisGame, this));
+                    thisGame.ChangeCurrentStage(this, new ControlsStage(thisGame, this));
                 else if (selected == 2)
                     thisGame.Quit();
+                selectionSoundFX.Play();
             }
                
                 
@@ -58,12 +67,14 @@ namespace TankProject
                 buttons[selected].backgroundColor = Color.White;
                 selected--;
                 buttons[selected].backgroundColor = Color.Yellow;
+                menuScrollSoundFX.Play();
             }
             else if (Input.WasPressed(Buttons.DPadDown, PlayerIndex.One) || Input.WasPressed(Keys.Down) && selected < 2)
             {
                 buttons[selected].backgroundColor = Color.White;
                 selected++;
                 buttons[selected].backgroundColor = Color.Yellow;
+                menuScrollSoundFX.Play();
             }
 
         }

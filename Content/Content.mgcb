@@ -154,3 +154,21 @@
 /processorParam:TextureFormat=Compressed
 /build:body.fbx
 
+#begin menuScroll.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:menuScroll.wav
+
+#begin selection.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:selection.wav
+
+#begin engine.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:engine.wav
+

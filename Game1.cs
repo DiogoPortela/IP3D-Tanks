@@ -91,8 +91,13 @@ namespace TankProject
            
         }
 
-        internal void ChangeCurrentStage(Stage changeTo)
+        internal void ChangeCurrentStage(Stage changeFrom, Stage changeTo)
         {
+            if(changeFrom is GameStage)
+            {
+                (changeFrom as GameStage).Stop();
+            }
+
             if (changeTo is EscStage || changeTo is MenuStage || changeTo is ControlsStage)
                 IsMouseVisible = true;
             else if(changeTo is GameStage)
