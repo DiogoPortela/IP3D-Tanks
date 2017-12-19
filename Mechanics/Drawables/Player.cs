@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -38,7 +39,7 @@ namespace TankProject
         internal int score;
 
         private PlayerKeys playerKeys;
-    
+
         private static GameStage gameState;
 
         //test zone
@@ -58,6 +59,8 @@ namespace TankProject
         private ParticleSystem rightDirt;
         private Vector3 rightDirtOffset;
         private Vector3 initialRightDirtOffset;
+
+        private SoundEffectInstance shootSoundFX;
 
 
         //--------------------Constructors--------------------//
@@ -79,7 +82,7 @@ namespace TankProject
             gameState = currentState;   //TODO: CLEAN
             aceleration = Vector3.Zero;
             velocity = Vector3.Zero;
-        
+
             initialLeftSmokeOffset = leftSmokeOffset = new Vector3(0.08f, 0.15f, -0.15f);
             initialRightSmokeOffset = rightSmokeOffset = new Vector3(-0.08f, 0.15f, -0.15f);
             initialLeftDirtOffset = leftDirtOffset = new Vector3(0.08f, 0.0f, -0.15f);
@@ -91,6 +94,8 @@ namespace TankProject
         //Loads
         internal void LoadModelBones(ContentManager content, Material material, Light light)
         {
+            shootSoundFX = content.Load<SoundEffect>("pimba").CreateInstance();
+            shootSoundFX.Volume = 0.5f;
             leftDirt = new ParticleSystem(ParticleType.Smoke, this.position + leftDirtOffset, new ParticleSpawner(0.01f, true), content, 250, 500, 5);
             rightDirt = new ParticleSystem(ParticleType.Smoke, this.position + rightDirtOffset, new ParticleSpawner(0.01f, true), content, 250, 500, 5);
 
@@ -193,7 +198,7 @@ namespace TankProject
                 leftDirt.SetShouldSpawn(true);
                 rightDirt.SetShouldSpawn(true);
             }
-            
+
         }
         private void Rotate(GameTime gameTime)
         {
@@ -273,7 +278,11 @@ namespace TankProject
         }
         private void Shoot()
         {
-            bulletList.Add(new Bullet(cannon.position, cannon.Forward, cannon.Up));
+            if(shootSoundFX.State != SoundState.Playing)
+            {
+                bulletList.Add(new Bullet(cannon.position, cannon.Forward, cannon.Up));
+                shootSoundFX.Play();
+            }
         }
 
         //Corrections
@@ -352,7 +361,7 @@ namespace TankProject
                 Shoot();
             }
 
-            for(int i = bulletList.Count - 1; i >= 0; i--)
+            for (int i = bulletList.Count - 1; i >= 0; i--)
             {
                 bulletList[i].Update(gameTime);
                 if (bulletList[i].position.Y <= 0)
@@ -386,7 +395,7 @@ namespace TankProject
                 mesh.Draw();
             }
 
-            foreach(Bullet b in bulletList)
+            foreach (Bullet b in bulletList)
             {
                 b.Draw(cam);
             }

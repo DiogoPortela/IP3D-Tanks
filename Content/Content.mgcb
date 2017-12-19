@@ -178,3 +178,9 @@
 /processorParam:Quality=Best
 /build:rain.wav
 
+#begin pimba.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:pimba.wav
+
