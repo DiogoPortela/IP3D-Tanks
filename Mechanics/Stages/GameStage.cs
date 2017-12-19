@@ -22,6 +22,8 @@ namespace TankProject
         internal ParticleSystem playerTwoRain;
 
         private SoundEffectInstance engineSoundFX;
+        private SoundEffectInstance rainSoundFX;
+
 
         internal static Light currentLight;
 
@@ -82,6 +84,11 @@ namespace TankProject
             engineSoundFX.IsLooped = true;
             engineSoundFX.Volume = 0.1f;
             engineSoundFX.Play();
+
+            rainSoundFX = game1.Content.Load<SoundEffect>("rain").CreateInstance();
+            rainSoundFX.IsLooped = true;
+            rainSoundFX.Volume = 0.2f;
+            rainSoundFX.Play();
 
             //TODO: END: CLEAN THIS BEFORE END
             //DEBUG
@@ -210,6 +217,7 @@ namespace TankProject
                         if((p.bulletList[i].position - enemyList[j].position).Length() < 1 && OBB.AreColliding(p.bulletList[i].boundingBox, enemyList[j].boundingBox))
                         {
                             p.score += (int)Vector3.Distance(p.position, enemyList[j].position) * 50;
+                            particleSystemList.Add(new ParticleSystem(ParticleType.Explosion, enemyList[j].position, new ParticleSpawner(0.2f, true), thisGame.Content, 200, 1000, 0));
                             p.bulletList.Remove(p.bulletList[i]);
                             enemyList.Remove(enemyList[j]);
                             i--;
@@ -252,9 +260,11 @@ namespace TankProject
                 }
             }
 
+            //Particle Update
             playerOneRain.Update(new Vector3(playerOne.position.X, 10, playerOne.position.Z), gameTime);
             playerTwoRain.Update(new Vector3(playerTwo.position.X, 10, playerTwo.position.Z), gameTime);
-
+            foreach (ParticleSystem p in particleSystemList)
+                p.Update(Vector3.Zero, gameTime);
 
             //TODO: DELETE AT END
             //DEBUG SECTION
@@ -299,6 +309,8 @@ namespace TankProject
             playerOne.Draw(device, currentCameraPlayerOne);
             playerTwo.Draw(device, currentCameraPlayerOne);
             playerOneRain.Draw(device, currentCameraPlayerOne);
+            foreach (ParticleSystem p in particleSystemList)
+                p.Draw(device, currentCameraPlayerOne);
             Debug.Draw(currentCameraPlayerOne);
 
             device.Viewport = downView;
@@ -311,6 +323,8 @@ namespace TankProject
             playerOne.Draw(device, currentCameraPlayerTwo);
             playerTwo.Draw(device, currentCameraPlayerTwo);
             playerTwoRain.Draw(device, currentCameraPlayerTwo);
+            foreach (ParticleSystem p in particleSystemList)
+                p.Draw(device, currentCameraPlayerTwo);
             Debug.Draw(currentCameraPlayerTwo);
 
             device.Viewport = defaultView;
@@ -319,6 +333,7 @@ namespace TankProject
         internal void Stop()
         {
             engineSoundFX.Stop();
+            rainSoundFX.Stop();
         }
         internal void Resume()
         {
@@ -327,10 +342,16 @@ namespace TankProject
                 engineSoundFX = thisGame.Content.Load<SoundEffect>("engine").CreateInstance();
                 engineSoundFX.IsLooped = true;
                 engineSoundFX.Volume = 0.1f;
-                engineSoundFX.Play();
             }
 
             engineSoundFX.Play();
+            if(rainSoundFX == null)
+            {
+                rainSoundFX = thisGame.Content.Load<SoundEffect>("rain").CreateInstance();
+                rainSoundFX.IsLooped = true;
+                rainSoundFX.Volume = 0.2f;
+            }
+            rainSoundFX.Play();
         }
     }
 }

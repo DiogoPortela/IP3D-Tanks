@@ -172,3 +172,9 @@
 /processorParam:Quality=Best
 /build:engine.wav
 
+#begin rain.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:rain.wav
+

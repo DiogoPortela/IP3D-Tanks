@@ -107,7 +107,7 @@ namespace TankProject
                     {
                         float distanceToRadius = (float)random.NextDouble() * radius;
                         float yaw = MathHelper.ToRadians((float)random.NextDouble() * 360.0f);
-                        float pitch = MathHelper.ToRadians((float)random.NextDouble() * 180.0f);
+                        float pitch = MathHelper.ToRadians((float)random.NextDouble() * 180.0f - 90.0f);
 
                         Vector3 positionInsideRadius = position + Vector3.Normalize(Vector3.Transform(Vector3.Right, Matrix.CreateFromYawPitchRoll(yaw, pitch, 0))) * distanceToRadius;
 
@@ -130,6 +130,9 @@ namespace TankProject
     }
     class ParticleSystem
     {
+        private const float MAX_ROT = 0.05f;
+        private const float EXPLOSION_FORCE = 0.2f;
+
         private ParticleType particleType;
         private BasicEffect effect;
         private Texture2D particleTexture;
@@ -143,7 +146,6 @@ namespace TankProject
         internal Vector3 systemPosition;
         private Vector3 accelaration;
         private Random random;
-        private const float MAX_ROT = 0.05f;
 
         private UpdateFunction typeUpdate;
 
@@ -184,6 +186,18 @@ namespace TankProject
                     accelaration = new Vector3(0.0f, -0.98f, 0.0f);
                     break;
                 case ParticleType.Explosion:
+                    particleTexture = content.Load<Texture2D>("Smoke");
+                    typeUpdate = new UpdateFunction(ExplosionUpdate);
+                    accelaration = new Vector3(0.0f, -0.98f, 0.0f);
+                    #region Add Particles
+                    for (int i = 0; i < particleMax; i++)
+                    {
+                        Vector3 auxPosition = spawner.GetPositions(1, systemPosition)[0];
+                        Vector3 direction = Vector3.Normalize(auxPosition - systemPosition + Vector3.Up) * EXPLOSION_FORCE;
+                        currentParticles.Add(new Particle(auxPosition, direction, 0.08f));
+                        particleCount++;
+                    }
+                    #endregion
                     break;
                 case ParticleType.Smoke:
                     particleTexture = content.Load<Texture2D>("Smoke");
@@ -258,10 +272,29 @@ namespace TankProject
 
             }
         }
+        private void ExplosionUpdate(GameTime gameTime)
+        {
+          
+            for (int i = particleCount - 1; i >= 0; i--)
+            {
+                #region Update Particles              
+                currentParticles[i].Update(accelaration, gameTime);
+                #endregion
+
+                #region Kill Particles
+                if ((currentParticles.Count > 0 && (DateTime.Now.TimeOfDay - currentParticles[i].dateTime.TimeOfDay).Milliseconds > particleMaxTime))
+                {
+                    currentParticles.Remove(currentParticles[i]);
+                    particleCount--;
+                }
+                #endregion
+
+            }
+        }
         internal void Draw(GraphicsDevice device, Camera camera)
         {
             device.BlendState = BlendState.AlphaBlend;
-            device.DepthStencilState = DepthStencilState.None;
+            //device.DepthStencilState = DepthStencilState.None;
 
             effect.Texture = particleTexture;
             effect.View = camera.ViewMatrix;
@@ -269,7 +302,7 @@ namespace TankProject
             foreach (Particle p in currentParticles)
                 p.Draw(device, ref effect, ref camera);
             device.BlendState = BlendState.Opaque;
-            device.DepthStencilState = DepthStencilState.Default;
+            //device.DepthStencilState = DepthStencilState.Default;
         }
     }
 }
