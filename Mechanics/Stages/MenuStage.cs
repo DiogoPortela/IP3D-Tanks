@@ -11,13 +11,13 @@ namespace TankProject
     class MenuStage : Stage
     {
         private Button StartCoop;
-        private Button Options;
+        private Button Controls;
         private Button Quit;
 
         internal MenuStage(Game1 game1) : base (game1)
         {
             StartCoop = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 75, Game1.graphics.PreferredBackBufferHeight / 3), new Point(150, 50), Color.White, Color.Black, "Start Coop");
-            Options = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 75, Game1.graphics.PreferredBackBufferHeight / 3 + 100), new Point(150, 50), Color.White, Color.Black, "Options");
+            Controls = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 75, Game1.graphics.PreferredBackBufferHeight / 3 + 100), new Point(150, 50), Color.White, Color.Black, "Controls");
             Quit = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 75, Game1.graphics.PreferredBackBufferHeight / 3 + 200), new Point(150, 50), Color.White, Color.Black, "Quit");
 
         }
@@ -27,13 +27,11 @@ namespace TankProject
             if (Input.LeftMouseClick())
             {
                 if (StartCoop.IsPointInside(Input.MouseState.Position))
-                {
                     thisGame.ChangeCurrentStage(new GameStage(thisGame));
-                }
+                else if(Controls.IsPointInside(Input.MouseState.Position))
+                    thisGame.ChangeCurrentStage(new ControlsStage(thisGame, this));
                 else if (Quit.IsPointInside(Input.MouseState.Position))
-                {
                     thisGame.Quit();
-                }
             }            
         }
 
@@ -41,7 +39,7 @@ namespace TankProject
         {
             batch.Begin();
             StartCoop.Draw(batch);
-            Options.Draw(batch);
+            Controls.Draw(batch);
             Quit.Draw(batch);
             batch.End();
         }

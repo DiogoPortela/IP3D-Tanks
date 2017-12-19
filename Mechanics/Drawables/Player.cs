@@ -193,9 +193,6 @@ namespace TankProject
         }
         private void Rotate(GameTime gameTime)
         {
-            if (rotation.X > 2 * MathHelper.Pi || rotation.X < -2 * MathHelper.Pi)
-                rotation.X = 0; //TODO: END: VER SE ISTO ESTA A FAZER ALGUMA COISA?
-
             #region wheels and movement
             if ((Input.IsPressedDown(playerKeys.Left) && !Input.IsPressedDown(playerKeys.Right)) ||
                 (Input.IsPressedDown(Buttons.DPadLeft, playerIndex) && !Input.IsPressedDown(Buttons.DPadRight, playerIndex)) ||

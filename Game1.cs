@@ -93,7 +93,7 @@ namespace TankProject
 
         internal void ChangeCurrentStage(Stage changeTo)
         {
-            if (changeTo is EscStage || changeTo is MenuStage)
+            if (changeTo is EscStage || changeTo is MenuStage || changeTo is ControlsStage)
                 IsMouseVisible = true;
             else if(changeTo is GameStage)
             {

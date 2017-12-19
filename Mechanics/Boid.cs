@@ -1,22 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TankProject
 {
     class Boid : GameObject
     {
-        private const float MAX_VELOCITY = 0.02f;
+        private const float MAX_VELOCITY = 0.01f;
         private const float MAX_ROTATION = 2.0f;
-        private Vector3 seekVelocity;
-        private Vector3 acceleration;
+        protected Vector3 seekVelocity;
+        protected Vector3 acceleration;
 
-        private List<Boid> neighboardhood;
-        private List<float> neighboardhoodDistances;
-        private List<Vector3> neighboardhoodDistanceNormalized;
+        protected List<Boid> neighboardhood;
+        protected List<float> neighboardhoodDistances;
+        protected List<Vector3> neighboardhoodDistanceNormalized;
 
         private GameStage game;
 
@@ -35,7 +32,7 @@ namespace TankProject
             foreach (Boid b in game.enemyList)
             {
                 float d = (this.position - b.position).Length();
-                if (d < 3.0f)
+                if (d < 0.2f)
                 {
                     neighboardhood.Add(b);
                     neighboardhoodDistances.Add(d);
@@ -75,17 +72,15 @@ namespace TankProject
                     acceleration = Vector3.Transform(acceleration, angleRotation);
                 }
 
-                ///
                 Vector3 repulsionAcceleration = Vector3.Zero;
                 for(int i = 0; i < neighboardhood.Count; i++)
                 {
                     if(!((1.0f / neighboardhoodDistances[i]) > float.MaxValue))
-                        repulsionAcceleration *= neighboardhoodDistanceNormalized[i] * (1.0f / neighboardhoodDistances[i]);
+                        repulsionAcceleration += neighboardhoodDistanceNormalized[i] * (1.0f / neighboardhoodDistances[i]);
 
                 }
-                ///
 
-                acceleration = (acceleration + repulsionAcceleration) / 2;
+                acceleration = acceleration * 0.8f + repulsionAcceleration * 0.2f;
 
                 velocity += acceleration * (float)deltaTime.ElapsedGameTime.TotalSeconds;
                 if (velocity.Length() > MAX_VELOCITY)

@@ -8,21 +8,21 @@ namespace TankProject
     {
         private static Model model;
         private const float TANK_HEIGHT_FROM_FLOOR = 0.01f;
-
         internal Matrix[] boneTransformations;
+        private float modelScale;
 
 
-        internal Enemy(Vector3 position, Vector3 rotation, GameStage game) : base(position, rotation, game)
+        internal Enemy(Vector3 position, Vector3 rotation, float modelScale, GameStage game) : base(position, rotation, game)
         {
             this.relativeForward = this.Forward = Vector3.Forward;
             this.relativeRight = this.Right = Vector3.Right;
             boneTransformations = new Matrix[model.Bones.Count];
+            this.modelScale = modelScale;
         }
 
         internal static void Load(ContentManager content, Material material, Light light)
         {
             model = content.Load<Model>("body");
-
             foreach (ModelMesh mesh in model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
@@ -50,7 +50,7 @@ namespace TankProject
             Vector2 positionXZ = new Vector2(position.X, position.Z);
             Vector2 roundedPositionXZ = new Vector2((int)this.position.X, (int)this.position.Z);
 
-            if(position.X > 0 && position.X < Floor.heightMap.Width - 1 && position.Y > 0 && position.Y < Floor.heightMap.Height - 1)
+            if(position.X > 0 && position.X < Floor.heightMap.Width - 1 && position.Z > 0 && position.Z < Floor.heightMap.Height - 1)
             {
                 this.position.Y = TANK_HEIGHT_FROM_FLOOR + Interpolation.BiLinear(positionXZ, roundedPositionXZ, 1.0f,
             Floor.VerticesHeight[(int)positionXZ.X, (int)positionXZ.Y], Floor.VerticesHeight[(int)positionXZ.X + 1, (int)positionXZ.Y],
@@ -67,7 +67,7 @@ namespace TankProject
             Vector2 positionXZ = new Vector2(position.X, position.Z);
             Vector2 roundedPositionXZ = new Vector2((int)this.position.X, (int)this.position.Z);
 
-            if(position.X > 0 && position.X < Floor.heightMap.Width - 1 && position.Y > 0 && position.Y < Floor.heightMap.Height - 1)
+            if(position.X > 0 && position.X < Floor.heightMap.Width - 1 && position.Z > 0 && position.Z < Floor.heightMap.Height - 1)
             {
                 this.Up = Interpolation.BiLinear(positionXZ, roundedPositionXZ, 1.0f,
                 Floor.VerticesNormals[(int)positionXZ.X, (int)positionXZ.Y], Floor.VerticesNormals[(int)positionXZ.X + 1, (int)positionXZ.Y],
@@ -93,14 +93,12 @@ namespace TankProject
             HeightFollow();
             NormalFollow();
 
-
-
             rotationMatrix.Up = this.Up;
             //The 3d model is facing backwards.
             rotationMatrix.Forward = -this.Forward;
             rotationMatrix.Right = -this.Right;
 
-            model.Root.Transform = Matrix.CreateScale(0.002f) * rotationMatrix * Matrix.CreateTranslation(position);
+            model.Root.Transform = Matrix.CreateScale(modelScale) * rotationMatrix * Matrix.CreateTranslation(position);
             model.CopyAbsoluteBoneTransformsTo(boneTransformations);
         }
 

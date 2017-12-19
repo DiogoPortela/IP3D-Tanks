@@ -9,6 +9,8 @@ namespace TankProject
 {
     class GameStage : Stage
     {
+        private const float ENEMY_MODE_SCALE = 0.002f;
+
         private Camera currentCameraPlayerOne;
         private Camera currentCameraPlayerTwo;
         private Viewport defaultView, upView, downView;
@@ -16,6 +18,9 @@ namespace TankProject
         internal List<Player> playerList;
         internal List<Enemy> enemyList;
         internal List<ParticleSystem> particleSystemList;
+        internal ParticleSystem playerOneRain;
+        internal ParticleSystem playerTwoRain;
+
 
         internal static Light currentLight;
 
@@ -28,7 +33,6 @@ namespace TankProject
         DebugLine debugLine6;
 
         List<DebugBox> boxes;
-        ParticleSystem teste;
 
         //--------------------Constructors--------------------//
         internal GameStage(Game1 game1) : base (game1)
@@ -50,7 +54,6 @@ namespace TankProject
 
             //Load Players
             playerList = new List<Player>();
-            enemyList = new List<Enemy>();
             playerOne = new Player(new Vector3(64, 10, 64), Vector3.Zero, Vector3.Zero, 0.0005f, PlayerIndex.One, this);
             playerOne.LoadModelBones(game1.Content, Material.White, currentLight);
             playerList.Add(playerOne);
@@ -65,10 +68,13 @@ namespace TankProject
             enemyList = new List<Enemy>();
             for(int i = 0; i < 60; i++)
             {
-                enemyList.Add(new Enemy(new Vector3((float)r.NextDouble() * 128.0f, 0, (float)r.NextDouble() * 128.0f), Vector3.Zero, this));
+                enemyList.Add(new Enemy(new Vector3((float)r.NextDouble() * 128.0f, 0, (float)r.NextDouble() * 128.0f), Vector3.Zero, ENEMY_MODE_SCALE, this));
             }
 
             particleSystemList = new List<ParticleSystem>();
+            playerOneRain = new ParticleSystem(ParticleType.Rain, new Vector3(64, 64, 64), new ParticleSpawner(30, false), game1.Content, 1000, 1000, 1);
+            playerTwoRain = new ParticleSystem(ParticleType.Rain, new Vector3(64, 64, 64), new ParticleSpawner(30, false), game1.Content, 1000, 1000, 1);
+
 
             Floor.Start(game1.Content, currentCameraPlayerOne, Material.White, currentLight);
 
@@ -88,7 +94,6 @@ namespace TankProject
             Debug.AddLine("4", debugLine4);
             Debug.AddLine("5", debugLine5);
             Debug.AddLine("6", debugLine6);
-            teste = new ParticleSystem(ParticleType.Rain, new Vector3(64, 64, 64), new ParticleSpawner(30, false), game1.Content, 1000, 1000, 1);
 
             boxes = new List<DebugBox>();
             boxes.Add(new DebugBox(playerOne.boundingBox));
@@ -175,7 +180,7 @@ namespace TankProject
                     currentCameraPlayerTwo = new CameraFree(currentCameraPlayerTwo);
             }
 
-            Vector3 tempPosition = playerOne.position;
+            Vector3 tempPosition = playerOne.position;  //TODO: CLEAN
 
             foreach(Player p in playerList)
             {
@@ -199,9 +204,12 @@ namespace TankProject
                 }
             }
 
+            playerOneRain.Update(new Vector3(playerOne.position.X, 10, playerOne.position.Z), gameTime);
+            playerTwoRain.Update(new Vector3(playerTwo.position.X, 10, playerTwo.position.Z), gameTime);
+
+
             //TODO: DELETE AT END
             //DEBUG SECTION
-            teste.Update(new Vector3(playerOne.position.X, 10, playerOne.position.Z), gameTime);
             debugLine1.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Forward);
             debugLine2.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Right);
             debugLine3.Update(playerOne.cannon.position, playerOne.cannon.position + playerOne.cannon.Up);
@@ -235,8 +243,7 @@ namespace TankProject
             }
             playerOne.Draw(device, currentCameraPlayerOne);
             playerTwo.Draw(device, currentCameraPlayerOne);
-         
-            teste.Draw(device, currentCameraPlayerOne); //DELETE
+            playerOneRain.Draw(device, currentCameraPlayerOne);
             Debug.Draw(currentCameraPlayerOne);
 
             device.Viewport = downView;
@@ -248,7 +255,7 @@ namespace TankProject
             }
             playerOne.Draw(device, currentCameraPlayerTwo);
             playerTwo.Draw(device, currentCameraPlayerTwo);
-           
+            playerTwoRain.Draw(device, currentCameraPlayerTwo);
             Debug.Draw(currentCameraPlayerTwo);
 
             device.Viewport = defaultView;
