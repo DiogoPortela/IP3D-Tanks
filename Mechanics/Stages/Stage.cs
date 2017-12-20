@@ -14,6 +14,8 @@ namespace TankProject
 
         internal abstract void Update(GameTime gameTime);
         internal abstract void Draw(GraphicsDevice device, SpriteBatch batch);
+        internal abstract void Resume();
+        internal abstract void Stop();
     }
 
     class Button

@@ -9,10 +9,10 @@ namespace TankProject
     class EscStage : Stage
     {
         private Stage previousStage;
-        private Button Resume;
-        private Button Controls;
-        private Button ReturnToMenu;
-        private Button Quit;
+        private Button ResumeBtn;
+        private Button ControlsBtn;
+        private Button ReturnToMenuBtn;
+        private Button QuitBtn;
 
         private Button[] buttons;
 
@@ -23,17 +23,17 @@ namespace TankProject
 
         internal EscStage(Stage currentStage, Game1 game1) : base (game1)
         {
-            Resume = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 75, Game1.graphics.PreferredBackBufferHeight / 3), new Point(150, 50), Color.Yellow, Color.Black, "Resume");
-            Controls = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 75, Game1.graphics.PreferredBackBufferHeight / 3 + 100), new Point(150, 50), Color.White, Color.Black, "Controls");
-            ReturnToMenu = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 80, Game1.graphics.PreferredBackBufferHeight / 3 + 200), new Point(160, 50), Color.White, Color.Black, "Return to Menu");
-            Quit = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 75, Game1.graphics.PreferredBackBufferHeight / 3 + 300), new Point(150, 50), Color.White, Color.Black, "Quit");
+            ResumeBtn = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 75, Game1.graphics.PreferredBackBufferHeight / 3), new Point(150, 50), Color.Yellow, Color.Black, "Resume");
+            ControlsBtn = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 75, Game1.graphics.PreferredBackBufferHeight / 3 + 100), new Point(150, 50), Color.White, Color.Black, "Controls");
+            ReturnToMenuBtn = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 80, Game1.graphics.PreferredBackBufferHeight / 3 + 200), new Point(160, 50), Color.White, Color.Black, "Return to Menu");
+            QuitBtn = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 75, Game1.graphics.PreferredBackBufferHeight / 3 + 300), new Point(150, 50), Color.White, Color.Black, "Quit");
 
             selected = 0;
             buttons = new Button[4];
-            buttons[0] = Resume;
-            buttons[1] = Controls;
-            buttons[2] = ReturnToMenu;
-            buttons[3] = Quit;
+            buttons[0] = ResumeBtn;
+            buttons[1] = ControlsBtn;
+            buttons[2] = ReturnToMenuBtn;
+            buttons[3] = QuitBtn;
 
             previousStage = currentStage;
 
@@ -46,16 +46,16 @@ namespace TankProject
         {
             if (Input.LeftMouseClick())
             {
-                if (Resume.IsPointInside(Input.MouseState.Position))
+                if (ResumeBtn.IsPointInside(Input.MouseState.Position))
                 {
                     thisGame.ChangeCurrentStage(this, previousStage);
-                    (previousStage as GameStage).Resume();
+                    previousStage.Resume();
                 }
-                else if (ReturnToMenu.IsPointInside(Input.MouseState.Position))
+                else if (ReturnToMenuBtn.IsPointInside(Input.MouseState.Position))
                     thisGame.ChangeCurrentStage(this, new MenuStage(thisGame));
-                else if (Controls.IsPointInside(Input.MouseState.Position))
+                else if (ControlsBtn.IsPointInside(Input.MouseState.Position))
                     thisGame.ChangeCurrentStage(this, new ControlsStage(thisGame, this));
-                else if (Quit.IsPointInside(Input.MouseState.Position))
+                else if (QuitBtn.IsPointInside(Input.MouseState.Position))
                     thisGame.Quit();
                 selectionSoundFX.Play();
             }
@@ -97,11 +97,21 @@ namespace TankProject
         internal override void Draw(GraphicsDevice device, SpriteBatch batch)
         {
             batch.Begin();
-            Resume.Draw(batch);
-            Controls.Draw(batch);
-            ReturnToMenu.Draw(batch);
-            Quit.Draw(batch);
+            ResumeBtn.Draw(batch);
+            ControlsBtn.Draw(batch);
+            ReturnToMenuBtn.Draw(batch);
+            QuitBtn.Draw(batch);
             batch.End();
+        }
+
+        internal override void Resume()
+        {
+
+        }
+
+        internal override void Stop()
+        {
+
         }
     }
 }

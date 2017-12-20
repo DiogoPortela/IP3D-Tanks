@@ -88,19 +88,16 @@ namespace TankProject
 
             currentStage.Draw(GraphicsDevice, spriteBatch);
             base.Draw(gameTime);
-           
+
         }
 
         internal void ChangeCurrentStage(Stage changeFrom, Stage changeTo)
         {
-            if(changeFrom is GameStage)
-            {
-                (changeFrom as GameStage).Stop();
-            }
+            changeFrom.Stop();
 
             if (changeTo is EscStage || changeTo is MenuStage || changeTo is ControlsStage)
                 IsMouseVisible = true;
-            else if(changeTo is GameStage)
+            else if (changeTo is GameStage || changeTo is PvpStage)
             {
                 GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
                 GraphicsDevice.BlendState = BlendState.Opaque;

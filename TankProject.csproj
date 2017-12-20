@@ -69,6 +69,7 @@
     <Compile Include="Mechanics\Stages\EscStage.cs" />
     <Compile Include="Mechanics\Stages\GameStage.cs" />
     <Compile Include="Mechanics\Stages\MenuStage.cs" />
+    <Compile Include="Mechanics\Stages\PvpStage.cs" />
     <Compile Include="Mechanics\Stages\Stage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

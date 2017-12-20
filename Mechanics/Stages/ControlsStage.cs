@@ -96,5 +96,15 @@ namespace TankProject
             batch.Draw(currentTexture, rect, Color.White);
             batch.End();
         }
+
+        internal override void Resume()
+        {
+
+        }
+
+        internal override void Stop()
+        {
+
+        }
     }
 }

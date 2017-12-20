@@ -40,7 +40,6 @@ namespace TankProject
 
         private PlayerKeys playerKeys;
 
-        private static GameStage gameState;
 
         //test zone
         internal Vector3 lastFramePosition;
@@ -65,7 +64,7 @@ namespace TankProject
 
         //--------------------Constructors--------------------//
 
-        internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float modelScale, PlayerIndex index, GameStage currentState)
+        internal Player(Vector3 position, Vector3 rotation, Vector3 velocity, float modelScale, PlayerIndex index)
             : base(position, rotation, velocity, 100)
         {
             this.hp = base.hp;
@@ -79,7 +78,6 @@ namespace TankProject
             bulletList = new List<Bullet>();
             SetPlayerKeys();
 
-            gameState = currentState;   //TODO: CLEAN
             aceleration = Vector3.Zero;
             velocity = Vector3.Zero;
 

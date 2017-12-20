@@ -1,9 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
@@ -13,6 +9,7 @@ namespace TankProject
     class MenuStage : Stage
     {
         private Button StartCoop;
+        private Button StartPvp;
         private Button Controls;
         private Button Quit;
 
@@ -25,12 +22,14 @@ namespace TankProject
         internal MenuStage(Game1 game1) : base (game1)
         {
             StartCoop = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 75, Game1.graphics.PreferredBackBufferHeight / 3), new Point(150, 50), Color.Yellow, Color.Black, "Start Coop");
-            Controls = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 75, Game1.graphics.PreferredBackBufferHeight / 3 + 100), new Point(150, 50), Color.White, Color.Black, "Controls");
-            Quit = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 75, Game1.graphics.PreferredBackBufferHeight / 3 + 200), new Point(150, 50), Color.White, Color.Black, "Quit");
-            buttons = new Button[3];
+            StartPvp = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 75, Game1.graphics.PreferredBackBufferHeight / 3 + 100), new Point(150, 50), Color.White, Color.Black, "Start PVP");
+            Controls = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 75, Game1.graphics.PreferredBackBufferHeight / 3 + 200), new Point(150, 50), Color.White, Color.Black, "Controls");
+            Quit = new Button(new Point(Game1.graphics.PreferredBackBufferWidth / 2 - 75, Game1.graphics.PreferredBackBufferHeight / 3 + 300), new Point(150, 50), Color.White, Color.Black, "Quit");
+            buttons = new Button[4];
             buttons[0] = StartCoop;
-            buttons[1] = Controls;
-            buttons[2] = Quit;
+            buttons[1] = StartPvp;
+            buttons[2] = Controls;
+            buttons[3] = Quit;
 
             selected = 0;
 
@@ -44,6 +43,8 @@ namespace TankProject
             {
                 if (StartCoop.IsPointInside(Input.MouseState.Position))
                     thisGame.ChangeCurrentStage(this, new GameStage(thisGame));
+                else if (StartPvp.IsPointInside(Input.MouseState.Position))
+                    thisGame.ChangeCurrentStage(this, new PvpStage(thisGame));
                 else if(Controls.IsPointInside(Input.MouseState.Position))
                     thisGame.ChangeCurrentStage(this, new ControlsStage(thisGame, this));
                 else if (Quit.IsPointInside(Input.MouseState.Position))
@@ -55,9 +56,12 @@ namespace TankProject
                 if (selected == 0)
                     thisGame.ChangeCurrentStage(this, new GameStage(thisGame));
                 else if (selected == 1)
-                    thisGame.ChangeCurrentStage(this, new ControlsStage(thisGame, this));
+                    thisGame.ChangeCurrentStage(this, new PvpStage(thisGame));
                 else if (selected == 2)
+                    thisGame.ChangeCurrentStage(this, new ControlsStage(thisGame, this));
+                else if (selected == 3)
                     thisGame.Quit();
+              
                 selectionSoundFX.Play();
             }
                
@@ -69,7 +73,7 @@ namespace TankProject
                 buttons[selected].backgroundColor = Color.Yellow;
                 menuScrollSoundFX.Play();
             }
-            else if (Input.WasPressed(Buttons.DPadDown, PlayerIndex.One) || Input.WasPressed(Keys.Down) && selected < 2)
+            else if (Input.WasPressed(Buttons.DPadDown, PlayerIndex.One) || Input.WasPressed(Keys.Down) && selected < 3)
             {
                 buttons[selected].backgroundColor = Color.White;
                 selected++;
@@ -83,9 +87,20 @@ namespace TankProject
         {
             batch.Begin();
             StartCoop.Draw(batch);
+            StartPvp.Draw(batch);
             Controls.Draw(batch);
             Quit.Draw(batch);
             batch.End();
+        }
+
+        internal override void Resume()
+        {
+
+        }
+
+        internal override void Stop()
+        {
+
         }
     }
 }
