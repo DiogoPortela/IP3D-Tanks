@@ -194,7 +194,7 @@ namespace TankProject
                     {
                         Vector3 auxPosition = spawner.GetPositions(1, systemPosition)[0];
                         Vector3 direction = Vector3.Normalize(auxPosition - systemPosition) * EXPLOSION_FORCE;
-                        currentParticles.Add(new Particle(auxPosition, direction, 0.08f));
+                        currentParticles.Add(new Particle(auxPosition, direction, 0.1f));
                         particleCount++;
                     }
                     #endregion
@@ -251,7 +251,7 @@ namespace TankProject
                 lastParticleSpawn.TotalGameTime = lastParticleSpawn.TotalGameTime.Add(TimeSpan.FromMilliseconds(particleSpawnRate));
                 if (particleCount < particleMax)
                 {
-                    currentParticles.Add(new Particle(spawner.GetPositions(1, systemPosition)[0], Vector3.Zero, 0.008f));
+                    currentParticles.Add(new Particle(spawner.GetPositions(1, systemPosition)[0], Vector3.Zero, 0.01f));
                     particleCount++;
                 }
             }
@@ -294,7 +294,7 @@ namespace TankProject
         internal void Draw(GraphicsDevice device, Camera camera)
         {
             device.BlendState = BlendState.AlphaBlend;
-            //device.DepthStencilState = DepthStencilState.None;
+            device.DepthStencilState = DepthStencilState.DepthRead;
 
             effect.Texture = particleTexture;
             effect.View = camera.ViewMatrix;
@@ -302,7 +302,7 @@ namespace TankProject
             foreach (Particle p in currentParticles)
                 p.Draw(device, ref effect, ref camera);
             device.BlendState = BlendState.Opaque;
-            //device.DepthStencilState = DepthStencilState.Default;
+            device.DepthStencilState = DepthStencilState.Default;
         }
     }
 }

@@ -37,7 +37,7 @@ namespace TankProject
             graphics.ApplyChanges();
 
             this.Window.IsBorderless = true;
-            this.Window.Title = "Super Awesome Game";
+            this.Window.Title = "PUFFF BATTLEROYAL";
             this.IsMouseVisible = true;
 
             base.Initialize();
