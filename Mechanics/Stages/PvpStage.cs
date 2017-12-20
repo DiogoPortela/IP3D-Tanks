@@ -136,6 +136,32 @@ namespace TankProject
                 }
             }
 
+            for (int i = playerOne.bulletList.Count - 1; i >= 0; i--)
+            {
+                if (OBB.AreColliding(playerOne.bulletList[i].boundingBox, playerTwo.boundingBox) || OBB.AreColliding(playerOne.bulletList[i].boundingBox, playerTwo.turret.boundingBox))
+                {
+                    particleSystemList.Add(new ParticleSystem(ParticleType.Explosion, playerOne.bulletList[i].position, new ParticleSpawner(0.2f, true), thisGame.Content, 200, 2000, 1));
+                    SoundEffectInstance aux = explosionSoundFX.CreateInstance();
+                    aux.Volume = 0.3f;
+                    aux.Play();
+                    playerTwo.hp -= 34f;
+                    playerOne.bulletList.Remove(playerOne.bulletList[i]);
+                }
+            }
+
+            for (int i = playerTwo.bulletList.Count - 1; i >= 0; i--)
+            {
+                if (OBB.AreColliding(playerTwo.bulletList[i].boundingBox, playerOne.boundingBox) || OBB.AreColliding(playerTwo.bulletList[i].boundingBox, playerOne.turret.boundingBox))
+                {
+                    particleSystemList.Add(new ParticleSystem(ParticleType.Explosion, playerTwo.bulletList[i].position, new ParticleSpawner(0.2f, true), thisGame.Content, 200, 2000, 1));
+                    SoundEffectInstance aux = explosionSoundFX.CreateInstance();
+                    aux.Volume = 0.3f;
+                    aux.Play();
+                    playerOne.hp -= 34f;
+                    playerTwo.bulletList.Remove(playerTwo.bulletList[i]);
+                }
+            }
+
             #region Collisions between bullets and players floor.
             foreach (Player p in playerList)
             {
