@@ -231,7 +231,7 @@ namespace TankProject
                                 break;
                         }
                     }
-                    if(p.bulletList[i].position.Y <= Floor.GetHeight(p.bulletList[i].position))
+                    if(i > 0 && p.bulletList[i].position.Y <= Floor.GetHeight(p.bulletList[i].position))
                     {
                         particleSystemList.Add(new ParticleSystem(ParticleType.Explosion, p.bulletList[i].position, new ParticleSpawner(0.2f, true), thisGame.Content, 200, 1000, 0));
                         p.bulletList.Remove(p.bulletList[i]);
