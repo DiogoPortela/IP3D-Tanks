@@ -361,13 +361,9 @@ namespace TankProject
                 Shoot();
             }
 
-            for (int i = bulletList.Count - 1; i >= 0; i--)
+            foreach(Bullet b in bulletList)
             {
-                bulletList[i].Update(gameTime);
-                if (bulletList[i].position.Y <= 0)
-                {
-                    bulletList.Remove(bulletList[i]);
-                }
+                b.Update(gameTime);
             }
 
             leftSmokeOffset = Vector3.Transform(initialLeftSmokeOffset, rotationMatrix);

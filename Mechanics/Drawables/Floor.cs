@@ -216,5 +216,15 @@ namespace TankProject
                 Game1.graphics.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleStrip, 0, i * heightMap.Width * 2, heightMap.Height * 2 - 2);
             }
         }
+
+        internal static float GetHeight(Vector3 objectPosition)
+        {
+            Vector2 positionXZ = new Vector2(objectPosition.X, objectPosition.Z);
+            Vector2 roundedPositionXZ = new Vector2((int)objectPosition.X, (int)objectPosition.Z);
+
+            return Interpolation.BiLinear(positionXZ, roundedPositionXZ, 1.0f,
+            VerticesHeight[(int)positionXZ.X, (int)positionXZ.Y], VerticesHeight[(int)positionXZ.X + 1, (int)positionXZ.Y],
+            VerticesHeight[(int)positionXZ.X, (int)positionXZ.Y + 1], VerticesHeight[(int)positionXZ.X + 1, (int)positionXZ.Y + 1]);
+        }
     }
 }
