@@ -39,7 +39,7 @@ namespace TankProject
         List<DebugBox> boxes;*/
 
         //--------------------Constructors--------------------//
-        internal GameStage(Game1 game1) : base (game1)
+        internal GameStage(Game1 game1) : base(game1)
         {
             #region Camera. Split screen
             //Viewports           
@@ -70,7 +70,7 @@ namespace TankProject
 
             Random r = new Random();
             enemyList = new List<Enemy>();
-            for(int i = 0; i < 60; i++)
+            for (int i = 0; i < 60; i++)
             {
                 enemyList.Add(new Enemy(new Vector3((float)r.NextDouble() * 128.0f, 0, (float)r.NextDouble() * 128.0f), Vector3.Zero, ENEMY_MODE_SCALE, this));
             }
@@ -200,25 +200,25 @@ namespace TankProject
                     currentCameraPlayerTwo = new CameraFree(currentCameraPlayerTwo);
             }
 
-            foreach(Player p in playerList)
+            foreach (Player p in playerList)
             {
-                if(p.hp > 0)
+                if (p.hp > 0)
                     p.Update(gameTime);
                 else
                 {
                     //TODO: explosion on tank ?and gameover screen?
-                }   
+                }
             }
 
             #region Collisions between players and enemies
-            foreach(Player p in playerList)
+            foreach (Player p in playerList)
             {
                 #region bullets and enemies
                 for (int i = p.bulletList.Count - 1; i >= 0; i--)
                 {
                     for (int j = enemyList.Count - 1; j >= 0; j--)
                     {
-                        if((p.bulletList[i].position - enemyList[j].position).Length() < 1 && OBB.AreColliding(p.bulletList[i].boundingBox, enemyList[j].boundingBox))
+                        if ((p.bulletList[i].position - enemyList[j].position).Length() < 1 && OBB.AreColliding(p.bulletList[i].boundingBox, enemyList[j].boundingBox))
                         {
                             p.score += (int)Vector3.Distance(p.position, enemyList[j].position) * 50;
                             particleSystemList.Add(new ParticleSystem(ParticleType.Explosion, enemyList[j].position, new ParticleSpawner(0.2f, true), thisGame.Content, 200, 2000, 1));
@@ -230,7 +230,7 @@ namespace TankProject
                                 break;
                         }
                     }
-                    if(i >= 0 && p.bulletList[i].position.Y <= Floor.GetHeight(p.bulletList[i].position))
+                    if (i >= 0 && p.bulletList[i].position.Y <= Floor.GetHeight(p.bulletList[i].position))
                     {
                         particleSystemList.Add(new ParticleSystem(ParticleType.Explosion, p.bulletList[i].position, new ParticleSpawner(0.2f, true), thisGame.Content, 200, 2000, 1));
                         explosionSoundFX.Play();
@@ -240,9 +240,9 @@ namespace TankProject
                 #endregion
 
                 #region tank and enemies
-                foreach(Enemy e in enemyList)
+                foreach (Enemy e in enemyList)
                 {
-                    if(OBB.AreColliding(p.boundingBox, e.boundingBox))
+                    if (OBB.AreColliding(p.boundingBox, e.boundingBox))
                     {
                         e.position = e.lastFramePosition;
                         p.position = p.lastFramePosition;
@@ -261,7 +261,7 @@ namespace TankProject
 
             foreach (Enemy e in enemyList)
             {
-                if((e.position - playerOne.position).Length() < (e.position - playerTwo.position).Length())
+                if ((e.position - playerOne.position).Length() < (e.position - playerTwo.position).Length())
                 {
                     e.Update(playerOne.position + playerOne.velocity * 60, gameTime);
                 }
@@ -274,12 +274,12 @@ namespace TankProject
             //Particle Update
             playerOneRain.Update(new Vector3(playerOne.position.X, 10, playerOne.position.Z), gameTime);
             playerTwoRain.Update(new Vector3(playerTwo.position.X, 10, playerTwo.position.Z), gameTime);
-            for(int i = particleSystemList.Count - 1; i >= 0; i--)
+            for (int i = particleSystemList.Count - 1; i >= 0; i--)
             {
-                /*if (particleSystemList[i].particleCount == 0)
+                if (particleSystemList[i].particleCount == 0)
                     particleSystemList.Remove(particleSystemList[i]);
-                else*/
-                particleSystemList[i].Update(Vector3.Zero, gameTime);
+                else
+                    particleSystemList[i].Update(Vector3.Zero, gameTime);
             }
 
             //TODO: DELETE AT END
@@ -362,7 +362,7 @@ namespace TankProject
         }
         internal void Resume()
         {
-            if(engineSoundFX == null)
+            if (engineSoundFX == null)
             {
                 engineSoundFX = thisGame.Content.Load<SoundEffect>("engine").CreateInstance();
                 engineSoundFX.IsLooped = true;
@@ -370,7 +370,7 @@ namespace TankProject
             }
 
             engineSoundFX.Play();
-            if(rainSoundFX == null)
+            if (rainSoundFX == null)
             {
                 rainSoundFX = thisGame.Content.Load<SoundEffect>("rain").CreateInstance();
                 rainSoundFX.IsLooped = true;
@@ -378,7 +378,7 @@ namespace TankProject
             }
             rainSoundFX.Play();
 
- 
+
         }
     }
 }
