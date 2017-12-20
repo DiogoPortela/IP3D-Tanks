@@ -47,7 +47,7 @@ namespace TankProject
             }
             if (Input.yAxis != 0)
             {
-                rotation.Y -= (float)gameTime.ElapsedGameTime.TotalSeconds * Input.yAxis;
+                rotation.Y += (float)gameTime.ElapsedGameTime.TotalSeconds * Input.yAxis;
             }
 
             base.Update(gameTime);

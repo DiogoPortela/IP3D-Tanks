@@ -221,7 +221,18 @@ namespace TankProject
                     }
                     #endregion
                     #region bullets and floor
-                    if (i >= 0 && p.bulletList[i].position.Y <= Floor.GetHeight(p.bulletList[i].position))
+                    if(p.bulletList[i].position.X < 0 || p.bulletList[i].position.X > Floor.heightMap.Width - 1|| p.bulletList[i].position.Z < 0 || p.bulletList[i].position.Z > Floor.heightMap.Height - 1)
+                    {
+                        if(p.bulletList[i].position.Y <= 0)
+                        {
+                            particleSystemList.Add(new ParticleSystem(ParticleType.Explosion, p.bulletList[i].position, new ParticleSpawner(0.2f, true), thisGame.Content, 200, 2000, 1));
+                            SoundEffectInstance aux = explosionSoundFX.CreateInstance();
+                            aux.Volume = 0.3f;
+                            aux.Play();
+                            p.bulletList.Remove(p.bulletList[i]);
+                        }
+                    }
+                    else if (i >= 0 && p.bulletList[i].position.Y <= Floor.GetHeight(p.bulletList[i].position))
                     {
                         particleSystemList.Add(new ParticleSystem(ParticleType.Explosion, p.bulletList[i].position, new ParticleSpawner(0.2f, true), thisGame.Content, 200, 2000, 1));
                         SoundEffectInstance aux = explosionSoundFX.CreateInstance();

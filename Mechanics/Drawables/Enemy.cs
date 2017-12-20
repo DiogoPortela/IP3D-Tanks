@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace TankProject
 {
     class Enemy : Boid
+
     {
         private static Model model;
         private float modelScale;

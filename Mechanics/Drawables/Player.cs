@@ -321,6 +321,17 @@ namespace TankProject
             this.Right = Vector3.Cross(relativeForward, Up);
             this.Right.Normalize();
         }
+        private void ClampInsideMap(ref Vector3 newPosition)
+        {
+            if (newPosition.X < 0)
+                newPosition.X = 0;
+            else if (newPosition.X > Floor.heightMap.Width - 1)
+                newPosition.X = Floor.heightMap.Width - 1;
+            if (newPosition.Z < 0)
+                newPosition.Z = 0;
+            else if (newPosition.Z > Floor.heightMap.Height - 1)
+                newPosition.Z = Floor.heightMap.Height - 1;
+        }
 
         //--------------------Update&Draw--------------------//
 
@@ -335,6 +346,8 @@ namespace TankProject
 
             relativeForward = Vector3.Normalize(Vector3.Transform(Vector3.Forward, Matrix.CreateRotationY(rotation.Y)));
             relativeRight = Vector3.Normalize(Vector3.Transform(Vector3.Right, Matrix.CreateRotationY(rotation.Y)));
+
+            ClampInsideMap(ref position);
 
             HeightFollow();
             NormalFollow();

@@ -14,6 +14,7 @@ namespace TankProject
     {
         Square, Disc, Cube, Sphere
     }
+
     public delegate void UpdateFunction(GameTime gameTime);
 
     class Particle
