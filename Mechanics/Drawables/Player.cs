@@ -60,6 +60,7 @@ namespace TankProject
         private Vector3 initialRightDirtOffset;
 
         private SoundEffectInstance shootSoundFX;
+        private SoundEffectInstance turnSoundFX;
 
 
         //--------------------Constructors--------------------//
@@ -94,6 +95,10 @@ namespace TankProject
         {
             shootSoundFX = content.Load<SoundEffect>("pimba").CreateInstance();
             shootSoundFX.Volume = 0.5f;
+            turnSoundFX = content.Load<SoundEffect>("girar_torres").CreateInstance();
+            turnSoundFX.IsLooped = true;
+            turnSoundFX.Volume = 1f;
+
             leftDirt = new ParticleSystem(ParticleType.Smoke, this.position + leftDirtOffset, new ParticleSpawner(0.01f, true), content, 250, 500, 5);
             rightDirt = new ParticleSystem(ParticleType.Smoke, this.position + rightDirtOffset, new ParticleSpawner(0.01f, true), content, 250, 500, 5);
 
@@ -257,10 +262,18 @@ namespace TankProject
             #region torre
             if ((Input.IsPressedDown(playerKeys.TurretLeft) && !Input.IsPressedDown(playerKeys.TurretRight)) ||
                 (Input.IsPressedDown(Buttons.RightThumbstickLeft, playerIndex) && !Input.IsPressedDown(Buttons.RightThumbstickRight, playerIndex)))
+            {
+                turnSoundFX.Play();
                 this.turret.rotation.Y += MathHelper.ToRadians(1f);
+            }
             else if ((Input.IsPressedDown(playerKeys.TurretRight) && !Input.IsPressedDown(playerKeys.TurretLeft)) ||
                      (Input.IsPressedDown(Buttons.RightThumbstickRight, playerIndex) && !Input.IsPressedDown(Buttons.RightThumbstickLeft, playerIndex)))
+            {
+                turnSoundFX.Play();
                 this.turret.rotation.Y -= MathHelper.ToRadians(1f);
+            }
+            else
+                turnSoundFX.Stop();
             #endregion
         }
         private void UpdateHatchet(GameTime gameTime)

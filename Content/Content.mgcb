@@ -214,3 +214,9 @@
 /processorParam:TextureFormat=Color
 /build:playerTwoHelp.png
 
+#begin girar_torres.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:girar_torres.wav
+
