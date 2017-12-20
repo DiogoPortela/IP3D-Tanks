@@ -109,7 +109,7 @@ namespace TankProject
                         float yaw = MathHelper.ToRadians((float)random.NextDouble() * 360.0f);
                         float pitch = MathHelper.ToRadians((float)random.NextDouble() * 180.0f - 90.0f);
 
-                        Vector3 positionInsideRadius = position + Vector3.Normalize(Vector3.Transform(Vector3.Right, Matrix.CreateFromYawPitchRoll(yaw, pitch, 0))) * distanceToRadius;
+                        Vector3 positionInsideRadius = position + Vector3.Normalize(Vector3.Transform(Vector3.Forward, Matrix.CreateFromYawPitchRoll(yaw, pitch, 0.0f))) * distanceToRadius;
 
                         positionArray[i] = positionInsideRadius;
                     }
@@ -131,14 +131,14 @@ namespace TankProject
     class ParticleSystem
     {
         private const float MAX_ROT = 0.05f;
-        private const float EXPLOSION_FORCE = 0.2f;
+        private const float EXPLOSION_FORCE = 0.04f;
 
         private ParticleType particleType;
         private BasicEffect effect;
         private Texture2D particleTexture;
         private ParticleSpawner spawner;
         private List<Particle> currentParticles;
-        private int particleCount;
+        internal int particleCount;
         private int particleMax;
         private int particleMaxTime;
         private float particleSpawnRate;
@@ -188,12 +188,12 @@ namespace TankProject
                 case ParticleType.Explosion:
                     particleTexture = content.Load<Texture2D>("Smoke");
                     typeUpdate = new UpdateFunction(ExplosionUpdate);
-                    accelaration = new Vector3(0.0f, -0.98f, 0.0f);
+                    accelaration = new Vector3(0.0f, -0.05f, 0.0f);
                     #region Add Particles
                     for (int i = 0; i < particleMax; i++)
                     {
                         Vector3 auxPosition = spawner.GetPositions(1, systemPosition)[0];
-                        Vector3 direction = Vector3.Normalize(auxPosition - systemPosition + Vector3.Up) * EXPLOSION_FORCE;
+                        Vector3 direction = Vector3.Normalize(auxPosition - systemPosition) * EXPLOSION_FORCE;
                         currentParticles.Add(new Particle(auxPosition, direction, 0.08f));
                         particleCount++;
                     }
@@ -234,7 +234,7 @@ namespace TankProject
                 #endregion
 
                 #region Kill Particles
-                if ((currentParticles.Count > 0 && (DateTime.Now.TimeOfDay - currentParticles[i].dateTime.TimeOfDay).Milliseconds > particleMaxTime) || currentParticles[i].currentPosition.Y <= 0)
+                if ((currentParticles.Count > 0 && (DateTime.Now.TimeOfDay - currentParticles[i].dateTime.TimeOfDay).TotalMilliseconds > particleMaxTime) || currentParticles[i].currentPosition.Y <= 0)
                 {
                     currentParticles.Remove(currentParticles[i]);
                     particleCount--;
@@ -263,7 +263,7 @@ namespace TankProject
                 #endregion
 
                 #region Kill Particles
-                if ((currentParticles.Count > 0 && (DateTime.Now.TimeOfDay - currentParticles[i].dateTime.TimeOfDay).Milliseconds > particleMaxTime))
+                if ((currentParticles.Count > 0 && (DateTime.Now.TimeOfDay - currentParticles[i].dateTime.TimeOfDay).TotalMilliseconds > particleMaxTime))
                 {
                     currentParticles.Remove(currentParticles[i]);
                     particleCount--;
@@ -282,7 +282,7 @@ namespace TankProject
                 #endregion
 
                 #region Kill Particles
-                if ((currentParticles.Count > 0 && (DateTime.Now.TimeOfDay - currentParticles[i].dateTime.TimeOfDay).Milliseconds > particleMaxTime))
+                if ((currentParticles.Count > 0 && (DateTime.Now.TimeOfDay - currentParticles[i].dateTime.TimeOfDay).TotalMilliseconds > particleMaxTime))
                 {
                     currentParticles.Remove(currentParticles[i]);
                     particleCount--;

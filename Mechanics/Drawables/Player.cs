@@ -162,12 +162,12 @@ namespace TankProject
             if (playerIndex == PlayerIndex.One)
             {
                 this.playerKeys = new PlayerKeys(Keys.W, Keys.S, Keys.A, Keys.D, Keys.Space,
-                    Keys.O, Keys.Left, Keys.Right, Keys.Up, Keys.Down);
+                    Keys.Q, Keys.F, Keys.H, Keys.T, Keys.G);
             }
             else if (playerIndex == PlayerIndex.Two)
             {
-                this.playerKeys = new PlayerKeys(Keys.I, Keys.K, Keys.J, Keys.L, Keys.U,
-                    Keys.D0, Keys.N, Keys.M, Keys.Y, Keys.H);
+                this.playerKeys = new PlayerKeys(Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.Enter,
+                    Keys.O, Keys.J, Keys.L, Keys.I, Keys.K);
             }
         }
 

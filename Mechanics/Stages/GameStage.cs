@@ -23,7 +23,7 @@ namespace TankProject
 
         private SoundEffectInstance engineSoundFX;
         private SoundEffectInstance rainSoundFX;
-        private SoundEffectInstance explosionSoundFX;
+        private SoundEffect explosionSoundFX;
 
 
         internal static Light currentLight;
@@ -91,8 +91,7 @@ namespace TankProject
             rainSoundFX.Volume = 0.2f;
             rainSoundFX.Play();
 
-            explosionSoundFX = game1.Content.Load<SoundEffect>("explosion").CreateInstance();
-            explosionSoundFX.Volume = 0.2f;
+            explosionSoundFX = game1.Content.Load<SoundEffect>("explosion");
 
 
             //TODO: END: CLEAN THIS BEFORE END
@@ -222,7 +221,7 @@ namespace TankProject
                         if((p.bulletList[i].position - enemyList[j].position).Length() < 1 && OBB.AreColliding(p.bulletList[i].boundingBox, enemyList[j].boundingBox))
                         {
                             p.score += (int)Vector3.Distance(p.position, enemyList[j].position) * 50;
-                            particleSystemList.Add(new ParticleSystem(ParticleType.Explosion, enemyList[j].position, new ParticleSpawner(0.2f, true), thisGame.Content, 200, 1000, 0));
+                            particleSystemList.Add(new ParticleSystem(ParticleType.Explosion, enemyList[j].position, new ParticleSpawner(0.2f, true), thisGame.Content, 200, 2000, 1));
                             explosionSoundFX.Play();
                             p.bulletList.Remove(p.bulletList[i]);
                             enemyList.Remove(enemyList[j]);
@@ -231,9 +230,10 @@ namespace TankProject
                                 break;
                         }
                     }
-                    if(i > 0 && p.bulletList[i].position.Y <= Floor.GetHeight(p.bulletList[i].position))
+                    if(i >= 0 && p.bulletList[i].position.Y <= Floor.GetHeight(p.bulletList[i].position))
                     {
-                        particleSystemList.Add(new ParticleSystem(ParticleType.Explosion, p.bulletList[i].position, new ParticleSpawner(0.2f, true), thisGame.Content, 200, 1000, 0));
+                        particleSystemList.Add(new ParticleSystem(ParticleType.Explosion, p.bulletList[i].position, new ParticleSpawner(0.2f, true), thisGame.Content, 200, 2000, 1));
+                        explosionSoundFX.Play();
                         p.bulletList.Remove(p.bulletList[i]);
                     }
                 }
@@ -274,8 +274,13 @@ namespace TankProject
             //Particle Update
             playerOneRain.Update(new Vector3(playerOne.position.X, 10, playerOne.position.Z), gameTime);
             playerTwoRain.Update(new Vector3(playerTwo.position.X, 10, playerTwo.position.Z), gameTime);
-            foreach (ParticleSystem p in particleSystemList)
-                p.Update(Vector3.Zero, gameTime);
+            for(int i = particleSystemList.Count - 1; i >= 0; i--)
+            {
+                /*if (particleSystemList[i].particleCount == 0)
+                    particleSystemList.Remove(particleSystemList[i]);
+                else*/
+                particleSystemList[i].Update(Vector3.Zero, gameTime);
+            }
 
             //TODO: DELETE AT END
             //DEBUG SECTION
@@ -339,13 +344,21 @@ namespace TankProject
             Debug.Draw(currentCameraPlayerTwo);
 
             device.Viewport = defaultView;
+
+            batch.Begin();
+            batch.DrawString(Debug.debugFont, playerOne.score.ToString(), new Vector2(device.Viewport.Width / 3, 10.0f), Color.White);
+            batch.DrawString(Debug.debugFont, playerTwo.score.ToString(), new Vector2(device.Viewport.Width / 3 * 2, 10.0f), Color.White);
+            batch.End();
+
+            device.SamplerStates[0] = SamplerState.LinearWrap;
+            device.BlendState = BlendState.Opaque;
+            device.DepthStencilState = DepthStencilState.Default;
         }
 
         internal void Stop()
         {
             engineSoundFX.Stop();
             rainSoundFX.Stop();
-            explosionSoundFX.Pause();
         }
         internal void Resume()
         {
@@ -365,8 +378,7 @@ namespace TankProject
             }
             rainSoundFX.Play();
 
-            if (explosionSoundFX.State == SoundState.Paused)
-                explosionSoundFX.Resume();
+ 
         }
     }
 }
