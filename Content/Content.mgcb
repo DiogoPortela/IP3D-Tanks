@@ -220,3 +220,15 @@
 /processorParam:Quality=Best
 /build:girar_torres.wav
 
+#begin battle_begin.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:battle_begin.wav
+
+#begin end.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:end.wav
+

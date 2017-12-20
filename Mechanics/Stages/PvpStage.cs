@@ -21,6 +21,7 @@ namespace TankProject
         private SoundEffectInstance engineSoundFX;
         private SoundEffectInstance rainSoundFX;
         private SoundEffect explosionSoundFX;
+        private SoundEffect battleSoundFX;
 
         internal static Light currentLight;
 
@@ -71,6 +72,9 @@ namespace TankProject
             rainSoundFX.Play();
 
             explosionSoundFX = game1.Content.Load<SoundEffect>("explosion");
+
+            battleSoundFX = game1.Content.Load<SoundEffect>("battle_begin");
+            battleSoundFX.Play();
         }
 
         internal override void Update(GameTime gameTime)
@@ -132,7 +136,11 @@ namespace TankProject
                     p.Update(gameTime);
                 else
                 {
-                    //TODO: explosion on tank ?and gameover screen?
+                    if(p == playerOne)
+                        thisGame.ChangeCurrentStage(this, new EndStage(false, true, thisGame));
+                    else
+                        thisGame.ChangeCurrentStage(this, new EndStage(true, false, thisGame));
+
                 }
             }
 
