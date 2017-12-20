@@ -23,6 +23,7 @@ namespace TankProject
 
         private SoundEffectInstance engineSoundFX;
         private SoundEffectInstance rainSoundFX;
+        private SoundEffectInstance explosionSoundFX;
 
 
         internal static Light currentLight;
@@ -89,6 +90,10 @@ namespace TankProject
             rainSoundFX.IsLooped = true;
             rainSoundFX.Volume = 0.2f;
             rainSoundFX.Play();
+
+            explosionSoundFX = game1.Content.Load<SoundEffect>("explosion").CreateInstance();
+            explosionSoundFX.Volume = 0.2f;
+
 
             //TODO: END: CLEAN THIS BEFORE END
             //DEBUG
@@ -218,6 +223,7 @@ namespace TankProject
                         {
                             p.score += (int)Vector3.Distance(p.position, enemyList[j].position) * 50;
                             particleSystemList.Add(new ParticleSystem(ParticleType.Explosion, enemyList[j].position, new ParticleSpawner(0.2f, true), thisGame.Content, 200, 1000, 0));
+                            explosionSoundFX.Play();
                             p.bulletList.Remove(p.bulletList[i]);
                             enemyList.Remove(enemyList[j]);
                             i--;
@@ -339,6 +345,7 @@ namespace TankProject
         {
             engineSoundFX.Stop();
             rainSoundFX.Stop();
+            explosionSoundFX.Pause();
         }
         internal void Resume()
         {
@@ -357,6 +364,9 @@ namespace TankProject
                 rainSoundFX.Volume = 0.2f;
             }
             rainSoundFX.Play();
+
+            if (explosionSoundFX.State == SoundState.Paused)
+                explosionSoundFX.Resume();
         }
     }
 }
