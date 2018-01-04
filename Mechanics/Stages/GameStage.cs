@@ -219,6 +219,8 @@ namespace TankProject
                                 break;
                         }
                     }
+                    if (i < 0)
+                        break;
                     #endregion
                     #region bullets and floor
                     if(p.bulletList[i].position.X < 0 || p.bulletList[i].position.X > Floor.heightMap.Width - 1|| p.bulletList[i].position.Z < 0 || p.bulletList[i].position.Z > Floor.heightMap.Height - 1)

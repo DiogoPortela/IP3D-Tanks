@@ -65,7 +65,15 @@ namespace TankProject
                 if (selected == 0)
                 {
                     thisGame.ChangeCurrentStage(this, previousStage);
-                    (previousStage as GameStage).Resume();
+
+                    if(previousStage is PvpStage)
+                    {
+                        (previousStage as PvpStage).Resume();
+                    }
+                    else
+                    {
+                        (previousStage as GameStage).Resume();
+                    }
                 }
                 else if (selected == 1)
                     thisGame.ChangeCurrentStage(this, new ControlsStage(thisGame, this));

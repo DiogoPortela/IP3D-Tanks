@@ -159,6 +159,5 @@ namespace TankProject
             }
             return separatingAxisChecker;
         }   
-
     }
 }
